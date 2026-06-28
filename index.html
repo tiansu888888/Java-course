@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DBFP2423: Java Programming (Multi-Page Hub)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Macaron Palette */
+            --pastel-pink: #FFD1DC;
+            --pastel-mint: #B0EACD;
+            --pastel-blue: #AEC6CF;
+            --pastel-lavender: #C3B1E1;
+            --pastel-yellow: #FDFD96;
+            
+            --ink: #111111;
+            --ink-muted: #333333;
+            
+            --glass-bg: rgba(255, 255, 255, 0.45);
+            --glass-border: rgba(255, 255, 255, 0.6);
+            --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+            --radius-lg: 32px;
+            --radius-md: 16px;
+            
+            --spring: cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background: linear-gradient(135deg, var(--pastel-pink), var(--pastel-lavender), var(--pastel-blue), var(--pastel-mint));
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            color: var(--ink);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Floating Auras */
+        body::before {
+            content: ''; position: fixed; top: -10%; left: -10%; width: 50vw; height: 50vw;
+            background: radial-gradient(circle, var(--pastel-yellow) 0%, transparent 70%);
+            filter: blur(80px); opacity: 0.6; z-index: -1;
+            animation: floatAura 20s ease-in-out infinite alternate;
+        }
+        body::after {
+            content: ''; position: fixed; bottom: -10%; right: -10%; width: 60vw; height: 60vw;
+            background: radial-gradient(circle, var(--pastel-pink) 0%, transparent 70%);
+            filter: blur(100px); opacity: 0.5; z-index: -1;
+            animation: floatAura 25s ease-in-out infinite alternate-reverse;
+        }
+
+        @keyframes floatAura {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(100px, 100px) scale(1.2); }
+        }
+
+        h1, h2, h3 { font-family: 'Orbitron', sans-serif; color: var(--ink); }
+        
+        .header, .hero { text-align: center; padding: 40px 20px 20px; position: relative; }
+        .header h1, .hero h1 { font-size: 2.5rem; margin-top: 20px; font-weight: 800; color: var(--ink); }
+        .hero p { font-size: 1.35rem; font-weight: 600; color: var(--ink); max-width: 600px; margin: 0 auto; background: var(--glass-bg); padding: 10px 20px; border-radius: 20px; backdrop-filter: blur(10px); border: 1px solid var(--glass-border); }
+        .hero-img-container { margin-top: 30px; }
+        .hero-img-container img { max-width: 250px; border-radius: 40px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); border: 4px solid rgba(255,255,255,0.7); animation: float 6s ease-in-out infinite; }
+        
+        @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-15px); } 100% { transform: translateY(0px); } }
+        
+        .nav-link { color: var(--ink-muted); text-decoration: none; font-weight: 700; display: inline-block; transition: all 0.4s var(--spring); font-size: 1.1rem; text-transform: uppercase; letter-spacing: 0.05em; background: var(--glass-bg); padding: 8px 16px; border-radius: 20px; border: 1px solid var(--glass-border); }
+        .nav-link:hover { color: var(--ink); transform: translateY(-3px); box-shadow: 0 4px 15px rgba(0,0,0,0.1); background: rgba(255,255,255,0.7); }
+        
+        .lang-btn {
+            position: absolute;
+            top: 40px;
+            right: 40px;
+            z-index: 10;
+        }
+
+        .container { max-width: 900px; margin: 20px auto 40px; padding: 0 20px; position: relative; z-index: 1; }
+        .grid-container { max-width: 1200px; margin: 40px auto 60px auto; padding: 0 20px; display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 30px; position: relative; z-index: 1; }
+        
+        .card { 
+            background: var(--glass-bg); 
+            border-radius: var(--radius-lg); 
+            padding: 40px; 
+            box-shadow: var(--glass-shadow); 
+            margin-bottom: 30px;
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            transition: all 0.5s var(--spring);
+            text-decoration: none;
+            color: var(--ink);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+        }
+        .grid-container .card { padding: 35px; }
+        .grid-container .card:hover { transform: translateY(-8px) scale(1.02); box-shadow: 0 15px 40px 0 rgba(31, 38, 135, 0.15); background: rgba(255, 255, 255, 0.6); }
+        .card h2 { border-bottom: 2px solid rgba(255,255,255,0.5); padding-bottom: 15px; margin-top: 0; font-size: 1.8rem;}
+        .grid-container .card p { color: var(--ink-muted); margin-bottom: 0; font-size: 1.1rem; line-height: 1.6; font-weight: 600; }
+        
+        .badge { background: linear-gradient(135deg, var(--pastel-pink), var(--pastel-lavender)); color: var(--ink); padding: 6px 16px; border-radius: 20px; font-size: 0.9rem; font-weight: 700; align-self: flex-start; margin-bottom: 20px; font-family: 'Rajdhani', sans-serif; border: 1px solid rgba(255,255,255,0.8); box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        
+        .btn { 
+            background: linear-gradient(135deg, var(--pastel-lavender), var(--pastel-pink));
+            color: var(--ink); 
+            padding: 12px 28px; 
+            border: 2px solid rgba(255,255,255,0.8); 
+            border-radius: 12px; 
+            cursor: pointer; 
+            font-weight: 700; 
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.1rem;
+            transition: all 0.4s var(--spring);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+        .btn:hover { transform: translateY(-4px); box-shadow: 0 8px 25px rgba(195, 177, 225, 0.4); background: linear-gradient(135deg, var(--pastel-pink), var(--pastel-lavender)); }
+
+        /* Translation CSS Rules */
+        .lang-cn { display: none !important; }
+        body.cn-active .lang-en { display: none !important; }
+        body.cn-active .lang-cn { display: block !important; }
+        
+        span.lang-cn { display: none !important; }
+        body.cn-active span.lang-en { display: none !important; }
+        body.cn-active span.lang-cn { display: inline !important; }
+
+        @media (max-width: 768px) {
+            .lang-btn {
+                position: static;
+                margin-top: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="hero">
+        <h1>
+            <span class="lang-en">DBFP2423: Java Programming</span>
+            <span class="lang-cn">DBFP2423: Java 编程</span>
+        </h1>
+        <p>
+            <span class="lang-en">Interactive Weekly Study Hub</span>
+            <span class="lang-cn">每周互动式学习中心</span>
+        </p>
+        <button class="btn lang-btn" onclick="toggleLanguage()">🌐 EN / 中文</button>
+        <div class="hero-img-container">
+            <img src="assets/macaron_java.png" alt="Macaron Java Concept">
+        </div>
+    </div>
+
+    <div class="grid-container">
+        <!-- Week 1 -->
+        <a href="week1.html" class="card">
+            <span class="badge">
+                <span class="lang-en">Week 1</span>
+                <span class="lang-cn">第 1 周</span>
+            </span>
+            <h2>
+                <span class="lang-en">Chapter 1: Fundamentals</span>
+                <span class="lang-cn">第 1 章：系统基础</span>
+            </h2>
+            <p>
+                <span class="lang-en">Overview of Computer Systems, Hardware vs. Software, and Program Development.</span>
+                <span class="lang-cn">计算机系统概述、硬件与软件、以及程序开发方法。</span>
+            </p>
+        </a>
+        
+        <!-- Week 2 -->
+        <a href="week2.html" class="card">
+            <span class="badge">
+                <span class="lang-en">Week 2</span>
+                <span class="lang-cn">第 2 周</span>
+            </span>
+            <h2>
+                <span class="lang-en">Chapter 2: Problem Solving</span>
+                <span class="lang-cn">第 2 章：问题求解</span>
+            </h2>
+            <p>
+                <span class="lang-en">The Software Development Method and Introduction to Algorithms.</span>
+                <span class="lang-cn">软件开发方法以及算法基础介绍。</span>
+            </p>
+        </a>
+
+        <!-- Week 3 -->
+        <a href="week3.html" class="card">
+            <span class="badge">
+                <span class="lang-en">Week 3</span>
+                <span class="lang-cn">第 3 周</span>
+            </span>
+            <h2>
+                <span class="lang-en">Chapter 3: Algorithm Design</span>
+                <span class="lang-cn">第 3 章：算法设计</span>
+            </h2>
+            <p>
+                <span class="lang-en">Pseudocode, Flowcharts, NS Diagrams, and Decision Tables.</span>
+                <span class="lang-cn">伪代码、流程图、NS图以及决策表。</span>
+            </p>
+        </a>
+
+        <!-- Week 4 -->
+        <a href="week4.html" class="card">
+            <span class="badge">
+                <span class="lang-en">Week 4</span>
+                <span class="lang-cn">第 4 周</span>
+            </span>
+            <h2>
+                <span class="lang-en">Chapter 4: Java Environment</span>
+                <span class="lang-cn">第 4 章：Java 环境</span>
+            </h2>
+            <p>
+                <span class="lang-en">Overview of Java, language elements, compilation, and IDE setup.</span>
+                <span class="lang-cn">Java 概述、语言基本要素、程序编译以及 IDE 环境搭建。</span>
+            </p>
+        </a>
+
+        <!-- Week 5 -->
+        <a href="week5.html" class="card">
+            <span class="badge">
+                <span class="lang-en">Week 5</span>
+                <span class="lang-cn">第 5 周</span>
+            </span>
+            <h2>
+                <span class="lang-en">Chapter 5: Variables & Data Types</span>
+                <span class="lang-cn">第 5 章：变量与数据类型</span>
+            </h2>
+            <p>
+                <span class="lang-en">Variable declarations, primitive types, and the String class.</span>
+                <span class="lang-cn">变量声明、基本数据类型以及 String 类的使用。</span>
+            </p>
+        </a>
+
+        <!-- Week 6 -->
+        <a href="week6.html" class="card">
+            <span class="badge">
+                <span class="lang-en">Week 6</span>
+                <span class="lang-cn">第 6 周</span>
+            </span>
+            <h2>
+                <span class="lang-en">Chapter 6: Operators & Expressions</span>
+                <span class="lang-cn">第 6 章：运算符与表达式</span>
+            </h2>
+            <p>
+                <span class="lang-en">Arithmetic, Relational, Logical operators, and mathematical formulas.</span>
+                <span class="lang-cn">算术、关系、逻辑运算符，以及数学公式表达。</span>
+            </p>
+        </a>
+
+        <!-- Week 7 -->
+        <a href="week7.html" class="card">
+            <span class="badge">
+                <span class="lang-en">Week 7</span>
+                <span class="lang-cn">第 7 周</span>
+            </span>
+            <h2>
+                <span class="lang-en">Chapter 7: Program Input/Output</span>
+                <span class="lang-cn">第 7 章：程序输入/输出</span>
+            </h2>
+            <p>
+                <span class="lang-en">Executable statements, the Scanner class, and number formatting.</span>
+                <span class="lang-cn">可执行语句、Scanner 类、以及数字输出格式化。</span>
+            </p>
+        </a>
+
+        <!-- Week 8 -->
+        <a href="week8.html" class="card">
+            <span class="badge">
+                <span class="lang-en">Week 8</span>
+                <span class="lang-cn">第 8 周</span>
+            </span>
+            <h2>
+                <span class="lang-en">Chapter 8: Selection</span>
+                <span class="lang-cn">第 8 章：选择结构</span>
+            </h2>
+            <p>
+                <span class="lang-en">The if, if-else, and switch statements.</span>
+                <span class="lang-cn">if，if-else 语句，以及 switch 条件选择结构。</span>
+            </p>
+        </a>
+
+        <!-- Week 9 -->
+        <a href="week9.html" class="card">
+            <span class="badge">
+                <span class="lang-en">Week 9</span>
+                <span class="lang-cn">第 9 周</span>
+            </span>
+            <h2>
+                <span class="lang-en">Chapter 9: Repetition (Part 1)</span>
+                <span class="lang-cn">第 9 章：循环结构（上）</span>
+            </h2>
+            <p>
+                <span class="lang-en">The while loop and sentinel-controlled loops.</span>
+                <span class="lang-cn">while 循环以及哨兵值控制循环结构。</span>
+            </p>
+        </a>
+
+        <!-- Week 10 -->
+        <a href="week10.html" class="card">
+            <span class="badge">
+                <span class="lang-en">Week 10</span>
+                <span class="lang-cn">第 10 周</span>
+            </span>
+            <h2>
+                <span class="lang-en">Chapter 10: Repetition (Part 2)</span>
+                <span class="lang-cn">第 10 章：循环结构（下）</span>
+            </h2>
+            <p>
+                <span class="lang-en">The for loop and nested loops.</span>
+                <span class="lang-cn">for 循环以及嵌套循环结构。</span>
+            </p>
+        </a>
+
+        <!-- Week 11 -->
+        <a href="week11.html" class="card">
+            <span class="badge">
+                <span class="lang-en">Week 11</span>
+                <span class="lang-cn">第 11 周</span>
+            </span>
+            <h2>
+                <span class="lang-en">Chapter 11: Methods (Part 1)</span>
+                <span class="lang-cn">第 11 章：方法（上）</span>
+            </h2>
+            <p>
+                <span class="lang-en">Parameters, arguments, and return types.</span>
+                <span class="lang-cn">方法参数传递、实参与形参、以及返回值类型。</span>
+            </p>
+        </a>
+
+        <!-- Week 12 -->
+        <a href="week12.html" class="card">
+            <span class="badge">
+                <span class="lang-en">Week 12</span>
+                <span class="lang-cn">第 12 周</span>
+            </span>
+            <h2>
+                <span class="lang-en">Chapter 12: Methods (Part 2)</span>
+                <span class="lang-cn">第 12 章：方法（下）</span>
+            </h2>
+            <p>
+                <span class="lang-en">The Math class and common static methods.</span>
+                <span class="lang-cn">Math 数学工具类以及常用的静态方法。</span>
+            </p>
+        </a>
+
+        <!-- Week 13 -->
+        <a href="week13.html" class="card">
+            <span class="badge">
+                <span class="lang-en">Week 13</span>
+                <span class="lang-cn">第 13 周</span>
+            </span>
+            <h2>
+                <span class="lang-en">Chapter 13: Java Fundamentals Revision</span>
+                <span class="lang-cn">第 13 章：Java 基础复习</span>
+            </h2>
+            <p>
+                <span class="lang-en">Review of compilation, JVM, syntax vs runtime errors.</span>
+                <span class="lang-cn">编译运行流程、JVM作用、以及语法与运行时错误复习。</span>
+            </p>
+        </a>
+
+        <!-- Week 14 -->
+        <a href="week14.html" class="card">
+            <span class="badge">
+                <span class="lang-en">Week 14</span>
+                <span class="lang-cn">第 14 周</span>
+            </span>
+            <h2>
+                <span class="lang-en">Chapter 14: Group Project Demo</span>
+                <span class="lang-cn">第 14 章：小组项目演示</span>
+            </h2>
+            <p>
+                <span class="lang-en">Presentation skills, code reviews, and project wrap-up.</span>
+                <span class="lang-cn">期末软件演示技巧、代码审查、以及项目总结。</span>
+            </p>
+        </a>
+    </div>
+
+    <script>
+        function toggleLanguage() {
+            document.body.classList.toggle('cn-active');
+        }
+    </script>
+</body>
+</html>

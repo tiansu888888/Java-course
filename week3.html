@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Week 3: Algorithm Design & Representation - DBFP2423</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Macaron Palette */
+            --pastel-pink: #FFD1DC;
+            --pastel-mint: #B0EACD;
+            --pastel-blue: #AEC6CF;
+            --pastel-lavender: #C3B1E1;
+            --pastel-yellow: #FDFD96;
+            
+            --ink: #111111;
+            --ink-muted: #333333;
+            
+            --glass-bg: rgba(255, 255, 255, 0.45);
+            --glass-border: rgba(255, 255, 255, 0.6);
+            --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+            --radius-lg: 32px;
+            --radius-md: 16px;
+            
+            --spring: cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background: linear-gradient(135deg, var(--pastel-pink), var(--pastel-lavender), var(--pastel-blue), var(--pastel-mint));
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            color: var(--ink);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Floating Auras */
+        body::before {
+            content: ''; position: fixed; top: -10%; left: -10%; width: 50vw; height: 50vw;
+            background: radial-gradient(circle, var(--pastel-yellow) 0%, transparent 70%);
+            filter: blur(80px); opacity: 0.6; z-index: -1;
+            animation: floatAura 20s ease-in-out infinite alternate;
+        }
+        body::after {
+            content: ''; position: fixed; bottom: -10%; right: -10%; width: 60vw; height: 60vw;
+            background: radial-gradient(circle, var(--pastel-pink) 0%, transparent 70%);
+            filter: blur(100px); opacity: 0.5; z-index: -1;
+            animation: floatAura 25s ease-in-out infinite alternate-reverse;
+        }
+
+        @keyframes floatAura {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(100px, 100px) scale(1.2); }
+        }
+
+        h1, h2, h3 { font-family: 'Orbitron', sans-serif; color: var(--ink); }
+        
+        .header { text-align: center; padding: 40px 20px 20px; position: relative; }
+        .header h1 { font-size: 2.5rem; margin-top: 20px; font-weight: 800; color: var(--ink); }
+        .nav-link { color: var(--ink-muted); text-decoration: none; font-weight: 700; display: inline-block; transition: all 0.4s var(--spring); font-size: 1.1rem; text-transform: uppercase; letter-spacing: 0.05em; background: var(--glass-bg); padding: 8px 16px; border-radius: 20px; border: 1px solid var(--glass-border); }
+        .nav-link:hover { color: var(--ink); transform: translateY(-3px); box-shadow: 0 4px 15px rgba(0,0,0,0.1); background: rgba(255,255,255,0.7); }
+        
+        .lang-btn {
+            position: absolute;
+            top: 40px;
+            right: 40px;
+            z-index: 10;
+        }
+
+        .container { max-width: 900px; margin: 20px auto 40px; padding: 0 20px; position: relative; z-index: 1; }
+        
+        .card { 
+            background: var(--glass-bg); 
+            border-radius: var(--radius-lg); 
+            padding: 40px; 
+            box-shadow: var(--glass-shadow); 
+            margin-bottom: 30px;
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            transition: all 0.5s var(--spring);
+        }
+        .card h2 { border-bottom: 2px solid rgba(255,255,255,0.5); padding-bottom: 15px; margin-top: 0; font-size: 1.8rem;}
+        
+        .step { background: rgba(255,255,255,0.3); padding: 20px; margin-bottom: 15px; border-radius: var(--radius-md); border: 1px solid var(--glass-border); }
+        .step h3 { margin-top: 0; font-size: 1.3rem; }
+        
+        .btn { 
+            background: linear-gradient(135deg, var(--pastel-lavender), var(--pastel-pink));
+            color: var(--ink); 
+            padding: 12px 28px; 
+            border: 2px solid rgba(255,255,255,0.8); 
+            border-radius: 12px; 
+            cursor: pointer; 
+            font-weight: 700; 
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.1rem;
+            transition: all 0.4s var(--spring);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            display: inline-block;
+            margin-top: 10px;
+        }
+        .btn:hover { transform: translateY(-4px); box-shadow: 0 8px 25px rgba(195, 177, 225, 0.4); background: linear-gradient(135deg, var(--pastel-pink), var(--pastel-lavender)); }
+        
+        /* Quiz */
+        .quiz-q { margin-bottom: 25px; }
+        .quiz-label { display: block; padding: 12px 16px; cursor: pointer; transition: all 0.4s var(--spring); border-radius: 12px; border: 1px solid transparent; font-weight: 600; font-size: 1.1rem;}
+        .quiz-label:hover { background: rgba(255,255,255,0.4); border: 1px solid var(--glass-border); transform: translateX(5px);}
+        
+        /* Coding */
+        .code-editor { background: rgba(0,0,0,0.8); color: #F8F9FA; padding: 20px; border-radius: var(--radius-md); font-family: 'JetBrains Mono', monospace; line-height: 1.8; margin-top: 10px; font-size: 1rem; border: 1px solid rgba(255,255,255,0.2); box-shadow: inset 0 2px 10px rgba(0,0,0,0.5); white-space: pre-wrap; }
+        .blank-input { border: none; border-bottom: 2px solid var(--pastel-mint); background: transparent; color: var(--ink); font-family: inherit; font-size: 1.1rem; text-align: center; outline: none; transition: all 0.4s var(--spring); font-weight: 700;}
+        .blank-input:focus { border-bottom: 2px solid var(--pastel-lavender); background: rgba(255,255,255,0.1); border-radius: 4px;}
+        .correct-ans { color: #0f5132; font-weight: 700; margin-top: 15px; display: inline-block; padding: 10px 16px; background: rgba(176, 234, 205, 0.6); border-radius: 12px; border: 1px solid var(--pastel-mint);}
+        .wrong-ans { color: #842029; font-weight: 700; margin-top: 15px; display: inline-block; padding: 10px 16px; background: rgba(255, 209, 220, 0.6); border-radius: 12px; border: 1px solid var(--pastel-pink);}
+        
+        /* Tips Section override */
+        .card[style*="border-left"] { border-left: none !important; position: relative; overflow: hidden; background: linear-gradient(135deg, rgba(176, 234, 205, 0.3), rgba(255, 255, 255, 0.4)); }
+        .card[style*="border-left"]::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 6px; background: var(--pastel-mint); box-shadow: 0 0 10px var(--pastel-mint); }
+        .card[style*="border-left"] h2 { border-bottom: none; color: #0f5132; }
+        
+        /* SVG Tweaks for Macaron Glassmorphism & High Contrast */
+        svg { background: transparent !important; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.05)); }
+        svg text { font-family: 'Rajdhani', sans-serif !important; font-weight: 700 !important; fill: #111111 !important; }
+        svg [fill="url(#navyGrad)"] { fill: rgba(255,255,255,0.8) !important; stroke: #111111 !important; stroke-width: 2px; }
+        svg [fill="#FFF"] { fill: rgba(255,255,255,0.8) !important; stroke: #111111 !important; stroke-width: 1px; }
+        svg [stroke="#1E3A8A"] { stroke: #111111 !important; stroke-width: 2px !important; }
+        svg [fill="#1E3A8A"] { fill: #111111 !important; }
+        svg [stroke="#FF6B6B"] { stroke: #D81B60 !important; }
+        svg [fill="#FF6B6B"] { fill: #D81B60 !important; }
+
+        /* Translation CSS Rules */
+        .lang-cn { display: none !important; }
+        body.cn-active .lang-en { display: none !important; }
+        body.cn-active .lang-cn { display: block !important; }
+        
+        span.lang-cn { display: none !important; }
+        body.cn-active span.lang-en { display: none !important; }
+        body.cn-active span.lang-cn { display: inline !important; }
+
+        @media (max-width: 768px) {
+            .lang-btn {
+                position: static;
+                margin-top: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="index.html" class="nav-link">
+            <span class="lang-en">← Back to Hub</span>
+            <span class="lang-cn">← 返回主页</span>
+        </a>
+        <h1>
+            <span class="lang-en">Week 3: Algorithm Design & Representation</span>
+            <span class="lang-cn">第 3 周：算法设计与表示</span>
+        </h1>
+        <button class="btn lang-btn" onclick="toggleLanguage()">🌐 EN / 中文</button>
+    </div>
+
+    <div class="container">
+        <!-- Notes Section -->
+        <div class="card">
+            <h2>
+                <span class="lang-en">Step-by-Step Guide</span>
+                <span class="lang-cn">分步指南</span>
+            </h2>
+            <div class="lang-en">
+                <div class='step'><h3>Step 1: What is Pseudocode?</h3><p><strong>Pseudocode</strong> (false code) is an artificial and informal language that helps programmers develop algorithms.</p></div><div class='step'><h3>Step 2: Flowcharts</h3><p>A <strong>flowchart</strong> is a visual representation of an algorithm using standard shapes (Oval = Start/End, Parallelogram = Input/Output, Diamond = Decision).</p></div>
+            </div>
+            <div class="lang-cn">
+                <div class='step'><h3>步骤 1：什么是伪代码？</h3><strong>伪代码</strong>（虚拟代码）是一种人工的、非正式的语言，帮助程序员开发算法。</div><div class='step'><h3>步骤 2：流程图</h3><strong>流程图</strong>是算法的视觉表示，使用标准形状（椭圆 = 开始/结束，平行四边形 = 输入/输出，菱形 = 决策）。</div>
+            </div>
+        </div>
+
+        <!-- SVG Animation Section -->
+        <div class="card">
+            <h2>
+                <span class="lang-en">Concept Visualization</span>
+                <span class="lang-cn">概念可视化</span>
+            </h2>
+            <div style="background: rgba(255,255,255,0.5); border-radius: 8px; padding: 20px; text-align: center; border: 1px solid rgba(255,255,255,0.8);">
+                <svg height="300" max-width="600" viewbox="0 0 600 300" width="100%" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<lineargradient id="navyGrad" x1="0%" x2="100%" y1="0%" y2="100%">
+<stop offset="0%" stop-color="#1E3A8A"></stop>
+<stop offset="100%" stop-color="#0A192F"></stop>
+</lineargradient>
+</defs>
+<!-- Start Oval -->
+<ellipse cx="300" cy="40" fill="url(#navyGrad)" rx="60" ry="25"></ellipse>
+<text fill="#FFF" font-family="Outfit" font-size="14" font-weight="bold" text-anchor="middle" x="300" y="45">Start</text>
+<!-- Decision Diamond -->
+<polygon fill="none" points="300,90 380,140 300,190 220,140" stroke="#FF6B6B" stroke-width="4"></polygon>
+<text fill="#FF6B6B" font-family="Outfit" font-size="14" font-weight="bold" text-anchor="middle" x="300" y="145">Age &gt;= 18?</text>
+<!-- True Process Rectangle -->
+<rect fill="url(#navyGrad)" height="50" width="120" x="420" y="220"></rect>
+<text fill="#FFF" font-family="Outfit" font-size="14" font-weight="bold" text-anchor="middle" x="480" y="250">Print "Adult"</text>
+<!-- False Process Rectangle -->
+<rect fill="url(#navyGrad)" height="50" width="120" x="60" y="220"></rect>
+<text fill="#FFF" font-family="Outfit" font-size="14" font-weight="bold" text-anchor="middle" x="120" y="250">Print "Minor"</text>
+<!-- Flow Lines -->
+<path d="M 300 65 L 300 90" fill="none" id="pathIn" stroke="#1E3A8A" stroke-width="3"></path>
+<!-- True Path -->
+<path d="M 380 140 L 480 140 L 480 220" fill="none" id="pathTrue" stroke="#1E3A8A" stroke-width="3"></path>
+<text fill="#1E3A8A" font-family="Outfit" font-size="14" font-weight="bold" text-anchor="middle" x="430" y="130">True</text>
+<!-- False Path -->
+<path d="M 220 140 L 120 140 L 120 220" fill="none" id="pathFalse" stroke="#1E3A8A" stroke-width="3"></path>
+<text fill="#1E3A8A" font-family="Outfit" font-size="14" font-weight="bold" text-anchor="middle" x="170" y="130">False</text>
+<!-- Animated Data Packets -->
+<!-- Packet coming in -->
+<circle fill="#FF6B6B" r="6">
+<animatemotion calcmode="linear" dur="4s" keypoints="0;1;1" keytimes="0;0.25;1" repeatcount="indefinite">
+<mpath href="#pathIn"></mpath>
+</animatemotion>
+</circle>
+<!-- Packet going True (simulating a path) -->
+<circle fill="#FF6B6B" opacity="0" r="6">
+<animate attributename="opacity" dur="4s" keytimes="0;0.25;0.75;1" repeatcount="indefinite" values="0;1;1;0"></animate>
+<animatemotion calcmode="linear" dur="4s" keypoints="0;0;1;1" keytimes="0;0.25;0.75;1" repeatcount="indefinite">
+<mpath href="#pathTrue"></mpath>
+</animatemotion>
+</circle>
+</svg>
+            </div>
+        </div>
+
+        <!-- Tips Section -->
+        <div class="card" style="border-left: 5px solid #10B981;">
+            <h2>
+                <span class="lang-en">Tips</span>
+                <span class="lang-cn">提示</span>
+            </h2>
+            <div class="lang-en"><ul>
+<li><strong>Algorithm Representation:</strong> Pseudocode should be easy to read (like English), while Flowcharts should be easy to see visually. Know when to use which.</li>
+<li><strong>Exam Focus:</strong> Practice drawing full flowcharts and converting them to pseudocode, as this is a common 10-mark structured question!</li>
+</ul></div>
+            <div class="lang-cn"><ul><li><strong>算法表示：</strong>伪代码应该易于阅读（类似于英语），而流程图应该易于从视觉上理解。知道何时使用哪一个。</li><li><strong>考试重点：</strong>练习绘制完整的流程图并将其转换为伪代码，因为这是一个常见的 10 分结构化大题！</li></ul></div>
+        </div>
+
+        <!-- Quiz Section -->
+        <div class="card">
+            <h2>
+                <span class="lang-en">Knowledge Check</span>
+                <span class="lang-cn">知识自测</span>
+            </h2>
+            <div id="quiz-container">
+                <div class='quiz-q'>
+            <p><b>1. 
+                <span class="lang-en">Which flowchart shape is used to represent a Decision (e.g., checking if age > 18)?</span>
+                <span class="lang-cn">哪种流程图形状用于表示决策（例如：检查 age >= 18）？</span>
+            </b></p>
+            <label class='quiz-label'>
+                <input type='radio' name='q0' value='0'>
+                <span class="lang-en">Rectangle</span>
+                <span class="lang-cn">矩形</span>
+            </label><label class='quiz-label'>
+                <input type='radio' name='q0' value='1'>
+                <span class="lang-en">Diamond</span>
+                <span class="lang-cn">菱形</span>
+            </label>
+        </div><div class='quiz-q'>
+            <p><b>2. 
+                <span class="lang-en">Pseudocode is best described as:</span>
+                <span class="lang-cn">伪代码最适合被描述为：</span>
+            </b></p>
+            <label class='quiz-label'>
+                <input type='radio' name='q1' value='0'>
+                <span class="lang-en">A strictly typed programming language.</span>
+                <span class="lang-cn">严格类型的编程语言。</span>
+            </label><label class='quiz-label'>
+                <input type='radio' name='q1' value='1'>
+                <span class="lang-en">An informal, English-like description of logic.</span>
+                <span class="lang-cn">对逻辑的非正式的、类似英语的描述。</span>
+            </label>
+        </div><div class='quiz-q'>
+            <p><b>3. 
+                <span class="lang-en">Which tool forces structured programming by eliminating messy directional arrows?</span>
+                <span class="lang-cn">哪个工具通过消除杂乱的方向箭头来强制执行结构化编程？</span>
+            </b></p>
+            <label class='quiz-label'>
+                <input type='radio' name='q2' value='0'>
+                <span class="lang-en">Decision Table</span>
+                <span class="lang-cn">决策表</span>
+            </label><label class='quiz-label'>
+                <input type='radio' name='q2' value='1'>
+                <span class="lang-en">NS (Nassi-Shneiderman) Diagram</span>
+                <span class="lang-cn">NS 图 (Nassi-Shneiderman)</span>
+            </label>
+        </div><div class='quiz-q'>
+            <p><b>4. 
+                <span class="lang-en">In a flowchart, a Parallelogram is used to indicate:</span>
+                <span class="lang-cn">在流程图中，平行四边形用于表示：</span>
+            </b></p>
+            <label class='quiz-label'>
+                <input type='radio' name='q3' value='0'>
+                <span class="lang-en">Input and Output</span>
+                <span class="lang-cn">输入和输出</span>
+            </label><label class='quiz-label'>
+                <input type='radio' name='q3' value='1'>
+                <span class="lang-en">Mathematical processing</span>
+                <span class="lang-cn">数学处理</span>
+            </label>
+        </div><div class='quiz-q'>
+            <p><b>5. 
+                <span class="lang-en">Why is designing an algorithm important before writing Java code?</span>
+                <span class="lang-cn">为什么在编写 Java 代码之前设计算法很重要？</span>
+            </b></p>
+            <label class='quiz-label'>
+                <input type='radio' name='q4' value='0'>
+                <span class="lang-en">It prevents logic errors and clarifies the solution.</span>
+                <span class="lang-cn">它能防止逻辑错误并理清解决方案。</span>
+            </label><label class='quiz-label'>
+                <input type='radio' name='q4' value='1'>
+                <span class="lang-en">It is a strict requirement by the Java compiler.</span>
+                <span class="lang-cn">这是 Java 编译器的严格要求。</span>
+            </label>
+        </div>
+                <button class="btn" onclick="checkQuiz()">
+                    <span class="lang-en">Submit Answers</span>
+                    <span class="lang-cn">提交答案</span>
+                </button>
+                <div id="quiz-result"></div>
+            </div>
+        </div>
+
+        <!-- Fill in the Blanks -->
+        <div class="card">
+            <h2>
+                <span class="lang-en">Fill in the Blanks</span>
+                <span class="lang-cn">填空练习</span>
+            </h2>
+            <p>
+            <span class="lang-en">A flowchart shape for processing is a <input type='text' id='blank0' class='blank-input' style='width:100px;'>.</span>
+            <span class="lang-cn">流程图中用于处理的形状是<input type='text' id='blank_cn0' class='blank-input' style='width:100px;'>。</span>
+        </p><p>
+            <span class="lang-en">A decision table lists rules and matching <input type='text' id='blank1' class='blank-input' style='width:100px;'> to take.</span>
+            <span class="lang-cn">决策表列出了规则和匹配的<input type='text' id='blank_cn1' class='blank-input' style='width:100px;'>。</span>
+        </p>
+            <button class="btn" onclick="checkBlanks()">
+                <span class="lang-en">Check Answers</span>
+                <span class="lang-cn">检查答案</span>
+            </button>
+            <div id="blanks-result"></div>
+        </div>
+
+        <!-- Coding Activities -->
+        <div class="card">
+            <h2>
+                <span class="lang-en">Coding Practice</span>
+                <span class="lang-cn">编程实践</span>
+            </h2>
+            <div class='step'>
+            <p><b>
+                <span class="lang-en">Exercise 1: Logic to Java Syntax: Convert the pseudocode IF age >= 18 THEN print "Adult" into Java code.</span>
+                <span class="lang-cn">练习 1：逻辑到 Java 语法: 将伪代码 IF age >= 18 THEN print "Adult" 转换为 Java 代码。</span>
+            </b></p>
+            <div class='code-editor'>_______ (age >= 18) {    System.out.println("Adult");}</div>
+            <button class="btn" onclick="showCodeAns('w3c0')">
+                <span class="lang-en">Show Answer</span>
+                <span class="lang-cn">显示答案</span>
+            </button>
+            <div class='code-editor' id='code-ans-w3c0' style='display:none;'>if</div>
+        </div><div class='step'>
+            <p><b>
+                <span class="lang-en">Exercise 2: Identify the Java Keyword: Which keyword is used in Java to handle the "False" path of a decision flowchart?</span>
+                <span class="lang-cn">练习 2：识别 Java 关键字: 哪个关键字在 Java 中用于处理决策流程图的“False”路径？</span>
+            </b></p>
+            <div class='code-editor'>_______ {    System.out.println("Minor");}</div>
+            <button class="btn" onclick="showCodeAns('w3c1')">
+                <span class="lang-en">Show Answer</span>
+                <span class="lang-cn">显示答案</span>
+            </button>
+            <div class='code-editor' id='code-ans-w3c1' style='display:none;'>else</div>
+        </div><div class='step'>
+            <p><b>
+                <span class="lang-en">Exercise 3: Flowchart Shape Identifier: In a flowchart, what shape is used for assigning a value (e.g., `total = A + B`)? (Hint: Process)</span>
+                <span class="lang-cn">练习 3：流程图形状标识符: 在流程图中，什么形状用于赋值（例如：`total = A + B`）？（提示：Process）</span>
+            </b></p>
+            <div class='code-editor'>Shape Name: _______</div>
+            <button class="btn" onclick="showCodeAns('w3c2')">
+                <span class="lang-en">Show Answer</span>
+                <span class="lang-cn">显示答案</span>
+            </button>
+            <div class='code-editor' id='code-ans-w3c2' style='display:none;'>Rectangle</div>
+        </div>
+        </div>
+
+        <!-- Matching Game -->
+        <div class="card">
+            <h2>
+                <span class="lang-en">Matching Game</span>
+                <span class="lang-cn">配对游戏</span>
+            </h2>
+            <p>
+                <span class="lang-en">Match the term on the left with its definition on the right.</span>
+                <span class="lang-cn">将左侧的术语与右侧的定义进行配对。</span>
+            </p>
+            <div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px;">
+                <div style="width: 45%;">
+                    <div class='step' style='padding:10px; cursor:pointer;'>Oval</div><div class='step' style='padding:10px; cursor:pointer;'>Parallelogram</div><div class='step' style='padding:10px; cursor:pointer;'>Rectangle</div><div class='step' style='padding:10px; cursor:pointer;'>Diamond</div>
+                </div>
+                <div style="width: 45%;">
+                    <div class='step' style='padding:10px; cursor:pointer;'>
+            <span class="lang-en">Start and End points</span>
+            <span class="lang-cn">开始和结束点</span>
+        </div><div class='step' style='padding:10px; cursor:pointer;'>
+            <span class="lang-en">Input and Output operations</span>
+            <span class="lang-cn">输入和输出操作</span>
+        </div><div class='step' style='padding:10px; cursor:pointer;'>
+            <span class="lang-en">Processing steps (calculations)</span>
+            <span class="lang-cn">处理步骤（计算）</span>
+        </div><div class='step' style='padding:10px; cursor:pointer;'>
+            <span class="lang-en">Decision path checks</span>
+            <span class="lang-cn">决策路径检查</span>
+        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleLanguage() {
+            document.body.classList.toggle('cn-active');
+        }
+
+        function checkQuiz() {
+            let score = 0;
+            
+        const q0 = document.querySelector('input[name="q0"]:checked');
+        if (q0 && parseInt(q0.value) === 1) score++;
+        
+        const q1 = document.querySelector('input[name="q1"]:checked');
+        if (q1 && parseInt(q1.value) === 1) score++;
+        
+        const q2 = document.querySelector('input[name="q2"]:checked');
+        if (q2 && parseInt(q2.value) === 1) score++;
+        
+        const q3 = document.querySelector('input[name="q3"]:checked');
+        if (q3 && parseInt(q3.value) === 0) score++;
+        
+        const q4 = document.querySelector('input[name="q4"]:checked');
+        if (q4 && parseInt(q4.value) === 0) score++;
+        
+            document.getElementById('quiz-result').innerHTML = `<span class='correct-ans'>
+                <span class="lang-en">You scored: ${score} / 5</span>
+                <span class="lang-cn">得分：${score} / 5</span>
+            </span>`;
+        }
+
+        function checkBlanks() {
+            
+        const b0 = (document.getElementById('blank0').value || document.getElementById('blank_cn0').value).toLowerCase().trim();
+        if(b0 === 'rectangle') {
+            document.getElementById('blank0').style.borderBottomColor = '#2E8B57';
+            document.getElementById('blank_cn0').style.borderBottomColor = '#2E8B57';
+        } else {
+            document.getElementById('blank0').style.borderBottomColor = '#C70039';
+            document.getElementById('blank_cn0').style.borderBottomColor = '#C70039';
+        }
+        
+        const b1 = (document.getElementById('blank1').value || document.getElementById('blank_cn1').value).toLowerCase().trim();
+        if(b1 === 'actions') {
+            document.getElementById('blank1').style.borderBottomColor = '#2E8B57';
+            document.getElementById('blank_cn1').style.borderBottomColor = '#2E8B57';
+        } else {
+            document.getElementById('blank1').style.borderBottomColor = '#C70039';
+            document.getElementById('blank_cn1').style.borderBottomColor = '#C70039';
+        }
+        
+        }
+
+        function showCodeAns(id) {
+            const el = document.getElementById('code-ans-' + id);
+            el.style.display = el.style.display === 'none' ? 'block' : 'none';
+        }
+    </script>
+</body>
+</html>

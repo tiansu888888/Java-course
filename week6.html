@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Week 6: Operators and Expressions - DBFP2423</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Macaron Palette */
+            --pastel-pink: #FFD1DC;
+            --pastel-mint: #B0EACD;
+            --pastel-blue: #AEC6CF;
+            --pastel-lavender: #C3B1E1;
+            --pastel-yellow: #FDFD96;
+            
+            --ink: #111111;
+            --ink-muted: #333333;
+            
+            --glass-bg: rgba(255, 255, 255, 0.45);
+            --glass-border: rgba(255, 255, 255, 0.6);
+            --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+            --radius-lg: 32px;
+            --radius-md: 16px;
+            
+            --spring: cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background: linear-gradient(135deg, var(--pastel-pink), var(--pastel-lavender), var(--pastel-blue), var(--pastel-mint));
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            color: var(--ink);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Floating Auras */
+        body::before {
+            content: ''; position: fixed; top: -10%; left: -10%; width: 50vw; height: 50vw;
+            background: radial-gradient(circle, var(--pastel-yellow) 0%, transparent 70%);
+            filter: blur(80px); opacity: 0.6; z-index: -1;
+            animation: floatAura 20s ease-in-out infinite alternate;
+        }
+        body::after {
+            content: ''; position: fixed; bottom: -10%; right: -10%; width: 60vw; height: 60vw;
+            background: radial-gradient(circle, var(--pastel-pink) 0%, transparent 70%);
+            filter: blur(100px); opacity: 0.5; z-index: -1;
+            animation: floatAura 25s ease-in-out infinite alternate-reverse;
+        }
+
+        @keyframes floatAura {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(100px, 100px) scale(1.2); }
+        }
+
+        h1, h2, h3 { font-family: 'Orbitron', sans-serif; color: var(--ink); }
+        
+        .header { text-align: center; padding: 40px 20px 20px; position: relative; }
+        .header h1 { font-size: 2.5rem; margin-top: 20px; font-weight: 800; color: var(--ink); }
+        .nav-link { color: var(--ink-muted); text-decoration: none; font-weight: 700; display: inline-block; transition: all 0.4s var(--spring); font-size: 1.1rem; text-transform: uppercase; letter-spacing: 0.05em; background: var(--glass-bg); padding: 8px 16px; border-radius: 20px; border: 1px solid var(--glass-border); }
+        .nav-link:hover { color: var(--ink); transform: translateY(-3px); box-shadow: 0 4px 15px rgba(0,0,0,0.1); background: rgba(255,255,255,0.7); }
+        
+        .lang-btn {
+            position: absolute;
+            top: 40px;
+            right: 40px;
+            z-index: 10;
+        }
+
+        .container { max-width: 900px; margin: 20px auto 40px; padding: 0 20px; position: relative; z-index: 1; }
+        
+        .card { 
+            background: var(--glass-bg); 
+            border-radius: var(--radius-lg); 
+            padding: 40px; 
+            box-shadow: var(--glass-shadow); 
+            margin-bottom: 30px;
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            transition: all 0.5s var(--spring);
+        }
+        .card h2 { border-bottom: 2px solid rgba(255,255,255,0.5); padding-bottom: 15px; margin-top: 0; font-size: 1.8rem;}
+        
+        .step { background: rgba(255,255,255,0.3); padding: 20px; margin-bottom: 15px; border-radius: var(--radius-md); border: 1px solid var(--glass-border); }
+        .step h3 { margin-top: 0; font-size: 1.3rem; }
+        
+        .btn { 
+            background: linear-gradient(135deg, var(--pastel-lavender), var(--pastel-pink));
+            color: var(--ink); 
+            padding: 12px 28px; 
+            border: 2px solid rgba(255,255,255,0.8); 
+            border-radius: 12px; 
+            cursor: pointer; 
+            font-weight: 700; 
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.1rem;
+            transition: all 0.4s var(--spring);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            display: inline-block;
+            margin-top: 10px;
+        }
+        .btn:hover { transform: translateY(-4px); box-shadow: 0 8px 25px rgba(195, 177, 225, 0.4); background: linear-gradient(135deg, var(--pastel-pink), var(--pastel-lavender)); }
+        
+        /* Quiz */
+        .quiz-q { margin-bottom: 25px; }
+        .quiz-label { display: block; padding: 12px 16px; cursor: pointer; transition: all 0.4s var(--spring); border-radius: 12px; border: 1px solid transparent; font-weight: 600; font-size: 1.1rem;}
+        .quiz-label:hover { background: rgba(255,255,255,0.4); border: 1px solid var(--glass-border); transform: translateX(5px);}
+        
+        /* Coding */
+        .code-editor { background: rgba(0,0,0,0.8); color: #F8F9FA; padding: 20px; border-radius: var(--radius-md); font-family: 'JetBrains Mono', monospace; line-height: 1.8; margin-top: 10px; font-size: 1rem; border: 1px solid rgba(255,255,255,0.2); box-shadow: inset 0 2px 10px rgba(0,0,0,0.5); white-space: pre-wrap; }
+        .blank-input { border: none; border-bottom: 2px solid var(--pastel-mint); background: transparent; color: var(--ink); font-family: inherit; font-size: 1.1rem; text-align: center; outline: none; transition: all 0.4s var(--spring); font-weight: 700;}
+        .blank-input:focus { border-bottom: 2px solid var(--pastel-lavender); background: rgba(255,255,255,0.1); border-radius: 4px;}
+        .correct-ans { color: #0f5132; font-weight: 700; margin-top: 15px; display: inline-block; padding: 10px 16px; background: rgba(176, 234, 205, 0.6); border-radius: 12px; border: 1px solid var(--pastel-mint);}
+        .wrong-ans { color: #842029; font-weight: 700; margin-top: 15px; display: inline-block; padding: 10px 16px; background: rgba(255, 209, 220, 0.6); border-radius: 12px; border: 1px solid var(--pastel-pink);}
+        
+        /* Tips Section override */
+        .card[style*="border-left"] { border-left: none !important; position: relative; overflow: hidden; background: linear-gradient(135deg, rgba(176, 234, 205, 0.3), rgba(255, 255, 255, 0.4)); }
+        .card[style*="border-left"]::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 6px; background: var(--pastel-mint); box-shadow: 0 0 10px var(--pastel-mint); }
+        .card[style*="border-left"] h2 { border-bottom: none; color: #0f5132; }
+        
+        /* SVG Tweaks for Macaron Glassmorphism & High Contrast */
+        svg { background: transparent !important; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.05)); }
+        svg text { font-family: 'Rajdhani', sans-serif !important; font-weight: 700 !important; fill: #111111 !important; }
+        svg [fill="url(#navyGrad)"] { fill: rgba(255,255,255,0.8) !important; stroke: #111111 !important; stroke-width: 2px; }
+        svg [fill="#FFF"] { fill: rgba(255,255,255,0.8) !important; stroke: #111111 !important; stroke-width: 1px; }
+        svg [stroke="#1E3A8A"] { stroke: #111111 !important; stroke-width: 2px !important; }
+        svg [fill="#1E3A8A"] { fill: #111111 !important; }
+        svg [stroke="#FF6B6B"] { stroke: #D81B60 !important; }
+        svg [fill="#FF6B6B"] { fill: #D81B60 !important; }
+
+        /* Translation CSS Rules */
+        .lang-cn { display: none !important; }
+        body.cn-active .lang-en { display: none !important; }
+        body.cn-active .lang-cn { display: block !important; }
+        
+        span.lang-cn { display: none !important; }
+        body.cn-active span.lang-en { display: none !important; }
+        body.cn-active span.lang-cn { display: inline !important; }
+
+        @media (max-width: 768px) {
+            .lang-btn {
+                position: static;
+                margin-top: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="index.html" class="nav-link">
+            <span class="lang-en">← Back to Hub</span>
+            <span class="lang-cn">← 返回主页</span>
+        </a>
+        <h1>
+            <span class="lang-en">Week 6: Operators and Expressions</span>
+            <span class="lang-cn">第 6 周：运算符与表达式</span>
+        </h1>
+        <button class="btn lang-btn" onclick="toggleLanguage()">🌐 EN / 中文</button>
+    </div>
+
+    <div class="container">
+        <!-- Notes Section -->
+        <div class="card">
+            <h2>
+                <span class="lang-en">Step-by-Step Guide</span>
+                <span class="lang-cn">分步指南</span>
+            </h2>
+            <div class="lang-en">
+                <div class='step'><h3>Step 1: Arithmetic Operators</h3><p>Standard math applies in Java: <code>+</code>, <code>-</code>, <code>*</code>, and <code>/</code>. There is also the Modulo operator <code>%</code>, which returns the remainder of a division.</p></div><div class='step'><h3>Step 2: Relational Operators</h3><p>These compare values and always result in a boolean (true/false). Examples: <code>==</code> (equal), <code>!=</code> (not equal), <code>&gt;</code> (greater than), <code>&lt;=</code> (less than or equal to).</p></div><div class='step'><h3>Step 3: Logical Operators</h3><p>Used to combine multiple relational expressions: <code>&amp;&amp;</code> (Logical AND), <code>||</code> (Logical OR), and <code>!</code> (Logical NOT).</p></div>
+            </div>
+            <div class="lang-cn">
+                <div class='step'><h3>步骤 1: 算术运算符</h3>Java 支持标准的算术运算：<code>+</code>（加）、<code>-</code>（减）、<code>*</code>（乘）、<code>/</code>（除）和 <code>%</code>（取模/求余数）。注意，整数除法（如 <code>5 / 2</code>）会截断小数部分得到 <code>2</code>。</div><div class='step'><h3>步骤 2: 运算符优先级</h3>Java 表达式遵循数学优先级规则：乘、除、取模先算，加、减后算。可以使用圆括号 <code>()</code> 来强制改变运算顺序。</div><div class='step'><h3>步骤 3: 关系与逻辑运算符</h3>关系运算符（<code>&gt;</code>、<code>&lt;</code>、<code>==</code>、<code>!=</code>）用于比较，结果为布尔值。逻辑运算符包括 <code>&amp;&amp;</code>（逻辑与）、<code>||</code>（逻辑或）和 <code>!</code>（逻辑非）。</div>
+            </div>
+        </div>
+
+        <!-- SVG Animation Section -->
+        <div class="card">
+            <h2>
+                <span class="lang-en">Concept Visualization</span>
+                <span class="lang-cn">概念可视化</span>
+            </h2>
+            <div style="background: rgba(255,255,255,0.5); border-radius: 8px; padding: 20px; text-align: center; border: 1px solid rgba(255,255,255,0.8);">
+                <svg height="250" max-width="600" viewbox="0 0 600 250" width="100%" xmlns="http://www.w3.org/2000/svg">
+<!-- AND Gate representation -->
+<text fill="#1E3A8A" font-family="Outfit" font-size="16" font-weight="bold" text-anchor="middle" x="150" y="40">A &amp;&amp; B</text>
+<rect fill="#E2E8F0" height="40" rx="5" width="80" x="50" y="60"></rect>
+<text fill="#0A192F" font-family="Outfit" font-size="14" text-anchor="middle" x="90" y="85">Input A</text>
+<rect fill="#E2E8F0" height="40" rx="5" width="80" x="50" y="120"></rect>
+<text fill="#0A192F" font-family="Outfit" font-size="14" text-anchor="middle" x="90" y="145">Input B</text>
+<path d="M 130 80 L 170 80 L 170 110" fill="none" stroke="#FF6B6B" stroke-width="3"></path>
+<path d="M 130 140 L 170 140 L 170 110 L 210 110" fill="none" stroke="#FF6B6B" stroke-width="3"></path>
+<circle cx="230" cy="110" fill="#FDE68A" r="15" stroke="#F59E0B" stroke-width="2">
+<animate attributename="fill" dur="4s" repeatcount="indefinite" values="#FDE68A;#FDE68A;#FDE68A;#F59E0B"></animate>
+</circle>
+<!-- OR Gate representation -->
+<text fill="#1E3A8A" font-family="Outfit" font-size="16" font-weight="bold" text-anchor="middle" x="450" y="40">A || B</text>
+<rect fill="#E2E8F0" height="40" rx="5" width="80" x="350" y="60"></rect>
+<text fill="#0A192F" font-family="Outfit" font-size="14" text-anchor="middle" x="390" y="85">Input A</text>
+<rect fill="#E2E8F0" height="40" rx="5" width="80" x="350" y="120"></rect>
+<text fill="#0A192F" font-family="Outfit" font-size="14" text-anchor="middle" x="390" y="145">Input B</text>
+<path d="M 430 80 L 470 80 L 470 110" fill="none" stroke="#10B981" stroke-width="3"></path>
+<path d="M 430 140 L 470 140 L 470 110 L 510 110" fill="none" stroke="#10B981" stroke-width="3"></path>
+<circle cx="530" cy="110" fill="#FDE68A" r="15" stroke="#F59E0B" stroke-width="2">
+<animate attributename="fill" dur="4s" repeatcount="indefinite" values="#F59E0B;#F59E0B;#F59E0B;#FDE68A"></animate>
+</circle>
+<text fill="#0A192F" font-family="Outfit" font-size="14" text-anchor="middle" x="300" y="210">Animation Cycle: F/F, T/F, F/T, T/T</text>
+</svg>
+            </div>
+        </div>
+
+        <!-- Tips Section -->
+        <div class="card" style="border-left: 5px solid #10B981;">
+            <h2>
+                <span class="lang-en">Tips</span>
+                <span class="lang-cn">提示</span>
+            </h2>
+            <div class="lang-en"><ul>
+<li><strong>Operator Precedence:</strong> Remember BODMAS! Multiplication/Division always evaluate before Addition/Subtraction. Use parentheses <code>()</code> to force the order you want.</li>
+<li><strong>Equals vs Assignment:</strong> A single <code>=</code> assigns a value to a variable. A double <code>==</code> compares two values! Don't mix them up.</li>
+</ul></div>
+            <div class="lang-cn"><ul><li><strong>取模运算符：</strong> <code>x % y</code> 计算的是 <code>x</code> 除以 <code>y</code> 的余数。例如 <code>7 % 3</code> 结果为 <code>1</code>。</li><li><strong>整数除法陷阱：</strong> 在 Java 中，<code>5.0 / 2</code> 得到 <code>2.5</code>，但 <code>5 / 2</code> 得到 <code>2</code>。如果要保留小数，其中一个操作数必须是小数类型！</li></ul></div>
+        </div>
+
+        <!-- Quiz Section -->
+        <div class="card">
+            <h2>
+                <span class="lang-en">Knowledge Check</span>
+                <span class="lang-cn">知识自测</span>
+            </h2>
+            <div id="quiz-container">
+                <div class='quiz-q'>
+            <p><b>1. 
+                <span class="lang-en">What does the modulo operator % do?</span>
+                <span class="lang-cn">在 Java 中，表达式 5 / 2 的运算结果是什么？</span>
+            </b></p>
+            <label class='quiz-label'>
+                <input type='radio' name='q0' value='0'>
+                <span class="lang-en">Calculates percentage</span>
+                <span class="lang-cn">2.5</span>
+            </label><label class='quiz-label'>
+                <input type='radio' name='q0' value='1'>
+                <span class="lang-en">Returns the remainder of a division</span>
+                <span class="lang-cn">2</span>
+            </label>
+        </div><div class='quiz-q'>
+            <p><b>2. 
+                <span class="lang-en">Which is the correct Relational Operator for "Not Equal To"?</span>
+                <span class="lang-cn">在 Java 中，表达式 7 % 4 的运算结果是什么？</span>
+            </b></p>
+            <label class='quiz-label'>
+                <input type='radio' name='q1' value='0'>
+                <span class="lang-en">!=</span>
+                <span class="lang-cn">3</span>
+            </label><label class='quiz-label'>
+                <input type='radio' name='q1' value='1'>
+                <span class="lang-en"><></span>
+                <span class="lang-cn">1</span>
+            </label>
+        </div><div class='quiz-q'>
+            <p><b>3. 
+                <span class="lang-en">If A is true and B is false, what is the result of A && B?</span>
+                <span class="lang-cn">哪个逻辑运算符代表“逻辑与”（只有当两个条件都为真时才返回真）？</span>
+            </b></p>
+            <label class='quiz-label'>
+                <input type='radio' name='q2' value='0'>
+                <span class="lang-en">true</span>
+                <span class="lang-cn">||</span>
+            </label><label class='quiz-label'>
+                <input type='radio' name='q2' value='1'>
+                <span class="lang-en">false</span>
+                <span class="lang-cn">&&</span>
+            </label>
+        </div><div class='quiz-q'>
+            <p><b>4. 
+                <span class="lang-en">If A is true and B is false, what is the result of A || B?</span>
+                <span class="lang-cn">如果 x = 5, y = 10，表达式 (x < 10 && y > 15) 的结果是什么？</span>
+            </b></p>
+            <label class='quiz-label'>
+                <input type='radio' name='q3' value='0'>
+                <span class="lang-en">true</span>
+                <span class="lang-cn">false</span>
+            </label><label class='quiz-label'>
+                <input type='radio' name='q3' value='1'>
+                <span class="lang-en">false</span>
+                <span class="lang-cn">true</span>
+            </label>
+        </div><div class='quiz-q'>
+            <p><b>5. 
+                <span class="lang-en">What is the value of 2 + 3 * 4 in Java?</span>
+                <span class="lang-cn">表达式 2 + 3 * 4 的结果是多少？</span>
+            </b></p>
+            <label class='quiz-label'>
+                <input type='radio' name='q4' value='0'>
+                <span class="lang-en">20</span>
+                <span class="lang-cn">20</span>
+            </label><label class='quiz-label'>
+                <input type='radio' name='q4' value='1'>
+                <span class="lang-en">14</span>
+                <span class="lang-cn">14</span>
+            </label>
+        </div>
+                <button class="btn" onclick="checkQuiz()">
+                    <span class="lang-en">Submit Answers</span>
+                    <span class="lang-cn">提交答案</span>
+                </button>
+                <div id="quiz-result"></div>
+            </div>
+        </div>
+
+        <!-- Fill in the Blanks -->
+        <div class="card">
+            <h2>
+                <span class="lang-en">Fill in the Blanks</span>
+                <span class="lang-cn">填空练习</span>
+            </h2>
+            <p>
+            <span class="lang-en">The result of 5 / 2 in Java is <input type='text' id='blank0' class='blank-input' style='width:100px;'>.</span>
+            <span class="lang-cn">Java中 5 / 2 的运行结果是<input type='text' id='blank_cn0' class='blank-input' style='width:100px;'>。</span>
+        </p><p>
+            <span class="lang-en">The operator for logic OR is <input type='text' id='blank1' class='blank-input' style='width:100px;'>.</span>
+            <span class="lang-cn">逻辑或的运算符是<input type='text' id='blank_cn1' class='blank-input' style='width:100px;'>。</span>
+        </p>
+            <button class="btn" onclick="checkBlanks()">
+                <span class="lang-en">Check Answers</span>
+                <span class="lang-cn">检查答案</span>
+            </button>
+            <div id="blanks-result"></div>
+        </div>
+
+        <!-- Coding Activities -->
+        <div class="card">
+            <h2>
+                <span class="lang-en">Coding Practice</span>
+                <span class="lang-cn">编程实践</span>
+            </h2>
+            <div class='step'>
+            <p><b>
+                <span class="lang-en">Exercise 1: Math Formula Translation: Convert the algebraic formula y = a(x + b) to a valid Java expression.</span>
+                <span class="lang-cn">练习 1: 编写取模表达式: 编写一行代码，将 <code>number</code> 除以 2 的余数赋给一个名为 <code>remainder</code> 的整数变量。</span>
+            </b></p>
+            <div class='code-editor'>int y = a _______ (x + b);</div>
+            <button class="btn" onclick="showCodeAns('w6c0')">
+                <span class="lang-en">Show Answer</span>
+                <span class="lang-cn">显示答案</span>
+            </button>
+            <div class='code-editor' id='code-ans-w6c0' style='display:none;'>int remainder = number % 2;</div>
+        </div><div class='step'>
+            <p><b>
+                <span class="lang-en">Exercise 2: Comparison Check: Complete the code to check if age is exactly equal to 21.</span>
+                <span class="lang-cn">练习 2: 整数除法转换: 为了使 <code>5 / 2</code> 得到正确的 <code>2.5</code>，请把 <code>5</code> 改写为浮点字面量。</span>
+            </b></p>
+            <div class='code-editor'>boolean canDrink = (age _______ 21);</div>
+            <button class="btn" onclick="showCodeAns('w6c1')">
+                <span class="lang-en">Show Answer</span>
+                <span class="lang-cn">显示答案</span>
+            </button>
+            <div class='code-editor' id='code-ans-w6c1' style='display:none;'>5.0 / 2</div>
+        </div><div class='step'>
+            <p><b>
+                <span class="lang-en">Exercise 3: Logical AND: You need both a ticket AND ID to enter. Fill in the logical AND operator.</span>
+                <span class="lang-cn">练习 3: 逻辑条件: 编写一个逻辑表达式，检查 <code>age</code> 是否大于等于 18 且小于等于 60。</span>
+            </b></p>
+            <div class='code-editor'>boolean access = hasTicket _______ hasID;</div>
+            <button class="btn" onclick="showCodeAns('w6c2')">
+                <span class="lang-en">Show Answer</span>
+                <span class="lang-cn">显示答案</span>
+            </button>
+            <div class='code-editor' id='code-ans-w6c2' style='display:none;'>age >= 18 && age <= 60</div>
+        </div>
+        </div>
+
+        <!-- Matching Game -->
+        <div class="card">
+            <h2>
+                <span class="lang-en">Matching Game</span>
+                <span class="lang-cn">配对游戏</span>
+            </h2>
+            <p>
+                <span class="lang-en">Match the term on the left with its definition on the right.</span>
+                <span class="lang-cn">将左侧的术语与右侧的定义进行配对。</span>
+            </p>
+            <div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px;">
+                <div style="width: 45%;">
+                    <div class='step' style='padding:10px; cursor:pointer;'>%</div><div class='step' style='padding:10px; cursor:pointer;'>==</div><div class='step' style='padding:10px; cursor:pointer;'>&&</div><div class='step' style='padding:10px; cursor:pointer;'>!=</div>
+                </div>
+                <div style="width: 45%;">
+                    <div class='step' style='padding:10px; cursor:pointer;'>
+            <span class="lang-en">Remainder/Modulo operator</span>
+            <span class="lang-cn">求余/取模运算符</span>
+        </div><div class='step' style='padding:10px; cursor:pointer;'>
+            <span class="lang-en">Equality check operator</span>
+            <span class="lang-cn">相等性检查运算符</span>
+        </div><div class='step' style='padding:10px; cursor:pointer;'>
+            <span class="lang-en">Logical AND operator</span>
+            <span class="lang-cn">逻辑与运算符</span>
+        </div><div class='step' style='padding:10px; cursor:pointer;'>
+            <span class="lang-en">Not equal check operator</span>
+            <span class="lang-cn">不等检查运算符</span>
+        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleLanguage() {
+            document.body.classList.toggle('cn-active');
+        }
+
+        function checkQuiz() {
+            let score = 0;
+            
+        const q0 = document.querySelector('input[name="q0"]:checked');
+        if (q0 && parseInt(q0.value) === 1) score++;
+        
+        const q1 = document.querySelector('input[name="q1"]:checked');
+        if (q1 && parseInt(q1.value) === 0) score++;
+        
+        const q2 = document.querySelector('input[name="q2"]:checked');
+        if (q2 && parseInt(q2.value) === 1) score++;
+        
+        const q3 = document.querySelector('input[name="q3"]:checked');
+        if (q3 && parseInt(q3.value) === 0) score++;
+        
+        const q4 = document.querySelector('input[name="q4"]:checked');
+        if (q4 && parseInt(q4.value) === 1) score++;
+        
+            document.getElementById('quiz-result').innerHTML = `<span class='correct-ans'>
+                <span class="lang-en">You scored: ${score} / 5</span>
+                <span class="lang-cn">得分：${score} / 5</span>
+            </span>`;
+        }
+
+        function checkBlanks() {
+            
+        const b0 = (document.getElementById('blank0').value || document.getElementById('blank_cn0').value).toLowerCase().trim();
+        if(b0 === '2') {
+            document.getElementById('blank0').style.borderBottomColor = '#2E8B57';
+            document.getElementById('blank_cn0').style.borderBottomColor = '#2E8B57';
+        } else {
+            document.getElementById('blank0').style.borderBottomColor = '#C70039';
+            document.getElementById('blank_cn0').style.borderBottomColor = '#C70039';
+        }
+        
+        const b1 = (document.getElementById('blank1').value || document.getElementById('blank_cn1').value).toLowerCase().trim();
+        if(b1 === '||') {
+            document.getElementById('blank1').style.borderBottomColor = '#2E8B57';
+            document.getElementById('blank_cn1').style.borderBottomColor = '#2E8B57';
+        } else {
+            document.getElementById('blank1').style.borderBottomColor = '#C70039';
+            document.getElementById('blank_cn1').style.borderBottomColor = '#C70039';
+        }
+        
+        }
+
+        function showCodeAns(id) {
+            const el = document.getElementById('code-ans-' + id);
+            el.style.display = el.style.display === 'none' ? 'block' : 'none';
+        }
+    </script>
+</body>
+</html>

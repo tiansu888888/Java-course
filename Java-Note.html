@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Java & CS Study Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root {
+  /* Macaron Palette */
+  --pastel-pink: #FFD1DC;
+  --pastel-mint: #B0EACD;
+  --pastel-blue: #AEC6CF;
+  --pastel-lavender: #C3B1E1;
+  --pastel-yellow: #FDFD96;
+  
+  --ink: #111111;
+  --ink-muted: #333333;
+  --text: #111111;
+  --text-muted: #333333;
+  --text-light: #555555;
+  
+  --glass-bg: rgba(255, 255, 255, 0.45);
+  --glass-border: rgba(255, 255, 255, 0.6);
+  --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+  --radius: 20px;
+  --radius-sm: 10px;
+  
+  --java-blue: #AEC6CF;
+  --java-blue-light: rgba(174, 198, 207, 0.4);
+  --java-blue-dark: #2C5F7C;
+  --java-red: #D81B60;
+  --java-red-light: rgba(216, 27, 96, 0.3);
+  --java-orange: #C2593F;
+  --primary: #C3B1E1;
+  --primary-light: rgba(195, 177, 225, 0.4);
+  --secondary: #B0EACD;
+  --secondary-light: rgba(176, 234, 205, 0.4);
+  --success: #2E8B57;
+  --success-light: rgba(176, 234, 205, 0.6);
+  --error: #D81B60;
+  --error-light: rgba(255, 209, 220, 0.6);
+  
+  --font-display: 'Orbitron', sans-serif;
+  --font-body: 'Rajdhani', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  
+  --spring: cubic-bezier(0.16, 1, 0.3, 1);
+  --shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+  --shadow-lg: 0 15px 40px 0 rgba(31, 38, 135, 0.15);
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+body {
+  font-family: var(--font-body);
+  color: var(--text);
+  line-height: 1.75;
+  overflow-x: hidden;
+  background: linear-gradient(135deg, var(--pastel-pink), var(--pastel-lavender), var(--pastel-blue), var(--pastel-mint));
+  background-size: 400% 400%;
+  animation: gradientBG 15s ease infinite;
+  min-height: 100vh;
+}
+
+@keyframes gradientBG {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Floating Auras */
+body::before {
+  content: ''; position: fixed; top: -10%; left: -10%; width: 50vw; height: 50vw;
+  background: radial-gradient(circle, var(--pastel-yellow) 0%, transparent 70%);
+  filter: blur(80px); opacity: 0.6; z-index: -1;
+  animation: floatAura 20s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+body::after {
+  content: ''; position: fixed; bottom: -10%; right: -10%; width: 60vw; height: 60vw;
+  background: radial-gradient(circle, var(--pastel-pink) 0%, transparent 70%);
+  filter: blur(100px); opacity: 0.5; z-index: -1;
+  animation: floatAura 25s ease-in-out infinite alternate-reverse;
+  pointer-events: none;
+}
+
+@keyframes floatAura {
+  0% { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(100px, 100px) scale(1.2); }
+}
+
+/* ===== HERO ===== */
+.hero {
+  position: relative; z-index: 1;
+  padding: 0; overflow: hidden;
+  background: rgba(255, 255, 255, 0.35);
+  border-bottom: 1px solid var(--glass-border);
+  backdrop-filter: blur(20px);
+}
+.hero-inner {
+  max-width: 1200px; margin: 0 auto;
+  padding: 2rem 2rem 1.8rem;
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 1.5rem;
+}
+.hero-left { display: flex; align-items: center; gap: 1.2rem; }
+.java-logo { width: 60px; height: 60px; flex-shrink: 0; position: relative; }
+.java-logo svg { width: 100%; height: 100%; }
+.hero-text h1 {
+  font-family: var(--font-display); color: var(--ink);
+  font-size: clamp(1.5rem, 3.5vw, 2.5rem); font-weight: 800;
+  letter-spacing: -.02em; line-height: 1.2;
+}
+.hero-text h1 .java-word { color: var(--java-orange); }
+.hero-text p {
+  color: var(--ink-muted); font-size: .9rem;
+  font-family: var(--font-mono); margin-top: 2px;
+}
+.controls { display: flex; gap: .6rem; align-items: center; flex-wrap: wrap; }
+.lang-toggle {
+  display: flex; background: rgba(255, 255, 255, 0.35);
+  border-radius: 30px; overflow: hidden; border: 1px solid var(--glass-border);
+}
+.lang-btn {
+  padding: .4rem .9rem; border: none; cursor: pointer;
+  font-family: var(--font-body); font-size: .90rem; font-weight: 700;
+  background: transparent; color: var(--ink-muted); transition: .3s;
+}
+.lang-btn.active { background: rgba(255, 255, 255, 0.85); color: var(--ink); font-weight: 700; }
+.score-badge {
+  display: flex; align-items: center; gap: .4rem;
+  background: rgba(255, 255, 255, 0.35); border: 1px solid var(--glass-border);
+  padding: .35rem .9rem; border-radius: 30px;
+  font-family: var(--font-mono); font-size: .82rem; color: var(--ink);
+}
+.score-badge svg { width: 16px; height: 16px; }
+.streak-badge { background: rgba(244, 162, 97, 0.25); border-color: rgba(244, 162, 97, 0.4); color: var(--java-orange); }
+
+/* ===== NAV ===== */
+.nav-bar {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(255, 255, 255, 0.45); backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--glass-border);
+  padding: .45rem 1rem;
+}
+.nav-inner { max-width: 1200px; margin: 0 auto; display: flex; gap: .3rem; overflow-x: auto; scrollbar-width: none; }
+.nav-inner::-webkit-scrollbar { display: none; }
+.nav-btn {
+  flex-shrink: 0; padding: .5rem .9rem; border: none; cursor: pointer;
+  font-family: var(--font-body); font-size: 0.95rem; font-weight: 700; color: var(--ink-muted);
+  background: transparent; border-radius: var(--radius-sm); transition: .25s; white-space: nowrap;
+}
+.nav-btn:hover { color: var(--ink); background: rgba(255, 255, 255, 0.3); }
+.nav-btn.active { color: var(--ink); background: rgba(255, 255, 255, 0.7); font-weight: 700; }
+
+/* ===== MAIN ===== */
+.main { max-width: 1200px; margin: 0 auto; padding: 2rem 1.5rem 4rem; position: relative; z-index: 1; }
+.section { display: none; animation: fadeUp .5s ease; }
+.section.active { display: block; }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+.section-title { font-family: var(--font-display); font-size: clamp(1.3rem, 3vw, 1.9rem); font-weight: 700; margin-bottom: .4rem; color: var(--ink); }
+.section-subtitle { color: var(--ink-muted); margin-bottom: 1.8rem; font-size: 1.05rem; font-weight: 600; }
+.chapter-block { margin-bottom: 2.2rem; }
+.chapter-header { display: flex; align-items: center; gap: .75rem; margin-bottom: 1rem; padding-bottom: .6rem; border-bottom: 2px solid var(--glass-border); }
+.chapter-num {
+  width: 42px; height: 42px; display: flex; align-items: center; justify-content: center;
+  background: linear-gradient(135deg, var(--pastel-blue), var(--java-blue-dark));
+  color: var(--ink); font-family: var(--font-display); font-weight: 700; font-size: 1.05rem;
+  border-radius: var(--radius-sm); flex-shrink: 0;
+  border: 1px solid var(--glass-border);
+}
+.chapter-num.java-num { background: linear-gradient(135deg, var(--pastel-pink), var(--java-red)); }
+.chapter-title { font-family: var(--font-display); font-weight: 700; font-size: 1.18rem; color: var(--ink); }
+
+/* ===== ACCORDION & CARDS ===== */
+.accordion, .svg-card, .quiz-card, .scenario-card, .code-card, .match-card, .quiz-result {
+  background: var(--glass-bg) !important;
+  border-radius: var(--radius) !important;
+  box-shadow: var(--glass-shadow) !important;
+  border: 1px solid var(--glass-border) !important;
+  backdrop-filter: blur(40px) !important;
+  -webkit-backdrop-filter: blur(40px) !important;
+  transition: all 0.5s var(--spring) !important;
+  margin-bottom: 1rem;
+  overflow: hidden;
+}
+.accordion-header {
+  display: flex; align-items: center; justify-content: space-between; padding: .9rem 1.15rem; cursor: pointer; transition: .3s; gap: 1rem;
+  background: transparent !important; user-select: none;
+}
+.accordion-header:hover { background: rgba(255, 255, 255, 0.4) !important; }
+.accordion-header h3 { font-family: var(--font-display); font-size: 1.05rem; font-weight: 700; color: var(--ink); }
+.accordion-icon {
+  width: 26px; height: 26px; display: flex; align-items: center; justify-content: center;
+  background: var(--pastel-lavender); color: var(--ink); border-radius: 50%; font-size: 1rem; transition: transform .3s; flex-shrink: 0;
+  border: 1px solid rgba(255,255,255,0.8);
+}
+.accordion.open .accordion-icon { transform: rotate(45deg); }
+.accordion-body { max-height: 0; overflow: hidden; transition: max-height .45s ease; padding: 0 1.15rem; background: transparent !important; }
+.accordion.open .accordion-body { max-height: 4000px; padding: 0 1.15rem 1.15rem; }
+.note-content { font-size: 1rem; line-height: 1.75; font-family: var(--font-body); font-weight: 600; color: var(--ink); }
+.note-content h4 { font-family: var(--font-display); font-size: 1.05rem; font-weight: 700; color: var(--ink); margin: .9rem 0 .35rem; }
+.note-content ul { padding-left: 1.3rem; margin: .4rem 0; }
+.note-content li { margin-bottom: .3rem; }
+.note-content .highlight { background: var(--pastel-yellow); padding: 2px 6px; border-radius: 4px; font-weight: 700; }
+.note-content .info-box { background: rgba(255, 255, 255, 0.35); border-left: 4px solid var(--pastel-blue); padding: .65rem .9rem; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; margin: .65rem 0; font-size: .95rem; border-top: 1px solid var(--glass-border); border-right: 1px solid var(--glass-border); border-bottom: 1px solid var(--glass-border); }
+.note-content .java-box { background: rgba(255, 255, 255, 0.35); border-left: 4px solid var(--java-red); padding: .65rem .9rem; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; margin: .65rem 0; font-size: .95rem; border-top: 1px solid var(--glass-border); border-right: 1px solid var(--glass-border); border-bottom: 1px solid var(--glass-border); }
+.note-content .term { display: inline-block; background: var(--pastel-lavender); color: var(--ink); padding: 1px 7px; border-radius: 4px; font-family: var(--font-body); font-size: .9rem; font-weight: 700; margin: 0 2px; border: 1px solid rgba(255,255,255,0.8); }
+.note-content .jterm { display: inline-block; background: var(--pastel-pink); color: var(--ink); padding: 1px 7px; border-radius: 4px; font-family: var(--font-body); font-size: .9rem; font-weight: 700; margin: 0 2px; border: 1px solid rgba(255,255,255,0.8); }
+.note-content code { font-family: var(--font-mono); font-size: .9rem; background: rgba(0,0,0,0.05); padding: 2px 5px; border-radius: 3px; }
+
+/* ===== SVG ===== */
+.svg-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 1.3rem; }
+.svg-card { padding: 1.4rem; }
+.svg-card h3 { font-family: var(--font-display); font-size: 1.15rem; margin-bottom: .8rem; color: var(--ink); }
+.svg-card svg { width: 100%; height: auto; background: transparent !important; }
+.svg-card svg text { font-family: var(--font-body) !important; font-weight: 700 !important; fill: var(--ink) !important; }
+.pulse-node { animation: pulse 2s ease-in-out infinite; }
+@keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: .4; } }
+.flow-arrow { stroke-dasharray: 8 4; animation: flowDash 1s linear infinite; }
+@keyframes flowDash { to { stroke-dashoffset: -12; } }
+.gen-appear { opacity: 0; animation: genFade .6s ease forwards; }
+@keyframes genFade { to { opacity: 1; } }
+
+/* ===== QUIZ ===== */
+.quiz-container { max-width: 800px; }
+.quiz-progress { display: flex; gap: 5px; margin-bottom: 1.3rem; flex-wrap: wrap; }
+.quiz-dot {
+  width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: var(--font-mono); font-size: .78rem; font-weight: 700;
+  background: var(--glass-bg); border: 2px solid var(--glass-border); color: var(--ink-muted); transition: .3s; cursor: pointer;
+}
+.quiz-dot.answered { background: var(--pastel-blue); color: var(--ink); }
+.quiz-dot.correct { background: var(--success) !important; color: #fff !important; border-color: var(--success) !important; }
+.quiz-dot.wrong { background: var(--error) !important; color: #fff !important; border-color: var(--error) !important; }
+.quiz-q-num { font-family: var(--font-mono); font-size: .85rem; color: var(--ink-muted); margin-bottom: .4rem; font-weight: 700; }
+.quiz-question { font-size: 1.15rem; font-weight: 700; margin-bottom: 1.1rem; line-height: 1.55; color: var(--ink); }
+.quiz-options { display: flex; flex-direction: column; gap: .5rem; }
+.quiz-opt {
+  display: flex; align-items: flex-start; gap: .65rem; padding: .65rem .9rem; border: 2px solid var(--glass-border); border-radius: var(--radius-md); cursor: pointer; transition: .25s;
+  background: rgba(255,255,255,0.2); font-family: var(--font-body); font-weight: 600; color: var(--ink);
+}
+.quiz-opt:hover { border-color: var(--pastel-lavender); background: rgba(255,255,255,0.4); }
+.quiz-opt.selected { border-color: var(--pastel-lavender); background: rgba(255,255,255,0.5); }
+.quiz-opt.correct-opt { border-color: var(--success) !important; background: var(--success-light) !important; }
+.quiz-opt.wrong-opt { border-color: var(--error) !important; background: var(--error-light) !important; }
+.quiz-opt-letter {
+  width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; border-radius: 50%;
+  background: var(--glass-border); font-family: var(--font-mono); font-size: .78rem; font-weight: 700; flex-shrink: 0; transition: .25s; color: var(--ink);
+}
+.quiz-opt.selected .quiz-opt-letter { background: var(--pastel-lavender); color: var(--ink); }
+.quiz-opt.correct-opt .quiz-opt-letter { background: var(--success); color: #fff; }
+.quiz-opt.wrong-opt .quiz-opt-letter { background: var(--error); color: #fff; }
+.quiz-opt-text { font-size: .95rem; line-height: 1.45; }
+.quiz-feedback { margin-top: .9rem; padding: .65rem .9rem; border-radius: var(--radius-sm); font-size: .95rem; display: none; font-weight: 600; }
+.quiz-feedback.show { display: block; }
+.quiz-feedback.correct-fb { background: var(--success-light); color: #0f5132; border: 1px solid var(--success); }
+.quiz-feedback.wrong-fb { background: var(--error-light); color: #842029; border: 1px solid var(--error); }
+.quiz-nav { display: flex; gap: .65rem; margin-top: 1.3rem; flex-wrap: wrap; justify-content: center; }
+
+/* ===== BUTTONS ===== */
+.btn {
+  padding: .65rem 1.4rem; border: none; border-radius: 30px; cursor: pointer; font-family: var(--font-body); font-size: 0.95rem; font-weight: 700; transition: .3s; display: inline-flex; align-items: center; gap: .35rem;
+  background: linear-gradient(135deg, var(--pastel-lavender), var(--pastel-pink)) !important;
+  color: var(--ink) !important;
+  border: 2px solid rgba(255,255,255,0.8) !important;
+}
+.btn:hover {
+  transform: translateY(-3px) !important;
+  box-shadow: 0 8px 25px rgba(195, 177, 225, 0.4) !important;
+  background: linear-gradient(135deg, var(--pastel-pink), var(--pastel-lavender)) !important;
+}
+.btn-java { background: linear-gradient(135deg, var(--pastel-blue), var(--pastel-lavender)) !important; }
+.btn-red { background: linear-gradient(135deg, var(--pastel-pink), var(--pastel-lavender)) !important; }
+.btn-secondary { background: transparent !important; color: var(--ink) !important; border: 2px solid var(--pastel-lavender) !important; }
+.btn-secondary:hover { background: rgba(255,255,255,0.3) !important; }
+.btn-orange { background: linear-gradient(135deg, var(--pastel-yellow), var(--pastel-pink)) !important; }
+.btn:disabled { opacity: .5; cursor: not-allowed; transform: none!important; }
+.quiz-result { text-align: center; padding: 2rem; }
+.quiz-result h3 { font-family: var(--font-display); font-size: 1.5rem; margin-bottom: .4rem; }
+.quiz-result .big-score { font-family: var(--font-display); font-size: 3.2rem; font-weight: 800; color: var(--ink); margin: .4rem 0; }
+
+/* ===== SCENARIOS ===== */
+.scenario-group { margin-bottom: 2.5rem; }
+.scenario-group-header { display: flex; align-items: center; gap: .9rem; margin-bottom: 1.2rem; padding-bottom: .6rem; border-bottom: 2px solid var(--glass-border); }
+.scenario-group-icon {
+  width: 44px; height: 44px; display: flex; align-items: center; justify-content: center;
+  background: linear-gradient(135deg, var(--pastel-yellow), var(--pastel-pink));
+  color: var(--ink); font-family: var(--font-display); font-weight: 800; font-size: .95rem;
+  border-radius: var(--radius-sm); flex-shrink: 0; border: 1px solid var(--glass-border);
+}
+.scenario-group-title { font-family: var(--font-display); font-weight: 700; font-size: 1.15rem; color: var(--ink); }
+.scenario-group-sub { font-size: .9rem; color: var(--ink-muted); margin-top: 1px; font-weight: 600; }
+.scenario-card { padding: 1.3rem 1.5rem; margin-bottom: 1.1rem; }
+.scenario-header { margin-bottom: .8rem; }
+.scenario-badge { font-family: var(--font-mono); font-size: .78rem; background: var(--pastel-yellow); color: var(--ink); padding: 3px 9px; border-radius: 20px; font-weight: 700; border: 1px solid rgba(255,255,255,0.8); }
+.scenario-badge.j-badge { background: var(--pastel-pink); }
+.scenario-context { background: rgba(255,255,255,0.2); border-radius: var(--radius-sm); padding: .9rem 1.1rem; margin-bottom: .9rem; font-size: .95rem; line-height: 1.65; border-left: 4px solid var(--pastel-blue); border-top: 1px solid var(--glass-border); border-right: 1px solid var(--glass-border); border-bottom: 1px solid var(--glass-border); }
+.scenario-context pre { font-family: var(--font-mono); font-size: .9rem; line-height: 1.55; margin: .4rem 0; overflow-x: auto; white-space: pre; }
+.scenario-question { font-weight: 700; font-size: 1rem; margin-bottom: .9rem; line-height: 1.5; color: var(--ink); }
+.scenario-opts { display: flex; flex-direction: column; gap: .45rem; }
+.scenario-opt { display: flex; align-items: flex-start; gap: .55rem; padding: .55rem .9rem; border: 2px solid var(--glass-border); border-radius: var(--radius-sm); cursor: pointer; transition: .25s; font-size: .95rem; line-height: 1.45; background: rgba(255,255,255,0.15); }
+.scenario-opt:hover { border-color: var(--pastel-lavender); background: rgba(255,255,255,0.3); }
+.scenario-opt.sel { border-color: var(--pastel-lavender); background: rgba(255,255,255,0.4); }
+.scenario-opt.correct-sel { border-color: var(--success) !important; background: var(--success-light) !important; }
+.scenario-opt.wrong-sel { border-color: var(--error) !important; background: var(--error-light) !important; }
+.scenario-opt.dis-opt { pointer-events: none; }
+.scenario-opt-letter { width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; border-radius: 50%; background: var(--glass-border); font-family: var(--font-mono); font-size: .72rem; font-weight: 700; flex-shrink: 0; transition: .25s; color: var(--ink); }
+.scenario-opt.sel .scenario-opt-letter { background: var(--pastel-lavender); color: var(--ink); }
+.scenario-opt.correct-sel .scenario-opt-letter { background: var(--success); color: #fff; }
+.scenario-opt.wrong-sel .scenario-opt-letter { background: var(--error); color: #fff; }
+.scenario-fb { margin-top: .65rem; padding: .55rem .9rem; border-radius: var(--radius-sm); font-size: .9rem; line-height: 1.55; display: none; font-weight: 600; }
+.scenario-fb.show-fb { display: block; animation: fadeUp .3s ease; }
+.scenario-fb.correct-sfb { background: var(--success-light); color: #0f5132; border: 1px solid var(--success); }
+.scenario-fb.wrong-sfb { background: var(--error-light); color: #842029; border: 1px solid var(--error); }
+.scenario-progress { display: flex; align-items: center; gap: .75rem; margin-bottom: 1.8rem; padding: .85rem 1.1rem; background: var(--glass-bg); border-radius: var(--radius); box-shadow: var(--shadow); border: 1px solid var(--glass-border); backdrop-filter: blur(10px); }
+.scenario-progress-bar { flex: 1; height: 7px; background: rgba(255,255,255,0.3); border-radius: 10px; overflow: hidden; }
+.scenario-progress-fill { height: 100%; border-radius: 10px; transition: width .4s ease; width: 0%; background: linear-gradient(90deg, var(--pastel-blue), var(--pastel-lavender)); }
+.scenario-progress-text { font-family: var(--font-mono); font-size: .82rem; color: var(--ink-muted); white-space: nowrap; font-weight: 700; }
+
+/* ===== CODE ===== */
+.code-container { max-width: 800px; }
+.code-card { overflow: hidden; margin-bottom: 1.8rem; }
+.code-card-header { padding: .9rem 1.15rem; background: linear-gradient(135deg, var(--pastel-pink), var(--java-red)); color: var(--ink); display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--glass-border); }
+.code-card-header.pseudo-header { background: linear-gradient(135deg, var(--pastel-blue), var(--java-blue-dark)); }
+.code-card-header h3 { font-family: var(--font-display); font-size: 1.05rem; font-weight: 700; }
+.code-diff { font-family: var(--font-mono); font-size: .78rem; background: rgba(255,255,255,0.4); padding: 2px 9px; border-radius: 20px; font-weight: 700; border: 1px solid var(--glass-border); }
+.code-body { padding: 1.3rem; }
+.code-problem { margin-bottom: 1.1rem; line-height: 1.65; font-size: 1rem; font-family: var(--font-body); font-weight: 600; color: var(--ink); }
+.code-editor { width: 100%; min-height: 170px; padding: .9rem; font-family: var(--font-mono); font-size: .95rem; line-height: 1.65; border: 2px solid var(--glass-border); border-radius: var(--radius-sm); background: rgba(0,0,0,0.8); color: #F8F9FA; resize: vertical; transition: .3s; outline: none; }
+.code-editor:focus { border-color: var(--pastel-blue); }
+.code-actions { display: flex; gap: .65rem; margin-top: .9rem; flex-wrap: wrap; }
+.code-solution { margin-top: .9rem; padding: .9rem; background: rgba(0,0,0,0.05); border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: .9rem; line-height: 1.65; display: none; white-space: pre-wrap; border: 1px dashed var(--pastel-blue); color: var(--ink); }
+.code-solution.show { display: block; animation: fadeUp .4s ease; }
+
+/* ===== MATCH ===== */
+.match-container { max-width: 900px; }
+.match-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.3rem; flex-wrap: wrap; gap: .9rem; }
+.match-stats { display: flex; gap: .8rem; }
+.match-stat { background: var(--glass-bg); padding: .4rem .9rem; border-radius: 30px; font-family: var(--font-mono); font-size: .82rem; box-shadow: var(--shadow); border: 1px solid var(--glass-border); font-weight: 700; }
+.match-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(195px, 1fr)); gap: .65rem; }
+.match-card {
+  border: 2px solid var(--glass-border);
+  padding: .9rem; cursor: pointer; transition: .3s; min-height: 65px;
+  display: flex; align-items: center; justify-content: center; text-align: center;
+  font-size: .95rem; font-family: var(--font-body); font-weight: 700; user-select: none; flex-direction: column;
+}
+.match-card:hover { border-color: var(--pastel-blue); transform: translateY(-2px); }
+.match-card.selected-card { border-color: var(--java-orange) !important; background: var(--pastel-pink) !important; box-shadow: 0 0 0 3px rgba(244,162,97,.25) !important; }
+.match-card.matched-card { border-color: var(--success) !important; background: var(--success-light) !important; opacity: .7; pointer-events: none; transform: none; }
+.match-card.wrong-card { animation: shake .4s ease; }
+@keyframes shake { 0%,100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+.match-card .card-label { font-family: var(--font-mono); font-size: .7rem; text-transform: uppercase; letter-spacing: .05em; color: var(--ink-muted); display: block; margin-bottom: 3px; font-weight: 700; }
+
+/* ===== TOAST ===== */
+.toast { position: fixed; bottom: 2rem; right: 2rem; z-index: 999; background: var(--glass-bg); backdrop-filter: blur(20px); border-left: 4px solid var(--java-orange); padding: .9rem 1.3rem; border-radius: var(--radius-sm); box-shadow: var(--shadow-lg); border-top: 1px solid var(--glass-border); border-right: 1px solid var(--glass-border); border-bottom: 1px solid var(--glass-border); transform: translateX(120%); transition: transform .4s cubic-bezier(.175,.885,.32,1.275); max-width: 300px; }
+.toast.show { transform: translateX(0); }
+.toast-title { font-family: var(--font-display); font-weight: 700; font-size: .95rem; color: var(--java-orange); }
+.toast-text { font-size: .88rem; color: var(--ink-muted); margin-top: 1px; font-weight: 600; }
+.footer { text-align: center; padding: 1.8rem; margin-top: 2rem; border-top: 1px solid var(--glass-border); color: var(--ink-muted); font-size: .9rem; font-family: var(--font-mono); position: relative; z-index: 1; font-weight: 700; }
+
+@media(max-width:768px){
+  .hero-inner { justify-content: center; text-align: center; }
+  .hero-left { flex-direction: column; text-align: center; }
+  .main { padding: 1.3rem 1rem 3rem; }
+  .svg-grid { grid-template-columns: 1fr; }
+  .match-grid { grid-template-columns: repeat(auto-fill, minmax(145px, 1fr)); }
+  .quiz-card { padding: 1.15rem; }
+  .nav-btn { padding: .4rem .7rem; font-size: .85rem; }
+  .scenario-card { padding: 1.1rem; }
+}
+@media(max-width:480px){.controls { width: 100%; justify-content: center; }.match-grid { grid-template-columns: 1fr 1fr; }}
+.mt-2 { margin-top: 1.8rem; }.text-center { text-align: center; }
+</style>
+</head>
+<body>
+
+<!-- ===== HERO ===== -->
+<header class="hero">
+  <div class="hero-inner">
+    <div class="hero-left">
+      <div class="java-logo">
+        <svg viewBox="0 0 100 120" xmlns="http://www.w3.org/2000/svg">
+          <!-- Cup body -->
+          <path d="M20 45 L25 100 Q25 112 50 112 Q75 112 75 100 L80 45 Z" fill="#C7402D" opacity=".9"/>
+          <path d="M20 45 L25 100 Q25 112 50 112 Q75 112 75 100 L80 45 Z" fill="none" stroke="#8B2500" stroke-width="1.5"/>
+          <!-- Cup rim -->
+          <ellipse cx="50" cy="45" rx="32" ry="8" fill="#E87461"/>
+          <ellipse cx="50" cy="45" rx="32" ry="8" fill="none" stroke="#C7402D" stroke-width="1"/>
+          <!-- Liquid -->
+          <ellipse cx="50" cy="48" rx="27" ry="6" fill="#6F4E37" opacity=".6"/>
+          <!-- Handle -->
+          <path d="M80 55 Q100 55 100 75 Q100 95 80 90" fill="none" stroke="#C7402D" stroke-width="6" stroke-linecap="round"/>
+          <!-- Steam -->
+          <path d="M35 30 Q38 20 35 10" fill="none" stroke="rgba(255,255,255,.5)" stroke-width="2.5" stroke-linecap="round">
+            <animate attributeName="d" dur="2s" repeatCount="indefinite" values="M35 30 Q38 20 35 10;M35 30 Q32 20 35 8;M35 30 Q38 20 35 10"/>
+            <animate attributeName="opacity" dur="2s" repeatCount="indefinite" values=".5;.2;.5"/>
+          </path>
+          <path d="M50 28 Q53 18 50 6" fill="none" stroke="rgba(255,255,255,.4)" stroke-width="2.5" stroke-linecap="round">
+            <animate attributeName="d" dur="2.3s" repeatCount="indefinite" values="M50 28 Q53 18 50 6;M50 28 Q47 18 50 4;M50 28 Q53 18 50 6"/>
+            <animate attributeName="opacity" dur="2.3s" repeatCount="indefinite" values=".4;.15;.4"/>
+          </path>
+          <path d="M65 32 Q68 22 65 12" fill="none" stroke="rgba(255,255,255,.35)" stroke-width="2" stroke-linecap="round">
+            <animate attributeName="d" dur="1.8s" repeatCount="indefinite" values="M65 32 Q68 22 65 12;M65 32 Q62 22 65 10;M65 32 Q68 22 65 12"/>
+          </path>
+        </svg>
+      </div>
+      <div class="hero-text">
+        <h1><span class="java-word">Java</span> & CS Study Hub</h1>
+        <p data-en="Chapters 1–10 · Interactive Learning Platform" data-cn="第1-10章 · 互动学习平台">Chapters 1–10 · Interactive Learning Platform</p>
+      </div>
+    </div>
+    <div class="controls">
+      <div class="score-badge" id="scoreBadge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><span id="scoreDisplay">0</span></div>
+      <div class="score-badge streak-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg><span id="streakDisplay">0</span></div>
+      <div class="lang-toggle"><button class="lang-btn active" onclick="setLang('en')">EN</button><button class="lang-btn" onclick="setLang('cn')">中文</button></div>
+    </div>
+  </div>
+</header>
+
+<!-- ===== NAV ===== -->
+<nav class="nav-bar"><div class="nav-inner">
+  <button class="nav-btn active" onclick="showSection('notes',this)" data-en="📝 Notes" data-cn="📝 笔记">📝 Notes</button>
+  <button class="nav-btn" onclick="showSection('diagrams',this)" data-en="📊 Diagrams" data-cn="📊 图表">📊 Diagrams</button>
+  <button class="nav-btn" onclick="showSection('quiz',this)" data-en="❓ Quiz" data-cn="❓ 测验">❓ Quiz</button>
+  <button class="nav-btn" onclick="showSection('scenarios',this)" data-en="🧩 Scenarios" data-cn="🧩 场景题">🧩 Scenarios</button>
+  <button class="nav-btn" onclick="showSection('code',this)" data-en="💻 Code" data-cn="💻 编程">💻 Code</button>
+  <button class="nav-btn" onclick="showSection('match',this)" data-en="🎮 Match" data-cn="🎮 匹配">🎮 Match</button>
+</div></nav>
+
+<main class="main">
+
+<!-- ==================== NOTES ==================== -->
+<section class="section active" id="sec-notes">
+<div class="section-title" data-en="Interactive Study Notes" data-cn="互动学习笔记">Interactive Study Notes</div>
+<div class="section-subtitle" data-en="Click each topic to expand. Covers Chapters 1–10." data-cn="点击展开。涵盖第1-10章。">Click each topic to expand. Covers Chapters 1–10.</div>
+
+<div class="chapter-block"><div class="chapter-header"><div class="chapter-num">1</div><div class="chapter-title" data-en="Fundamentals of Computer Systems" data-cn="计算机系统基础">Fundamentals of Computer Systems</div></div>
+<div class="accordion" onclick="toggleAccordion(this)"><div class="accordion-header"><h3 data-en="1.1 Overview of Computer and Programming" data-cn="1.1 计算机与编程概述">1.1 Overview of Computer and Programming</h3><div class="accordion-icon">+</div></div><div class="accordion-body"><div class="note-content" data-lang="en"><h4>What is a Computer?</h4><p>An <span class="highlight">electronic device</span> that accepts data (input), processes it per instructions, and produces output.</p><div class="info-box"><strong>IPO Cycle:</strong> Input → Processing → Output</div><h4>Characteristics</h4><ul><li><strong>Speed</strong> · <strong>Accuracy</strong> · <strong>Storage</strong> · <strong>Automation</strong> · <strong>Versatility</strong></li></ul><h4>Programming Languages</h4><ul><li><span class="term">Machine:</span> Binary (0s,1s)</li><li><span class="term">Assembly:</span> Mnemonics</li><li><span class="term">High-Level:</span> Python, Java, C++</li></ul></div><div class="note-content" data-lang="cn" style="display:none"><h4>什么是计算机？</h4><p>接受数据、按指令处理并产生输出的<span class="highlight">电子设备</span>。</p><div class="info-box"><strong>IPO循环：</strong>输入→处理→输出</div></div></div></div></div>
+
+<div class="accordion" onclick="toggleAccordion(this)"><div class="accordion-header"><h3 data-en="1.2 Electronic Computer: Then and Now" data-cn="1.2 电子计算机：过去与现在">1.2 Electronic Computer: Then and Now</h3><div class="accordion-icon">+</div></div><div class="accordion-body"><div class="note-content" data-lang="en"><h4>Five Generations</h4><div class="info-box"><strong>1st (1940–56):</strong> Vacuum Tubes — ENIAC</div><div class="info-box"><strong>2nd (1956–63):</strong> Transistors — IBM 7094</div><div class="info-box"><strong>3rd (1964–71):</strong> ICs — IBM System/360</div><div class="info-box"><strong>4th (1971–now):</strong> Microprocessors — Intel 4004</div><div class="info-box"><strong>5th (now+):</strong> AI & Quantum</div></div><div class="note-content" data-lang="cn" style="display:none"><h4>五个世代</h4><div class="info-box">第一代真空管→第二代晶体管→第三代IC→第四代微处理器→第五代AI/量子</div></div></div></div></div>
+
+<div class="accordion" onclick="toggleAccordion(this)"><div class="accordion-header"><h3 data-en="1.3–1.4 Hardware & Software" data-cn="1.3–1.4 硬件与软件">1.3–1.4 Hardware & Software</h3><div class="accordion-icon">+</div></div><div class="accordion-body"><div class="note-content" data-lang="en"><ul><li><strong>Hardware:</strong> Input/Output, CPU (<span class="term">ALU</span>, <span class="term">CU</span>, Registers), <span class="term">RAM</span>/<span class="term">ROM</span>, Storage</li><li><strong>Software:</strong> System (OS, Drivers) vs Application</li></ul><div class="info-box"><strong>Von Neumann:</strong> Data & instructions share memory. Fetch→Decode→Execute.</div></div><div class="note-content" data-lang="cn" style="display:none"><ul><li><strong>硬件：</strong>I/O、CPU（ALU、CU、寄存器）、RAM/ROM、存储</li><li><strong>软件：</strong>系统软件（OS）vs 应用软件</li></ul></div></div></div></div>
+</div>
+
+<div class="chapter-block"><div class="chapter-header"><div class="chapter-num">2</div><div class="chapter-title" data-en="Introduction to Problem Solving" data-cn="问题求解导论">Introduction to Problem Solving</div></div>
+<div class="accordion" onclick="toggleAccordion(this)"><div class="accordion-header"><h3 data-en="2.1–2.2 Software Development Method" data-cn="2.1–2.2 软件开发方法">2.1–2.2 Software Development Method</h3><div class="accordion-icon">+</div></div><div class="accordion-body"><div class="note-content" data-lang="en"><h4>5 Steps</h4><ul><li><strong>1.</strong> Problem Analysis <strong>2.</strong> Design <strong>3.</strong> Coding <strong>4.</strong> Testing <strong>5.</strong> Maintenance</li></ul></div><div class="note-content" data-lang="cn" style="display:none"><h4>五步</h4><ul><li>分析→设计→编码→测试→维护</li></ul></div></div></div></div>
+
+<div class="accordion" onclick="toggleAccordion(this)"><div class="accordion-header"><h3 data-en="2.3–2.4 Algorithms" data-cn="2.3–2.4 算法">2.3–2.4 Algorithms</h3><div class="accordion-icon">+</div></div><div class="accordion-body"><div class="note-content" data-lang="en"><p>Algorithm = <span class="highlight">finite, step-by-step procedure</span></p><ul><li><span class="term">Input/Output</span> · <span class="term">Definiteness</span> · <span class="term">Finiteness</span> · <span class="term">Effectiveness</span></li></ul><h4>Control Structures</h4><ul><li><span class="term">Sequence</span> · <span class="term">Selection</span> (IF-ELSE) · <span class="term">Iteration</span> (WHILE/FOR)</li></ul></div><div class="note-content" data-lang="cn" style="display:none"><p>算法=<span class="highlight">有限的逐步过程</span>。特性：输入/输出、确定性、有限性、有效性。</p></div></div></div></div>
+</div>
+
+<div class="chapter-block"><div class="chapter-header"><div class="chapter-num">3</div><div class="chapter-title" data-en="Algorithm Design & Representation" data-cn="算法设计与表示">Algorithm Design & Representation</div></div>
+<div class="accordion" onclick="toggleAccordion(this)"><div class="accordion-header"><h3 data-en="3.1–3.3 Pseudocode, Flowchart, NS Diagram" data-cn="3.1–3.3 伪代码、流程图、N-S图">3.1–3.3 Pseudocode, Flowchart, NS Diagram</h3><div class="accordion-icon">+</div></div><div class="accordion-body"><div class="note-content" data-lang="en"><ul><li><span class="term">Pseudocode:</span> Informal language-independent description</li><li><span class="term">Flowchart:</span> Graphical — Oval=Terminal, Parallelogram=I/O, Rectangle=Process, Diamond=Decision</li><li><span class="term">NS Diagram:</span> Nested rectangles, <span class="highlight">no arrows</span></li></ul></div><div class="note-content" data-lang="cn" style="display:none"><ul><li><span class="term">伪代码：</span>非正式语言无关描述</li><li><span class="term">流程图：</span>图形化表示</li><li><span class="term">N-S图：</span>嵌套矩形，无箭头</li></ul></div></div></div></div>
+</div>
+
+<div class="chapter-block"><div class="chapter-header"><div class="chapter-num java-num">4</div><div class="chapter-title" data-en="Introduction to the Java Environment" data-cn="Java环境入门">Introduction to the Java Environment</div></div>
+<div class="accordion" onclick="toggleAccordion(this)"><div class="accordion-header"><h3 data-en="4.1 Overview of Java" data-cn="4.1 Java概述">4.1 Overview of Java</h3><div class="accordion-icon">+</div></div><div class="accordion-body"><div class="note-content" data-lang="en"><h4>Key Features</h4><ul><li><span class="jterm">Platform Independent:</span> "Write Once, Run Anywhere"</li><li><span class="jterm">OOP:</span> Classes, objects, inheritance</li><li><span class="jterm">Robust & Secure</span></li></ul><div class="java-box"><code>.java</code> → <code>javac</code> → <code>.class</code> (bytecode) → <code>JVM</code> → Machine Code</div></div><div class="note-content" data-lang="cn" style="display:none"><div class="java-box">.java → javac → .class（字节码）→ JVM → 机器码</div></div></div></div></div>
+
+<div class="accordion" onclick="toggleAccordion(this)"><div class="accordion-header"><h3 data-en="4.2 Java Language Elements" data-cn="4.2 Java语言元素">4.2 Java Language Elements</h3><div class="accordion-icon">+</div></div><div class="accordion-body"><div class="note-content" data-lang="en"><div class="java-box"><code>public class Hello {</code><br><code>&nbsp; public static void main(String[] args) {</code><br><code>&nbsp;&nbsp;&nbsp; System.out.println("Hello!");</code><br><code>&nbsp; }</code><br><code>}</code></div><ul><li>File name = public class name + <code>.java</code></li><li><span class="jterm">camelCase</span> for variables</li></ul></div><div class="note-content" data-lang="cn" style="display:none"><p>文件名=公共类名+.java。驼峰命名。</p></div></div></div></div>
+
+<div class="accordion" onclick="toggleAccordion(this)"><div class="accordion-header"><h3 data-en="4.3 Setting Up Java Environment" data-cn="4.3 搭建Java环境">4.3 Setting Up Java Environment</h3><div class="accordion-icon">+</div></div><div class="accordion-body"><div class="note-content" data-lang="en"><ul><li><span class="jterm">JVM:</span> Executes bytecode</li><li><span class="jterm">JRE:</span> JVM + libraries</li><li><span class="jterm">JDK:</span> JRE + javac + tools</li></ul><div class="java-box"><code>javac Hello.java</code> → compile<br><code>java Hello</code> → run</div></div><div class="note-content" data-lang="cn" style="display:none"><p>JVM执行字节码。JRE=JVM+库。JDK=JRE+编译器+工具。</p></div></div></div></div>
+</div>
+
+<div class="chapter-block"><div class="chapter-header"><div class="chapter-num java-num">5</div><div class="chapter-title" data-en="Variables and Data Types" data-cn="变量和数据类型">Variables and Data Types</div></div>
+<div class="accordion" onclick="toggleAccordion(this)"><div class="accordion-header"><h3 data-en="5.1–5.3 Variables, Primitives, String" data-cn="5.1–5.3 变量、基本类型、String">5.1–5.3 Variables, Primitives, String</h3><div class="accordion-icon">+</div></div><div class="accordion-body"><div class="note-content" data-lang="en"><div class="java-box"><code>int x = 10;</code> | <code>double d = 3.14;</code> | <code>char c = 'A';</code> | <code>boolean b = true;</code></div><div class="info-box"><code>int</code> 4B | <code>double</code> 8B | <code>char</code> 2B | <code>boolean</code> 1bit<br><code>5/2=2</code> (int) vs <code>5.0/2=2.5</code> (double)</div><p><span class="jterm">String</span> is a class — use <code>.equals()</code> not <code>==</code></p></div><div class="note-content" data-lang="cn" style="display:none"><p>int 4字节 | double 8字节 | char 2字节 | boolean 1位。String是类，用.equals()比较。</p></div></div></div></div>
+</div>
+
+<div class="chapter-block"><div class="chapter-header"><div class="chapter-num java-num">6</div><div class="chapter-title" data-en="Operators and Expressions" data-cn="运算符与表达式">Operators and Expressions</div></div>
+<div class="accordion" onclick="toggleAccordion(this)"><div class="accordion-header"><h3 data-en="6.1–6.3 Arithmetic, Relational, Logical, Math" data-cn="6.1–6.3 算术、关系、逻辑、Math">6.1–6.3 Arithmetic, Relational, Logical, Math</h3><div class="accordion-icon">+</div></div><div class="accordion-body"><div class="note-content" data-lang="en"><div class="java-box"><code>+ - * / %</code> | <code>== != > < >= <=</code> | <code>&& || !</code></div><p>Math class: <code>Math.PI</code>, <code>Math.sqrt()</code>, <code>Math.pow()</code>, <code>Math.abs()</code>, <code>Math.random()</code></p><div class="info-box"><strong>Short-circuit:</strong> <code>false && ...</code> → right side not evaluated</div></div><div class="note-content" data-lang="cn" style="display:none"><p>算术运算符、关系运算符、逻辑运算符、Math类方法。短路求值。</p></div></div></div></div>
+</div>
+
+<div class="chapter-block"><div class="chapter-header"><div class="chapter-num java-num">7</div><div class="chapter-title" data-en="Program Input and Output" data-cn="程序输入与输出">Program Input and Output</div></div>
+<div class="accordion" onclick="toggleAccordion(this)"><div class="accordion-header"><h3 data-en="7.1–7.3 I/O and Scanner" data-cn="7.1–7.3 I/O与Scanner">7.1–7.3 I/O and Scanner</h3><div class="accordion-icon">+</div></div><div class="accordion-body"><div class="note-content" data-lang="en"><div class="java-box"><code>System.out.println()</code> / <code>printf("%.2f", val)</code><br><code>Scanner input = new Scanner(System.in);</code><br><code>int n = input.nextInt();</code> <code>String s = input.nextLine();</code></div><div class="info-box"><strong>Warning:</strong> After <code>nextInt()</code>, call <code>nextLine()</code> to consume leftover newline.</div></div><div class="note-content" data-lang="cn" style="display:none"><div class="info-box">nextInt()后要调用nextLine()消耗换行符。</div></div></div></div></div>
+</div>
+
+<div class="chapter-block"><div class="chapter-header"><div class="chapter-num java-num">8</div><div class="chapter-title" data-en="Selection Structures" data-cn="选择结构">Selection Structures</div></div>
+<div class="accordion" onclick="toggleAccordion(this)"><div class="accordion-header"><h3 data-en="8.1–8.3 if, if-else, switch" data-cn="8.1–8.3 if、if-else、switch">8.1–8.3 if, if-else, switch</h3><div class="accordion-icon">+</div></div><div class="accordion-body"><div class="note-content" data-lang="en"><div class="java-box"><code>if (cond) { } else if (cond2) { } else { }</code><br><code>switch(x) { case 1: ...; break; default: ...; }</code></div><div class="info-box"><strong>Key:</strong> switch needs <code>break</code> to prevent fall-through. Use <code>else if</code> for mutually exclusive conditions.</div></div><div class="note-content" data-lang="cn" style="display:none"><div class="info-box">switch需要break防穿透。互斥条件用else if。</div></div></div></div></div>
+</div>
+
+<div class="chapter-block"><div class="chapter-header"><div class="chapter-num java-num">9</div><div class="chapter-title" data-en="Repetition Structures" data-cn="循环结构">Repetition Structures</div></div>
+<div class="accordion" onclick="toggleAccordion(this)"><div class="accordion-header"><h3 data-en="9.1–9.3 while, for, loops" data-cn="9.1–9.3 while、for循环">9.1–9.3 while, for, loops</h3><div class="accordion-icon">+</div></div><div class="accordion-body"><div class="note-content" data-lang="en"><div class="java-box"><code>while (cond) { ...; update; }</code><br><code>for (init; cond; update) { ... }</code></div><div class="info-box"><strong>while:</strong> unknown iterations | <strong>for:</strong> known iterations. Always update loop variable!</div></div><div class="note-content" data-lang="cn" style="display:none"><div class="info-box">while: 未知迭代 | for: 已知迭代。确保更新循环变量！</div></div></div></div></div>
+</div>
+
+<div class="chapter-block"><div class="chapter-header"><div class="chapter-num java-num">10</div><div class="chapter-title" data-en="Methods and Libraries" data-cn="方法与库">Methods and Libraries</div></div>
+<div class="accordion" onclick="toggleAccordion(this)"><div class="accordion-header"><h3 data-en="10.1–10.3 Methods, Math class" data-cn="10.1–10.3 方法、Math类">10.1–10.3 Methods, Math class</h3><div class="accordion-icon">+</div></div><div class="accordion-body"><div class="note-content" data-lang="en"><div class="java-box"><code>public static int add(int a, int b) { return a + b; }</code></div><ul><li><span class="jterm">void</span> = no return</li><li><span class="jterm">Overloading:</span> same name, different params</li></ul></div><div class="note-content" data-lang="cn" style="display:none"><p>方法促进模块化。void无返回值。重载=同名不同参数。</p></div></div></div></div>
+</div>
+
+</section>
+
+<!-- ==================== DIAGRAMS ==================== -->
+<section class="section" id="sec-diagrams">
+<div class="section-title" data-en="Animated Diagrams" data-cn="动画图表">Animated Diagrams</div>
+<div class="section-subtitle" data-en="Visual representations for key concepts." data-cn="关键概念可视化。">Visual representations for key concepts.</div>
+<div class="svg-grid">
+
+<div class="svg-card"><h3 data-en="Java Compilation Process" data-cn="Java编译过程">Java Compilation Process</h3><svg viewBox="0 0 520 130" xmlns="http://www.w3.org/2000/svg" font-family="'Source Serif 4',serif"><rect x="10" y="35" width="90" height="50" rx="8" fill="#C7402D"/><text x="55" y="57" text-anchor="middle" font-size="10" fill="#fff" font-weight="600">.java</text><text x="55" y="72" text-anchor="middle" font-size="8" fill="#FADEB8">Source</text><line x1="100" y1="60" x2="140" y2="60" stroke="#2D2926" stroke-width="2" marker-end="url(#a)"/><rect x="140" y="35" width="90" height="50" rx="8" fill="#F4A261"/><text x="185" y="57" text-anchor="middle" font-size="10" fill="#2D2926" font-weight="600">javac</text><text x="185" y="72" text-anchor="middle" font-size="8" fill="#6F4E37">Compiler</text><line x1="230" y1="60" x2="270" y2="60" stroke="#2D2926" stroke-width="2" marker-end="url(#a)"/><rect x="270" y="35" width="90" height="50" rx="8" fill="#5382A1"/><text x="315" y="57" text-anchor="middle" font-size="10" fill="#fff" font-weight="600">.class</text><text x="315" y="72" text-anchor="middle" font-size="8" fill="#D0E4F0">Bytecode</text><line x1="360" y1="60" x2="400" y2="60" stroke="#2D2926" stroke-width="2" marker-end="url(#a)"/><rect x="400" y="35" width="100" height="50" rx="8" fill="#2C5F7C"/><text x="450" y="57" text-anchor="middle" font-size="10" fill="#fff" font-weight="600">JVM</text><text x="450" y="72" text-anchor="middle" font-size="8" fill="#8BB0C9">Machine Code</text><text x="260" y="115" text-anchor="middle" font-size="9" fill="#A89E96" font-style="italic">Write Once, Run Anywhere</text><defs><marker id="a" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#2D2926"/></marker></defs></svg></div>
+
+<div class="svg-card"><h3 data-en="if-else Control Flow" data-cn="if-else控制流">if-else Control Flow</h3><svg viewBox="0 0 400 270" xmlns="http://www.w3.org/2000/svg" font-family="'Source Serif 4',serif"><ellipse cx="200" cy="28" rx="58" ry="16" fill="#2C5F7C"/><text x="200" y="33" text-anchor="middle" font-size="10" fill="#fff" font-weight="600">START</text><line x1="200" y1="44" x2="200" y2="64" stroke="#2D2926" stroke-width="1.5" marker-end="url(#a)"/><polygon points="200,64 268,104 200,144 132,104" fill="#F4A261" stroke="#C7402D" stroke-width="1.5"/><text x="200" y="108" text-anchor="middle" font-size="10" fill="#fff" font-weight="600">condition?</text><text x="276" y="100" font-size="9" fill="#2E8B57" font-weight="600">T</text><text x="112" y="100" font-size="9" fill="#C7402D" font-weight="600">F</text><line x1="268" y1="104" x2="308" y2="104" stroke="#2D2926" stroke-width="1.5"/><line x1="308" y1="104" x2="308" y2="164" stroke="#2D2926" stroke-width="1.5"/><rect x="268" y="164" width="80" height="32" rx="5" fill="#5382A1"/><text x="308" y="184" text-anchor="middle" font-size="9" fill="#fff" font-weight="600">if block</text><line x1="132" y1="104" x2="92" y2="104" stroke="#2D2926" stroke-width="1.5"/><line x1="92" y1="104" x2="92" y2="164" stroke="#2D2926" stroke-width="1.5"/><rect x="52" y="164" width="80" height="32" rx="5" fill="#C7402D"/><text x="92" y="184" text-anchor="middle" font-size="9" fill="#fff" font-weight="600">else block</text><line x1="308" y1="196" x2="308" y2="220" stroke="#2D2926" stroke-width="1"/><line x1="92" y1="196" x2="92" y2="220" stroke="#2D2926" stroke-width="1"/><line x1="92" y1="220" x2="308" y2="220" stroke="#2D2926" stroke-width="1"/><line x1="200" y1="220" x2="200" y2="240" stroke="#2D2926" stroke-width="1"/><ellipse cx="200" cy="252" rx="38" ry="11" fill="#2C5F7C"/><text x="200" y="256" text-anchor="middle" font-size="9" fill="#fff" font-weight="600">END</text></svg></div>
+
+<div class="svg-card"><h3 data-en="Loop Execution" data-cn="循环执行">Loop Execution</h3><svg viewBox="0 0 400 290" xmlns="http://www.w3.org/2000/svg" font-family="'Source Serif 4',serif"><ellipse cx="200" cy="22" rx="48" ry="14" fill="#2C5F7C"/><text x="200" y="27" text-anchor="middle" font-size="10" fill="#fff" font-weight="600">START</text><line x1="200" y1="36" x2="200" y2="55" stroke="#2D2926" stroke-width="1.5"/><rect x="145" y="55" width="110" height="28" rx="4" fill="#D0E4F0" stroke="#5382A1"/><text x="200" y="73" text-anchor="middle" font-size="9" fill="#2C5F7C">init: i=1,sum=0</text><line x1="200" y1="83" x2="200" y2="100" stroke="#2D2926" stroke-width="1.5"/><polygon points="200,100 265,135 200,170 135,135" fill="#F4A261" stroke="#C7402D" stroke-width="1.5"/><text x="200" y="139" text-anchor="middle" font-size="9" fill="#fff" font-weight="600">i&lt;=N?</text><text x="274" y="132" font-size="9" fill="#2E8B57" font-weight="600">Y</text><text x="116" y="132" font-size="9" fill="#C7402D" font-weight="600">N</text><line x1="265" y1="135" x2="305" y2="135" stroke="#2D2926" stroke-width="1.5"/><rect x="265" y="180" width="90" height="48" rx="5" fill="#5382A1"/><text x="310" y="199" text-anchor="middle" font-size="8" fill="#fff">sum+=i</text><text x="310" y="214" text-anchor="middle" font-size="8" fill="#fff">i++</text><line x1="310" y1="135" x2="310" y2="180" stroke="#2D2926" stroke-width="1.5"/><path d="M 265 204 Q 235 204 235 135 L 200 135" fill="none" stroke="#F4A261" stroke-width="2" stroke-dasharray="6 3" class="flow-arrow"/><line x1="135" y1="135" x2="95" y2="135" stroke="#2D2926" stroke-width="1.5"/><line x1="95" y1="135" x2="95" y2="250" stroke="#2D2926" stroke-width="1.5"/><line x1="95" y1="250" x2="160" y2="250" stroke="#2D2926" stroke-width="1.5"/><rect x="160" y="240" width="80" height="28" rx="4" fill="#D0E4F0" stroke="#5382A1"/><text x="200" y="258" text-anchor="middle" font-size="9" fill="#2C5F7C">Print sum</text><line x1="200" y1="268" x2="200" y2="284" stroke="#2D2926" stroke-width="1"/></svg></div>
+
+<div class="svg-card"><h3 data-en="Method Call Stack" data-cn="方法调用栈">Method Call Stack</h3><svg viewBox="0 0 380 195" xmlns="http://www.w3.org/2000/svg" font-family="'DM Mono',monospace"><rect x="20" y="8" width="340" height="40" rx="6" fill="#5382A1" opacity=".2" stroke="#5382A1"/><text x="190" y="27" text-anchor="middle" font-size="11" fill="#2C5F7C" font-weight="600">main()</text><text x="190" y="41" text-anchor="middle" font-size="8" fill="#5382A1">int r = calc(5,3);</text><line x1="190" y1="48" x2="190" y2="60" stroke="#C7402D" stroke-width="2"/><rect x="60" y="60" width="260" height="40" rx="6" fill="#C7402D" opacity=".12" stroke="#C7402D"/><text x="190" y="78" text-anchor="middle" font-size="11" fill="#C7402D" font-weight="600">calc(5, 3)</text><text x="190" y="92" text-anchor="middle" font-size="8" fill="#C7402D">return add(a,b)*2;</text><line x1="190" y1="100" x2="190" y2="112" stroke="#2C5F7C" stroke-width="2"/><rect x="100" y="112" width="180" height="38" rx="6" fill="#2C5F7C" opacity=".12" stroke="#2C5F7C"/><text x="190" y="130" text-anchor="middle" font-size="11" fill="#2C5F7C" font-weight="600">add(5, 3)</text><text x="190" y="144" text-anchor="middle" font-size="8" fill="#2C5F7C">return 8;</text><text x="190" y="178" text-anchor="middle" font-size="9" fill="#A89E96">Stack grows ↓ &nbsp; Returns bubble ↑</text></svg></div>
+
+<div class="svg-card"><h3 data-en="Von Neumann Architecture" data-cn="冯·诺依曼架构">Von Neumann Architecture</h3><svg viewBox="0 0 400 265" xmlns="http://www.w3.org/2000/svg" font-family="'Source Serif 4',serif"><rect x="145" y="8" width="110" height="70" rx="8" fill="#D0E4F0" stroke="#5382A1" stroke-width="2"/><text x="200" y="38" text-anchor="middle" font-size="12" font-weight="600" fill="#2C5F7C">Memory</text><text x="200" y="55" text-anchor="middle" font-size="9" fill="#5382A1">RAM & ROM</text><line x1="200" y1="78" x2="200" y2="105" stroke="#F4A261" stroke-width="3" class="flow-arrow"/><rect x="100" y="105" width="200" height="100" rx="10" fill="#FADEB8" stroke="#F4A261" stroke-width="2"/><text x="200" y="127" text-anchor="middle" font-size="13" font-weight="700" fill="#6F4E37">CPU</text><rect x="115" y="135" width="75" height="30" rx="5" fill="#C7402D" opacity=".85"/><text x="152" y="154" text-anchor="middle" font-size="9" fill="#fff" font-weight="600">Control Unit</text><rect x="200" y="135" width="75" height="30" rx="5" fill="#5382A1" opacity=".85"/><text x="237" y="154" text-anchor="middle" font-size="9" fill="#fff" font-weight="600">ALU</text><rect x="115" y="175" width="160" height="22" rx="4" fill="#fff" stroke="#F4A261"/><text x="195" y="190" text-anchor="middle" font-size="9" font-weight="600" fill="#6F4E37">Registers</text><rect x="10" y="135" width="72" height="36" rx="8" fill="#D0E4F0" stroke="#5382A1"/><text x="46" y="157" text-anchor="middle" font-size="10" font-weight="600" fill="#2C5F7C">Input</text><line x1="82" y1="153" x2="100" y2="153" stroke="#5382A1" stroke-width="2" class="flow-arrow"/><rect x="318" y="135" width="72" height="36" rx="8" fill="#D0E4F0" stroke="#5382A1"/><text x="354" y="157" text-anchor="middle" font-size="10" font-weight="600" fill="#2C5F7C">Output</text><line x1="300" y1="153" x2="318" y2="153" stroke="#5382A1" stroke-width="2" class="flow-arrow"/><circle cx="200" cy="95" r="4" fill="#C7402D" class="pulse-node"/><text x="200" y="250" text-anchor="middle" font-size="9" fill="#A89E96" font-style="italic">Fetch → Decode → Execute → Store</text></svg></div>
+
+<div class="svg-card"><h3 data-en="Data Type Sizes" data-cn="数据类型大小">Data Type Sizes</h3><svg viewBox="0 0 380 170" xmlns="http://www.w3.org/2000/svg" font-family="'DM Mono',monospace"><rect x="85" y="12" width="270" height="22" rx="4" fill="#2C5F7C" opacity=".85"/><text x="220" y="27" text-anchor="middle" font-size="9" fill="#fff" font-weight="600">long — 8 bytes (64 bits)</text><rect x="85" y="40" width="230" height="22" rx="4" fill="#5382A1" opacity=".85"/><text x="200" y="55" text-anchor="middle" font-size="9" fill="#fff" font-weight="600">double — 8 bytes (64 bits)</text><rect x="85" y="68" width="135" height="22" rx="4" fill="#F4A261"/><text x="152" y="83" text-anchor="middle" font-size="9" fill="#2D2926" font-weight="600">int — 4 bytes (32 bits)</text><rect x="85" y="96" width="68" height="22" rx="4" fill="#C7402D" opacity=".8"/><text x="119" y="111" text-anchor="middle" font-size="9" fill="#fff" font-weight="600">char 2B</text><rect x="85" y="124" width="35" height="22" rx="4" fill="#6F4E37" opacity=".8"/><text x="102" y="139" text-anchor="middle" font-size="9" fill="#fff" font-weight="600">1B</text><text x="45" y="27" text-anchor="middle" font-size="9" fill="#A89E96">long</text><text x="45" y="55" text-anchor="middle" font-size="9" fill="#A89E96">double</text><text x="40" y="83" text-anchor="middle" font-size="9" fill="#A89E96">int</text><text x="40" y="111" text-anchor="middle" font-size="9" fill="#A89E96">char</text><text x="42" y="139" text-anchor="middle" font-size="9" fill="#A89E96">byte</text><text x="190" y="164" text-anchor="middle" font-size="8" fill="#A89E96">Memory size comparison</text></svg></div>
+</div>
+</section>
+
+<!-- ==================== QUIZ ==================== -->
+<section class="section" id="sec-quiz">
+<div class="section-title" data-en="Knowledge Quiz" data-cn="知识测验">Knowledge Quiz</div>
+<div class="section-subtitle" data-en="20 questions covering all chapters. 10 pts each!" data-cn="20道题涵盖全部章节。每题10分！">20 questions covering all chapters. 10 pts each!</div>
+<div class="quiz-container" id="quizContainer"><div class="quiz-progress" id="quizProgress"></div><div id="quizContent"></div></div>
+</section>
+
+<!-- ==================== SCENARIOS ==================== -->
+<section class="section" id="sec-scenarios">
+<div class="section-title" data-en="Scenario-Based Questions" data-cn="场景分析题">Scenario-Based Questions</div>
+<div class="section-subtitle" data-en="25 scenarios across 5 chapter groups. 10 pts each." data-cn="25道场景题，5组章节。每题10分。">25 scenarios across 5 chapter groups. 10 pts each.</div>
+<div class="scenario-progress"><div class="scenario-progress-bar"><div class="scenario-progress-fill" id="scenProgFill"></div></div><div class="scenario-progress-text"><span id="scenAns">0</span>/25 <span data-en="answered" data-cn="已答">answered</span></div></div>
+<div id="scenarioContainer"></div>
+<div class="text-center mt-2"><button class="btn btn-red" onclick="showScenResults()" id="scenResBtn" style="display:none" data-en="See Results" data-cn="查看结果">See Results</button></div>
+</section>
+
+<!-- ==================== CODE ==================== -->
+<section class="section" id="sec-code">
+<div class="section-title" data-en="Coding Challenges" data-cn="编程挑战">Coding Challenges</div>
+<div class="section-subtitle" data-en="6 challenges from pseudocode to Java." data-cn="6个挑战从伪代码到Java。">6 challenges from pseudocode to Java.</div>
+<div class="code-container" id="codeContainer"></div>
+</section>
+
+<!-- ==================== MATCH ==================== -->
+<section class="section" id="sec-match">
+<div class="section-title" data-en="Matching Game" data-cn="匹配游戏">Matching Game</div>
+<div class="section-subtitle" data-en="Match terms with definitions. Find all 12 pairs!" data-cn="将术语与定义配对。找到全部12对！">Match terms with definitions. Find all 12 pairs!</div>
+<div class="match-container"><div class="match-header"><div class="match-stats"><div class="match-stat" data-en="Pairs: " data-cn="配对： ">Pairs: <span id="matchPairsFound">0</span>/<span id="matchTotalPairs">0</span></div><div class="match-stat" data-en="Moves: " data-cn="步数： ">Moves: <span id="matchMoves">0</span></div></div><button class="btn btn-orange" onclick="initMatchGame()" data-en="New Game" data-cn="新游戏">New Game</button></div><div class="match-grid" id="matchGrid"></div></div>
+</section>
+
+</main>
+
+<div class="toast" id="toast"><div class="toast-title" id="toastTitle"></div><div class="toast-text" id="toastText"></div></div>
+<footer class="footer">☕ Java & CS Study Hub &copy; 2025</footer>
+
+<script>
+const state={lang:'en',score:0,streak:0,quizAnswered:{},quizCorrect:{},scenAnswered:{},scenCorrect:{},matchSelected:null,matchMoves:0,matchPairsFound:0,matchData:[]};
+
+function setLang(l){state.lang=l;document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.textContent.trim()===(l==='en'?'EN':'中文')));document.querySelectorAll('[data-en]').forEach(e=>{e.textContent=e.getAttribute('data-'+l)});document.querySelectorAll('[data-lang]').forEach(e=>{e.style.display=e.getAttribute('data-lang')===l?'':'none'});if(document.getElementById('scenarioContainer').children.length>0)renderScenarios()}
+function showSection(id,btn){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.getElementById('sec-'+id).classList.add('active');document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');if(id==='match'&&state.matchData.length===0)initMatchGame();if(id==='quiz'&&document.getElementById('quizProgress').children.length===0)initQuiz();if(id==='scenarios'&&document.getElementById('scenarioContainer').children.length===0)renderScenarios();if(id==='code'&&document.getElementById('codeContainer').children.length===0)initCodeChallenges()}
+function toggleAccordion(el){el.classList.toggle('open')}
+function updateScore(pts){state.score+=pts;if(pts>0)state.streak++;else state.streak=0;document.getElementById('scoreDisplay').textContent=state.score;document.getElementById('streakDisplay').textContent=state.streak;const b=document.getElementById('scoreBadge');b.style.transform='scale(1.15)';setTimeout(()=>b.style.transform='',300)}
+function showToast(t,d){const e=document.getElementById('toast');document.getElementById('toastTitle').textContent=t;document.getElementById('toastText').textContent=d;e.classList.add('show');setTimeout(()=>e.classList.remove('show'),3000)}
+
+// QUIZ (20 questions - same data as before, abbreviated for file size)
+const quizData=[
+{q_en:"IPO cycle correct order?",q_cn:"IPO循环正确顺序？",opts_en:["Output→Input→Processing","Input→Processing→Output","Processing→Input→Output","Input→Output→Processing"],opts_cn:["输出→输入→处理","输入→处理→输出","处理→输入→输出","输入→输出→处理"],correct:1,ex_en:"IPO: Input → Processing → Output.",ex_cn:"IPO：输入→处理→输出。"},
+{q_en:"Which generation used vacuum tubes?",q_cn:"哪代用真空管？",opts_en:["2nd","1st","3rd","4th"],opts_cn:["第二","第一","第三","第四"],correct:1,ex_en:"1st generation (1940-56).",ex_cn:"第一代（1940-56）。"},
+{q_en:"ALU stands for?",q_cn:"ALU代表？",opts_en:["Automatic Logic Unit","Arithmetic Logic Unit","Advanced Logic Utility","Applied Learning Unit"],opts_cn:["自动逻辑单元","算术逻辑单元","高级逻辑实用程序","应用学习单元"],correct:1,ex_en:"Arithmetic Logic Unit.",ex_cn:"算术逻辑单元。"},
+{q_en:"Which is system software?",q_cn:"哪个是系统软件？",opts_en:["Word","OS","Browser","Editor"],opts_cn:["Word","操作系统","浏览器","编辑器"],correct:1,ex_en:"OS is system software.",ex_cn:"操作系统是系统软件。"},
+{q_en:"Flowchart diamond = ?",q_cn:"流程图菱形=？",opts_en:["Process","I/O","Decision","Terminal"],opts_cn:["处理","I/O","判断","终端"],correct:2,ex_en:"Diamond = decision.",ex_cn:"菱形=判断。"},
+{q_en:"JVM stands for?",q_cn:"JVM代表？",opts_en:["Java Variable Manager","Java Virtual Machine","Java Visual Method","Java Version Manager"],opts_cn:["Java变量管理器","Java虚拟机","Java可视化方法","Java版本管理器"],correct:1,ex_en:"Java Virtual Machine.",ex_cn:"Java虚拟机。"},
+{q_en:"Java file name must match?",q_cn:"Java文件名必须匹配？",opts_en:["Method","Variable","Public class","Package"],opts_cn:["方法","变量","公共类","包"],correct:2,ex_en:"Public class name.",ex_cn:"公共类名。"},
+{q_en:"10 / 3 in Java (int)?",q_cn:"Java中10/3(int)？",opts_en:["3.33","3","4","3.0"],opts_cn:["3.33","3","4","3.0"],correct:1,ex_en:"Integer division = 3.",ex_cn:"整数除法=3。"},
+{q_en:"NOT a primitive type?",q_cn:"非基本类型？",opts_en:["int","double","String","boolean"],opts_cn:["int","double","String","boolean"],correct:2,ex_en:"String is a class.",ex_cn:"String是类。"},
+{q_en:"Compare Strings correctly?",q_cn:"正确比较String？",opts_en:["== ",".equals()",".compare()",".match()"],opts_cn:["== ",".equals()",".compare()",".match()"],correct:1,ex_en:".equals() for content.",ex_cn:".equals()比较内容。"},
+{q_en:"% operator does?",q_cn:"%运算符？",opts_en:["Percentage","Division","Modulus","Multiply"],opts_cn:["百分比","除法","取模","乘法"],correct:2,ex_en:"Modulus (remainder).",ex_cn:"取模（余数）。"},
+{q_en:"printf(\"%.1f\", 3.14159) = ?",q_cn:"printf(\"%.1f\", 3.14159) = ?",opts_en:["3.14159","3.14","3.1","3.0"],opts_cn:["3.14159","3.14","3.1","3.0"],correct:2,ex_en:"3.1 (1 decimal).",ex_cn:"3.1（1位小数）。"},
+{q_en:"Scanner method for full line?",q_cn:"Scanner读整行的方法？",opts_en:["next()","nextInt()","nextLine()","readLine()"],opts_cn:["next()","nextInt()","nextLine()","readLine()"],correct:2,ex_en:"nextLine().",ex_cn:"nextLine()。"},
+{q_en:"if (x = 5) problem?",q_cn:"if (x = 5)的问题？",opts_en:["Nothing","= instead of ==","Missing braces","Wrong type"],opts_cn:["没问题","用了=不是==","缺花括号","类型错"],correct:1,ex_en:"= is assignment; need ==.",ex_cn:"=是赋值；需要==。"},
+{q_en:"Loop runs at least once?",q_cn:"至少运行一次的循环？",opts_en:["for","while","do-while","None"],opts_cn:["for","while","do-while","都不"],correct:2,ex_en:"do-while.",ex_cn:"do-while。"},
+{q_en:"break in switch does?",q_cn:"switch中break？",opts_en:["Stops program","Exits switch","Next case","Restart"],opts_cn:["停止程序","退出switch","下一case","重启"],correct:1,ex_en:"Exits switch block.",ex_cn:"退出switch块。"},
+{q_en:"Math.pow(2,3) = ?",q_cn:"Math.pow(2,3) = ?",opts_en:["5","6","8.0","8"],opts_cn:["5","6","8.0","8"],correct:2,ex_en:"8.0 (double).",ex_cn:"8.0（double）。"},
+{q_en:"void means?",q_cn:"void意思是？",opts_en:["Returns 0","Returns null","No return","Any type"],opts_cn:["返回0","返回null","无返回","任何类型"],correct:2,ex_en:"No return value.",ex_cn:"无返回值。"},
+{q_en:"Java entry point?",q_cn:"Java入口点？",opts_en:["void start()","static void main(String[] args)","void run()","static main()"],opts_cn:["void start()","static void main(String[] args)","void run()","static main()"],correct:1,ex_en:"Standard main.",ex_cn:"标准main。"},
+{q_en:"Method overloading = ?",q_cn:"方法重载=？",opts_en:["Same name, same params","Same name, diff params","Diff name, same params","Delete method"],opts_cn:["同名同参","同名异参","异名同参","删方法"],correct:1,ex_en:"Same name, different params.",ex_cn:"同名不同参。"}
+];
+
+function initQuiz(){const p=document.getElementById('quizProgress');p.innerHTML='';quizData.forEach((_,i)=>{const d=document.createElement('div');d.className='quiz-dot'+(i===0?' answered':'');d.textContent=i+1;d.onclick=()=>renderQ(i);p.appendChild(d)});renderQ(0)}
+function renderQ(idx){const q=quizData[idx],l=state.lang,c=document.getElementById('quizContent'),opts=l==='en'?q.opts_en:q.opts_cn,letters=['A','B','C','D'];let ans=state.quizAnswered[idx]!==undefined,sel=state.quizAnswered[idx];let h=`<div class="quiz-card"><div class="quiz-q-num">Q${idx+1}/${quizData.length}</div><div class="quiz-question">${l==='en'?q.q_en:q.q_cn}</div><div class="quiz-options">`;opts.forEach((o,i)=>{let cls='quiz-opt';if(ans){if(i===q.correct)cls+=' correct-opt';else if(i===sel&&i!==q.correct)cls+=' wrong-opt'}else if(sel===i)cls+=' selected';h+=`<div class="${cls}" onclick="selQ(${idx},${i})" ${ans?'style="pointer-events:none"':''}><div class="quiz-opt-letter">${letters[i]}</div><div class="quiz-opt-text">${o}</div></div>`});h+='</div>';if(ans){const ok=sel===q.correct;h+=`<div class="quiz-feedback show ${ok?'correct-fb':'wrong-fb'}">${ok?'✓':'✗'} ${l==='en'?q.ex_en:q.ex_cn}</div>`}h+=`<div class="quiz-nav"><button class="btn btn-secondary" ${idx===0?'disabled':''} onclick="renderQ(${idx-1})">←</button>${!ans?`<button class="btn btn-java" onclick="subQ(${idx})">${l==='en'?'Submit':'提交'}</button>`:''}${idx<quizData.length-1?`<button class="btn btn-java" onclick="renderQ(${idx+1})">→</button>`:(Object.keys(state.quizAnswered).length===quizData.length?`<button class="btn btn-red" onclick="showQRes()">${l==='en'?'Results':'结果'}</button>`:'')}</div></div>`;c.innerHTML=h}
+function selQ(qi,oi){if(state.quizAnswered[qi]!==undefined)return;state.quizAnswered[qi]=oi;renderQ(qi)}
+function subQ(qi){if(state.quizAnswered[qi]===undefined)return;const ok=state.quizAnswered[qi]===quizData[qi].correct;state.quizCorrect[qi]=ok;if(ok){updateScore(10);showToast('+10!','✓')}document.querySelectorAll('.quiz-dot').forEach((d,i)=>{if(state.quizCorrect[i]!==undefined)d.className='quiz-dot '+(state.quizCorrect[i]?'correct':'wrong');else if(state.quizAnswered[i]!==undefined)d.className='quiz-dot answered'});renderQ(qi)}
+function showQRes(){const t=Object.values(state.quizCorrect).filter(v=>v).length,l=state.lang,m=t>=18?'Outstanding!':t>=14?'Great job!':t>=10?'Good effort!':'Keep studying!';if(l==='cn')m=t>=18?'太棒了！':t>=14?'做得好！':t>=10?'继续努力！':'继续学习！';document.getElementById('quizContent').innerHTML=`<div class="quiz-result"><h3>${l==='en'?'Quiz Complete!':'测验完成！'}</h3><div class="big-score">${t}/${quizData.length}</div><p style="color:var(--text-muted);margin-bottom:1rem">${m}</p><p style="font-family:var(--font-mono);color:var(--java-blue);margin-bottom:1.5rem">${t*10} ${l==='en'?'points':'分'}</p><button class="btn btn-java" onclick="state.quizAnswered={};state.quizCorrect={};initQuiz()">${l==='en'?'Retake':'重做'}</button></div>`}
+
+// SCENARIOS (abbreviated structure - same 25 questions as before)
+const scenarioData=[
+{g:0,q_en:"School needs permanent storage for student records even when powered off. Which component?",q_cn:"学校需要断电后仍能保存学生记录的存储。用什么？",opts_en:["RAM","ROM","HDD/SSD","CPU Registers"],opts_cn:["RAM","ROM","硬盘/SSD","CPU寄存器"],c:2,ex_en:"HDD/SSD provides permanent storage. RAM is volatile.",ex_cn:"硬盘/SSD提供永久存储。RAM是易失的。"},
+{g:0,q_en:"Student jumps to coding a grade calculator without analyzing inputs/outputs. After 3 hours, many logic errors. Which step was skipped?",q_cn:"学生没分析输入输出就写代码。3小时后很多逻辑错误。跳过哪步？",opts_en:["Coding","Testing","Problem Analysis & Design","Maintenance"],opts_cn:["编码","测试","问题分析与设计","维护"],c:2,ex_en:"Problem Analysis & Design should come first.",ex_cn:"问题分析与设计应先行。"},
+{g:0,q_en:"Museum docent points to a 1952 machine with glowing glass tubes filling a room. Which generation?",q_cn:"博物馆中1952年充满发光玻璃管的大型机器。第几代？",opts_en:["1st — Vacuum Tubes","2nd — Transistors","3rd — ICs","4th — Microprocessors"],opts_cn:["第一代—真空管","第二代—晶体管","第三代—IC","第四代—微处理器"],c:0,ex_en:"1st generation: vacuum tubes (1940-56).",ex_cn:"第一代：真空管（1940-56）。"},
+{g:0,q_en:"Payroll: input hours/rate, calculate gross, deduct 15% tax, display net. In IPO, what is Processing?",q_cn:"薪资系统：输入小时/时薪，计算总薪资，扣税15%，显示净薪资。IPO中什么是处理？",opts_en:["Hours & rate","Gross calc, tax deduction, net calc","Displaying net pay","Keyboard"],opts_cn:["小时和时薪","总薪资计算、扣税、净薪资计算","显示净薪资","键盘"],c:1,ex_en:"Processing = calculations. Input = data. Output = display.",ex_cn:"处理=计算。输入=数据。输出=显示。"},
+{g:0,q_en:"Algorithm checks every pair 100 times each for a 100-item list (10,000 steps vs optimal 100). Which property needs improvement?",q_cn:"算法对100项列表每对检查100次（10000步vs最优100步）。需改进哪特性？",opts_en:["Finiteness","Definiteness","Effectiveness","Output"],opts_cn:["有限性","确定性","有效性","输出"],c:2,ex_en:"Effectiveness means steps should be efficient.",ex_cn:"有效性意味着步骤应高效。"},
+{g:1,q_en:"Student writes: BEGIN READ n IF n>0 DISPLAY 'Pos' ELSE DISPLAY 'Neg' ENDIF END. What is this?",q_cn:"学生写：BEGIN READ n IF n>0...这是什么？",opts_en:["Flowchart","Pseudocode","NS Diagram","Java code"],opts_cn:["流程图","伪代码","N-S图","Java代码"],c:1,ex_en:"Uses pseudocode conventions.",ex_cn:"使用伪代码约定。"},
+{g:1,q_en:"File saved as MyProgram.java but class is: public class Hello {}. What happens with javac?",q_cn:"文件存为MyProgram.java但类是Hello{}。javac会？",opts_en:["Compiles fine","Error: name mismatch","Warning only","Runtime error"],opts_cn:["正常编译","错误：名字不匹配","仅警告","运行时错误"],c:1,ex_en:"Public class name must match filename.",ex_cn:"公共类名必须匹配文件名。"},
+{g:1,q_en:"Developer can't read .class file. What's stored in it?",q_cn:"开发者看不懂.class文件。里面存什么？",opts_en:["Source code","Machine code","Bytecode for JVM","Assembly"],opts_cn:["源码","机器码","JVM字节码","汇编"],c:2,ex_en:"Bytecode for JVM.",ex_cn:"JVM的字节码。"},
+{g:1,q_en:"Diamond 'Is age≥18?' with Yes→'Allow', No→'Deny'. What structure?",q_cn:"菱形'年龄≥18？'Yes→允许，No→拒绝。什么结构？",opts_en:["Sequence","Selection","Iteration","Method call"],opts_cn:["顺序","选择","迭代","方法调用"],c:1,ex_en:"Selection/decision structure.",ex_cn:"选择/判断结构。"},
+{g:1,q_en:"javac HelloWorld shows 'error: file not found'. What's wrong?",q_cn:"javac HelloWorld报错'file not found'。问题？",opts_en:["Not installed","Missing .java extension","Wrong class name","Use java not javac"],opts_cn:["未安装","缺.java扩展名","类名错","用java不是javac"],c:1,ex_en:"Need: javac HelloWorld.java.",ex_cn:"需要：javac HelloWorld.java。"},
+{g:2,q_en:"int result = 17/3; System.out.println(result); Output?",q_cn:"int result = 17/3; 输出？",opts_en:["5.67","5","6","5.0"],opts_cn:["5.67","5","6","5.0"],c:1,ex_en:"Integer division truncates: 5.",ex_cn:"整数除法截断：5。"},
+{g:2,q_en:"String s1='hello'; String s2='hello'; if(s1==s2) works but is 'bad practice'. Why?",q_cn:"String s1='hello'; s2='hello'; s1==s2能用但是坏习惯。为什么？",opts_en:["== always works","== compares refs not content; works by luck (pool)","Won't compile","== is correct"],opts_cn:["==总有效","==比较引用非内容；碰巧有效","无法编译","==是正确的"],c:1,ex_en:"== checks reference, not content. Use .equals().",ex_cn:"==检查引用非内容。用.equals()。"},
+{g:2,q_en:"int a=5; int b=2; double c = a/b; Value of c?",q_cn:"int a=5; int b=2; double c=a/b; c的值？",opts_en:["2.5","2.0","3.0","2"],opts_cn:["2.5","2.0","3.0","2"],c:1,ex_en:"5/2=2 (int), assigned to double → 2.0.",ex_cn:"5/2=2(int)，赋给double→2.0。"},
+{g:2,q_en:"Which expression for b²-4ac is INCORRECT in Java?",q_cn:"哪个表达式在Java中是错误的？",opts_en:["b*b - 4*a*c","Math.pow(b,2) - 4*a*c","b² - 4*a*c","All correct"],opts_cn:["b*b - 4*a*c","Math.pow(b,2) - 4*a*c","b² - 4*a*c","都对"],c:2,ex_en:"² is not a valid Java operator.",ex_cn:"²不是有效的Java运算符。"},
+{g:2,q_en:"boolean x = (10>5) && (3>7); Value?",q_cn:"boolean x = (10>5) && (3>7); 值？",opts_en:["true","false","Error","null"],opts_cn:["true","false","错误","null"],c:1,ex_en:"true && false = false.",ex_cn:"true && false = false。"},
+{g:3,q_en:"int age=input.nextInt(); String name=input.nextLine(); After typing '25'+Enter, name is skipped. Why?",q_cn:"nextInt()后nextLine()被跳过。为什么？",opts_en:["Scanner broken","nextLine() consumed leftover '\\n'","Wrong declaration","nextInt reads full line"],opts_cn:["Scanner坏了","nextLine()消耗了残留'\\n'","声明错","nextInt读整行"],c:1,ex_en:"nextInt() leaves '\\n' in buffer.",ex_cn:"nextInt()在缓冲区留下'\\n'。"},
+{g:3,q_en:"printf(\"Price: $%.2f\", 19.998) output?",q_cn:"printf(\"$%.2f\", 19.998)输出？",opts_en:["$19.998","$19.99","$20.00","$19.9"],opts_cn:["$19.998","$19.99","$20.00","$19.9"],c:1,ex_en:"%.2f rounds to 2 decimals: $19.99.",ex_cn:"%.2f保留2位小数：$19.99。"},
+{g:3,q_en:"Separate ifs: if(score>=90) grade='A'; if(score>=80) grade='B'; if(score>=70) grade='C'; Score=95, what grade?",q_cn:"独立if：score=95时grade是什么？",opts_en:["'A'","'B'","'C'","Error"],opts_cn:["'A'","'B'","'C'","错误"],c:2,ex_en:"ALL ifs execute! 95≥70 → 'C'. Should use else if.",ex_cn:"所有if都执行！95≥70→'C'。应该用else if。"},
+{g:3,q_en:"switch(day) no break: case1→'Mon', case2→'Tue', case3→'Wed', default→'Other'. day=1?",q_cn:"switch无break：day=1输出？",opts_en:["Mon","Mon Tue Wed Other","Mon Other","Error"],opts_cn:["Mon","Mon Tue Wed Other","Mon Other","错误"],c:1,ex_en:"Fall-through: Mon Tue Wed Other.",ex_cn:"穿透：Mon Tue Wed Other。"},
+{g:3,q_en:"Parking: $3 first hour, $2/hr after. Best structure?",q_cn:"停车：首小时$3，之后$2/hr。最佳结构？",opts_en:["Single if","if-else","if-else if or arithmetic","switch"],opts_cn:["单个if","if-else","if-else if或算术","switch"],c:2,ex_en:"Range conditions need if-else or arithmetic.",ex_cn:"范围条件用if-else或算术。"},
+{g:4,q_en:"int i=1; while(i<=5){System.out.print(i);} — what happens?",q_cn:"int i=1; while(i<=5){print(i);}——会怎样？",opts_en:["Prints 1 2 3 4 5","Infinite loop: 1 1 1...","Nothing","Error"],opts_cn:["打印1 2 3 4 5","无限循环：1 1 1...","无输出","错误"],c:1,ex_en:"i never incremented → infinite loop.",ex_cn:"i从未自增→无限循环。"},
+{g:4,q_en:"public static int square(int n) { n*n; } — compiler error. What's missing?",q_cn:"方法编译错误。缺什么？",opts_en:["Nothing","return statement","Wrong param","Should be void"],opts_cn:["没错","return语句","参数错","应是void"],c:1,ex_en:"Missing: return n*n;",ex_cn:"缺少：return n*n;"},
+{g:4,q_en:"Simulate 6-sided die: correct expression?",q_cn:"模拟6面骰子的正确表达式？",opts_en:["(int)(Math.random()*6)+1","(int)(Math.random()*7)","(int)(Math.random()*6)","Math.random()*6+1"],opts_cn:["(int)(Math.random()*6)+1","(int)(Math.random()*7)","(int)(Math.random()*6)","Math.random()*6+1"],c:0,ex_en:"*6 gives 0-5 range, +1 shifts to 1-6.",ex_cn:"*6得0-5范围，+1变为1-6。"},
+{g:4,q_en:"Split 300-line main() into 5 methods. Primary benefit?",q_cn:"将300行main()拆成5个方法。主要好处？",opts_en:["Faster","Less memory","Easier to read, test, debug, maintain","Required by Java"],opts_cn:["更快","更少内存","更易读、测、调、维护","Java要求"],c:2,ex_en:"Modularity = readability + maintainability.",ex_cn:"模块化=可读性+可维护性。"},
+{g:4,q_en:"int add(int a,int b) and double add(double a,double b) in same class. Concept?",q_cn:"同名不同参数类型的方法。什么概念？",opts_en:["Overriding","Overloading","Inheritance","Polymorphism"],opts_cn:["重写","重载","继承","多态"],c:1,ex_en:"Method overloading.",ex_cn:"方法重载。"}
+];
+
+function renderScenarios(){const c=document.getElementById('scenarioContainer'),l=state.lang;const gn_en=["Ch 1–2: Systems & Problem Solving","Ch 3–4: Algorithms & Java Env","Ch 5–6: Variables & Operators","Ch 7–8: I/O & Selection","Ch 9–10: Loops & Methods"];const gn_cn=["第1-2章：系统与问题求解","第3-4章：算法与Java环境","第5-6章：变量与运算符","第7-8章：I/O与选择","第9-10章：循环与方法"];const gi=["1-2","3-4","5-6","7-8","9-10"];let html='';for(let g=0;g<5;g++){html+=`<div class="scenario-group"><div class="scenario-group-header"><div class="scenario-group-icon">${gi[g]}</div><div><div class="scenario-group-title">${l==='en'?gn_en[g]:gn_cn[g]}</div><div class="scenario-group-sub">${l==='en'?'5 scenarios · 10 pts each':'5道场景 · 每题10分'}</div></div></div>`;const gq=scenarioData.filter(s=>s.g===g);gq.forEach((s,i)=>{const si=scenarioData.indexOf(s),ans=state.scenAnswered[si]!==undefined,sel=state.scenAnswered[si],opts=l==='en'?s.opts_en:s.opts_cn,letters=['A','B','C','D'];const hasCode=s.q_en.includes('\n');const badgeCl=hasCode?'j-badge':'';const qText=l==='en'?s.q_en:s.q_cn;const qHtml=qText.includes('\n')?`<div class="scenario-context"><pre>${qText}</pre></div>`:`<div class="scenario-context">${qText}</div>`;html+=`<div class="scenario-card"><div class="scenario-header"><span class="scenario-badge ${badgeCl}">${l==='en'?'Scenario':'场景'} ${si+1}</span></div>${qHtml}<div class="scenario-question">${l==='en'?'What is the correct answer?':'正确答案是？'}</div><div class="scenario-opts">`;opts.forEach((o,j)=>{let cls='scenario-opt';if(ans){if(j===s.c)cls+=' correct-sel';else if(j===sel&&j!==s.c)cls+=' wrong-sel';cls+=' dis-opt'}else if(sel===j)cls+=' sel';html+=`<div class="${cls}" onclick="selScen(${si},${j})"><div class="scenario-opt-letter">${letters[j]}</div><div>${o}</div></div>`});html+='</div>';if(ans){const ok=sel===s.c;html+=`<div class="scenario-fb show-fb ${ok?'correct-sfb':'wrong-sfb'}">${ok?'✓':'✗'} ${l==='en'?s.ex_en:s.ex_cn}</div>`}html+='</div>'});html+='</div>'}c.innerHTML=html;updateScenProg()}
+function selScen(gi,oi){if(state.scenAnswered[gi]!==undefined)return;state.scenAnswered[gi]=oi;const ok=oi===scenarioData[gi].c;state.scenCorrect[gi]=ok;if(ok){updateScore(10);showToast('+10!','✓')}else{updateScore(0)}renderScenarios();if(Object.keys(state.scenAnswered).length===scenarioData.length)document.getElementById('scenResBtn').style.display='inline-flex'}
+function updateScenProg(){const t=scenarioData.length,a=Object.keys(state.scenAnswered).length;document.getElementById('scenAns').textContent=a;document.getElementById('scenProgFill').style.width=(a/t*100)+'%';document.getElementById('scenProgFill').style.background=a===t?'linear-gradient(90deg,var(--success),#4CAF50)':'linear-gradient(90deg,var(--java-blue),var(--java-orange))'}
+function showScenResults(){const t=Object.values(state.scenCorrect).filter(v=>v).length,l=state.lang;let m=t>=22?'Outstanding!':t>=17?'Great!':t>=12?'Good!':'Keep practicing!';if(l==='cn')m=t>=22?'太棒了！':t>=17?'做得好！':t>=12?'不错！':'继续练习！';document.getElementById('scenarioContainer').innerHTML=`<div class="quiz-result"><h3>${l==='en'?'Results':'结果'}</h3><div class="big-score">${t}/25</div><p style="color:var(--text-muted);margin-bottom:1rem">${m}</p><p style="font-family:var(--font-mono);color:var(--java-blue);margin-bottom:1.5rem">${t*10} ${l==='en'?'points':'分'}</p><button class="btn btn-java" onclick="state.scenAnswered={};state.scenCorrect={};renderScenarios();document.getElementById('scenResBtn').style.display='none'">${l==='en'?'Try Again':'重做'}</button></div>`;document.getElementById('scenResBtn').style.display='none'}
+
+// CODE CHALLENGES (same 6 as before)
+const codeChallenges=[
+{t_en:"Pseudocode: Average of N",t_cn:"伪代码：N个数平均值",d:"Easy",dc:"简单",h:"p",p_en:"Write pseudocode to read N numbers and calculate average.",p_cn:"写伪代码读N个数算平均值。",s_en:"BEGIN\n  SET sum=0, READ N\n  IF N>0 THEN\n    FOR i=1 TO N READ num; sum+=num ENDFOR\n    DISPLAY sum/N\n  ELSE DISPLAY \"None\"\n  END IF\nEND",s_cn:"开始\n  设sum=0, 读N\n  如果N>0 则\n    对于i=1到N 读num; sum+=num\n    显示sum/N\n  否则 显示\"无\"\n  结束\n结束"},
+{t_en:"Java: Variables Demo",t_cn:"Java：变量演示",d:"Easy",dc:"简单",h:"j",p_en:"Write Java declaring String name, int age, double GPA, printing all.",p_cn:"声明并打印姓名、年龄、GPA。",s_en:"public class Demo {\n  public static void main(String[] args) {\n    String name=\"Alice\"; int age=20; double gpa=3.75;\n    System.out.println(\"Name: \"+name);\n    System.out.println(\"Age: \"+age);\n    System.out.printf(\"GPA: %.2f%n\", gpa);\n  }\n}",s_cn:"public class Demo {\n  public static void main(String[] args) {\n    String name=\"Alice\"; int age=20; double gpa=3.75;\n    System.out.println(\"姓名：\"+name);\n    System.out.printf(\"GPA：%.2f%n\", gpa);\n  }\n}"},
+{t_en:"Java: Scanner Calculator",t_cn:"Java：Scanner计算器",d:"Med",dc:"中等",h:"j",p_en:"Read two numbers and operator (+,-,*,/) using Scanner. Display result.",p_cn:"用Scanner读两数和运算符并显示结果。",s_en:"import java.util.Scanner;\npublic class Calc {\n  public static void main(String[] args) {\n    Scanner in = new Scanner(System.in);\n    double a=in.nextDouble(); char op=in.next().charAt(0); double b=in.nextDouble();\n    double r; switch(op){\n      case '+': r=a+b; break; case '-': r=a-b; break;\n      case '*': r=a*b; break; case '/': r=a/b; break;\n      default: return;\n    }\n    System.out.printf(\"%.2f %c %.2f = %.2f%n\",a,op,b,r);\n  }\n}",s_cn:"同英文，使用Scanner读取输入。"},
+{t_en:"Java: 5×5 Multiplication Table",t_cn:"Java：5×5乘法表",d:"Med",dc:"中等",h:"j",p_en:"Nested for loops to print 5×5 multiplication table.",p_cn:"嵌套for循环打印5×5乘法表。",s_en:"public class Mult {\n  public static void main(String[] args) {\n    for(int i=1;i<=5;i++){\n      for(int j=1;j<=5;j++) System.out.printf(\"%4d\",i*j);\n      System.out.println();\n    }\n  }\n}",s_cn:"同英文。"},
+{t_en:"Java: circleArea & distance Methods",t_cn:"Java：圆面积和距离方法",d:"Hard",dc:"困难",h:"j",p_en:"circleArea(r) returns area. distance(x1,y1,x2,y2) returns distance. main calls both.",p_cn:"编写circleArea和distance方法，main调用。",s_en:"public class MathM {\n  public static double circleArea(double r){return Math.PI*Math.pow(r,2);}\n  public static double distance(double x1,double y1,double x2,double y2){\n    return Math.sqrt(Math.pow(x2-x1,2)+Math.pow(y2-y1,2));\n  }\n  public static void main(String[] args){\n    System.out.printf(\"Area: %.2f%n\",circleArea(5));\n    System.out.printf(\"Dist: %.2f%n\",distance(0,0,3,4));\n  }\n}",s_cn:"同英文。"},
+{t_en:"Pseudocode: Factorial",t_cn:"伪代码：阶乘",d:"Easy",dc:"简单",h:"p",p_en:"Write pseudocode to calculate N! (factorial).",p_cn:"写伪代码计算N!。",s_en:"BEGIN\n  READ N\n  SET fact=1\n  FOR i=1 TO N\n    SET fact=fact*i\n  ENDFOR\n  DISPLAY fact\nEND",s_cn:"开始\n  读N, 设fact=1\n  对于i=1到N fact=fact*i\n  显示fact\n结束"}
+];
+
+function initCodeChallenges(){const c=document.getElementById('codeContainer');let h='';codeChallenges.forEach((ch,i)=>{const l=state.lang,isJ=ch.h==='j';h+=`<div class="code-card"><div class="code-card-header ${isJ?'':'pseudo-header'}"><h3>${l==='en'?ch.t_en:ch.t_cn}</h3><span class="code-diff">${l==='en'?ch.d:ch.dc}</span></div><div class="code-body"><div class="code-problem">${l==='en'?ch.p_en:ch.p_cn}</div><textarea class="code-editor" id="ce-${i}"></textarea><div class="code-actions"><button class="btn ${isJ?'btn-red':'btn-java'}" onclick="chkCode(${i})">${l==='en'?'Complete (+15)':'完成(+15)'}</button><button class="btn btn-secondary" onclick="document.getElementById('cs-'+${i}).classList.toggle('show')">${l==='en'?'Solution':'解答'}</button></div><div class="code-solution" id="cs-${i}">${l==='en'?ch.s_en:ch.s_cn}</div></div></div>`});c.innerHTML=h}
+function chkCode(i){const ed=document.getElementById('ce-'+i);if(ed.value.trim().length<8){showToast(state.lang==='en'?'Try first!':'先试试！','');return}updateScore(15);showToast('+15!','☕');ed.style.borderColor='var(--success)'}
+
+// MATCH
+const matchPairs=[{t_en:"CPU",t_cn:"CPU",d_en:"Computer brain",d_cn:"计算机大脑"},{t_en:"RAM",t_cn:"RAM",d_en:"Volatile memory",d_cn:"易失内存"},{t_en:"Algorithm",t_cn:"算法",d_en:"Step-by-step procedure",d_cn:"逐步过程"},{t_en:"Flowchart",t_cn:"流程图",d_en:"Symbol-based diagram",d_cn:"符号化图表"},{t_en:"JVM",t_cn:"JVM",d_en:"Runs bytecode",d_cn:"运行字节码"},{t_en:"Scanner",t_cn:"Scanner",d_en:"Reads user input",d_cn:"读取用户输入"},{t_en:"if-else",t_cn:"if-else",d_en:"Selection structure",d_cn:"选择结构"},{t_en:"while",t_cn:"while",d_en:"Pre-test loop",d_cn:"前测试循环"},{t_en:"Method",t_cn:"方法",d_en:"Reusable code block",d_cn:"可重用代码块"},{t_en:"String",t_cn:"String",d_en:"Text reference type",d_cn:"文本引用类型"},{t_en:"switch",t_cn:"switch",d_en:"Multi-way branch",d_cn:"多路分支"},{t_en:"void",t_cn:"void",d_en:"No return value",d_cn:"无返回值"}];
+
+function initMatchGame(){const l=state.lang;state.matchSelected=null;state.matchMoves=0;state.matchPairsFound=0;const cards=[];matchPairs.forEach((p,i)=>{cards.push({id:i,type:'term',text:l==='en'?p.t_en:p.t_cn});cards.push({id:i,type:'def',text:l==='en'?p.d_en:p.d_cn})});for(let i=cards.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[cards[i],cards[j]]=[cards[j],cards[i]]}state.matchData=cards;document.getElementById('matchTotalPairs').textContent=matchPairs.length;document.getElementById('matchPairsFound').textContent=0;document.getElementById('matchMoves').textContent=0;document.getElementById('matchGrid').innerHTML=cards.map((c,i)=>`<div class="match-card" id="mc-${i}" onclick="clickMC(${i})"><span class="card-label">${c.type==='term'?(l==='en'?'Term':'术语'):(l==='en'?'Def':'定义')}</span>${c.text}</div>`).join('')}
+function clickMC(idx){const card=document.getElementById('mc-'+idx);if(card.classList.contains('matched-card'))return;const l=state.lang;if(state.matchSelected===null){state.matchSelected=idx;card.classList.add('selected-card')}else if(state.matchSelected===idx){card.classList.remove('selected-card');state.matchSelected=null}else{state.matchMoves++;document.getElementById('matchMoves').textContent=state.matchMoves;const fi=state.matchSelected,fEl=document.getElementById('mc-'+fi),fC=state.matchData[fi],sC=state.matchData[idx];fEl.classList.remove('selected-card');if(fC.id===sC.id&&fC.type!==sC.type){fEl.classList.add('matched-card');card.classList.add('matched-card');state.matchPairsFound++;document.getElementById('matchPairsFound').textContent=state.matchPairsFound;updateScore(8);if(state.matchPairsFound===matchPairs.length)setTimeout(()=>showToast('☕ '+l==='en'?'Complete!':'完成！',''),400)}else{card.classList.add('wrong-card');fEl.classList.add('wrong-card');setTimeout(()=>{card.classList.remove('wrong-card');fEl.classList.remove('wrong-card')},500)}state.matchSelected=null}}
+
+document.addEventListener('DOMContentLoaded',()=>{initQuiz();initCodeChallenges()});
+</script>
+</body>
+</html>

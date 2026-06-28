@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Week 4: Java Environment - DBFP2423</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Macaron Palette */
+            --pastel-pink: #FFD1DC;
+            --pastel-mint: #B0EACD;
+            --pastel-blue: #AEC6CF;
+            --pastel-lavender: #C3B1E1;
+            --pastel-yellow: #FDFD96;
+            
+            --ink: #111111;
+            --ink-muted: #333333;
+            
+            --glass-bg: rgba(255, 255, 255, 0.45);
+            --glass-border: rgba(255, 255, 255, 0.6);
+            --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+            --radius-lg: 32px;
+            --radius-md: 16px;
+            
+            --spring: cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background: linear-gradient(135deg, var(--pastel-pink), var(--pastel-lavender), var(--pastel-blue), var(--pastel-mint));
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            color: var(--ink);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Floating Auras */
+        body::before {
+            content: ''; position: fixed; top: -10%; left: -10%; width: 50vw; height: 50vw;
+            background: radial-gradient(circle, var(--pastel-yellow) 0%, transparent 70%);
+            filter: blur(80px); opacity: 0.6; z-index: -1;
+            animation: floatAura 20s ease-in-out infinite alternate;
+        }
+        body::after {
+            content: ''; position: fixed; bottom: -10%; right: -10%; width: 60vw; height: 60vw;
+            background: radial-gradient(circle, var(--pastel-pink) 0%, transparent 70%);
+            filter: blur(100px); opacity: 0.5; z-index: -1;
+            animation: floatAura 25s ease-in-out infinite alternate-reverse;
+        }
+
+        @keyframes floatAura {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(100px, 100px) scale(1.2); }
+        }
+
+        h1, h2, h3 { font-family: 'Orbitron', sans-serif; color: var(--ink); }
+        
+        .header { text-align: center; padding: 40px 20px 20px; position: relative; }
+        .header h1 { font-size: 2.5rem; margin-top: 20px; font-weight: 800; color: var(--ink); }
+        .nav-link { color: var(--ink-muted); text-decoration: none; font-weight: 700; display: inline-block; transition: all 0.4s var(--spring); font-size: 1.1rem; text-transform: uppercase; letter-spacing: 0.05em; background: var(--glass-bg); padding: 8px 16px; border-radius: 20px; border: 1px solid var(--glass-border); }
+        .nav-link:hover { color: var(--ink); transform: translateY(-3px); box-shadow: 0 4px 15px rgba(0,0,0,0.1); background: rgba(255,255,255,0.7); }
+        
+        .lang-btn {
+            position: absolute;
+            top: 40px;
+            right: 40px;
+            z-index: 10;
+        }
+
+        .container { max-width: 900px; margin: 20px auto 40px; padding: 0 20px; position: relative; z-index: 1; }
+        
+        .card { 
+            background: var(--glass-bg); 
+            border-radius: var(--radius-lg); 
+            padding: 40px; 
+            box-shadow: var(--glass-shadow); 
+            margin-bottom: 30px;
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            transition: all 0.5s var(--spring);
+        }
+        .card h2 { border-bottom: 2px solid rgba(255,255,255,0.5); padding-bottom: 15px; margin-top: 0; font-size: 1.8rem;}
+        
+        .step { background: rgba(255,255,255,0.3); padding: 20px; margin-bottom: 15px; border-radius: var(--radius-md); border: 1px solid var(--glass-border); }
+        .step h3 { margin-top: 0; font-size: 1.3rem; }
+        
+        .btn { 
+            background: linear-gradient(135deg, var(--pastel-lavender), var(--pastel-pink));
+            color: var(--ink); 
+            padding: 12px 28px; 
+            border: 2px solid rgba(255,255,255,0.8); 
+            border-radius: 12px; 
+            cursor: pointer; 
+            font-weight: 700; 
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.1rem;
+            transition: all 0.4s var(--spring);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            display: inline-block;
+            margin-top: 10px;
+        }
+        .btn:hover { transform: translateY(-4px); box-shadow: 0 8px 25px rgba(195, 177, 225, 0.4); background: linear-gradient(135deg, var(--pastel-pink), var(--pastel-lavender)); }
+        
+        /* Quiz */
+        .quiz-q { margin-bottom: 25px; }
+        .quiz-label { display: block; padding: 12px 16px; cursor: pointer; transition: all 0.4s var(--spring); border-radius: 12px; border: 1px solid transparent; font-weight: 600; font-size: 1.1rem;}
+        .quiz-label:hover { background: rgba(255,255,255,0.4); border: 1px solid var(--glass-border); transform: translateX(5px);}
+        
+        /* Coding */
+        .code-editor { background: rgba(0,0,0,0.8); color: #F8F9FA; padding: 20px; border-radius: var(--radius-md); font-family: 'JetBrains Mono', monospace; line-height: 1.8; margin-top: 10px; font-size: 1rem; border: 1px solid rgba(255,255,255,0.2); box-shadow: inset 0 2px 10px rgba(0,0,0,0.5); white-space: pre-wrap; }
+        .blank-input { border: none; border-bottom: 2px solid var(--pastel-mint); background: transparent; color: var(--ink); font-family: inherit; font-size: 1.1rem; text-align: center; outline: none; transition: all 0.4s var(--spring); font-weight: 700;}
+        .blank-input:focus { border-bottom: 2px solid var(--pastel-lavender); background: rgba(255,255,255,0.1); border-radius: 4px;}
+        .correct-ans { color: #0f5132; font-weight: 700; margin-top: 15px; display: inline-block; padding: 10px 16px; background: rgba(176, 234, 205, 0.6); border-radius: 12px; border: 1px solid var(--pastel-mint);}
+        .wrong-ans { color: #842029; font-weight: 700; margin-top: 15px; display: inline-block; padding: 10px 16px; background: rgba(255, 209, 220, 0.6); border-radius: 12px; border: 1px solid var(--pastel-pink);}
+        
+        /* Tips Section override */
+        .card[style*="border-left"] { border-left: none !important; position: relative; overflow: hidden; background: linear-gradient(135deg, rgba(176, 234, 205, 0.3), rgba(255, 255, 255, 0.4)); }
+        .card[style*="border-left"]::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 6px; background: var(--pastel-mint); box-shadow: 0 0 10px var(--pastel-mint); }
+        .card[style*="border-left"] h2 { border-bottom: none; color: #0f5132; }
+        
+        /* SVG Tweaks for Macaron Glassmorphism & High Contrast */
+        svg { background: transparent !important; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.05)); }
+        svg text { font-family: 'Rajdhani', sans-serif !important; font-weight: 700 !important; fill: #111111 !important; }
+        svg [fill="url(#navyGrad)"] { fill: rgba(255,255,255,0.8) !important; stroke: #111111 !important; stroke-width: 2px; }
+        svg [fill="#FFF"] { fill: rgba(255,255,255,0.8) !important; stroke: #111111 !important; stroke-width: 1px; }
+        svg [stroke="#1E3A8A"] { stroke: #111111 !important; stroke-width: 2px !important; }
+        svg [fill="#1E3A8A"] { fill: #111111 !important; }
+        svg [stroke="#FF6B6B"] { stroke: #D81B60 !important; }
+        svg [fill="#FF6B6B"] { fill: #D81B60 !important; }
+
+        /* Translation CSS Rules */
+        .lang-cn { display: none !important; }
+        body.cn-active .lang-en { display: none !important; }
+        body.cn-active .lang-cn { display: block !important; }
+        
+        span.lang-cn { display: none !important; }
+        body.cn-active span.lang-en { display: none !important; }
+        body.cn-active span.lang-cn { display: inline !important; }
+
+        @media (max-width: 768px) {
+            .lang-btn {
+                position: static;
+                margin-top: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="index.html" class="nav-link">
+            <span class="lang-en">← Back to Hub</span>
+            <span class="lang-cn">← 返回主页</span>
+        </a>
+        <h1>
+            <span class="lang-en">Week 4: Java Environment</span>
+            <span class="lang-cn">第 4 周：Java 环境与程序结构</span>
+        </h1>
+        <button class="btn lang-btn" onclick="toggleLanguage()">🌐 EN / 中文</button>
+    </div>
+
+    <div class="container">
+        <!-- Notes Section -->
+        <div class="card">
+            <h2>
+                <span class="lang-en">Step-by-Step Guide</span>
+                <span class="lang-cn">分步指南</span>
+            </h2>
+            <div class="lang-en">
+                <div class='step'><h3>Step 1: Overview of Java</h3><p>Java is an object-oriented, platform-independent language. The slogan <strong>"Write Once, Run Anywhere"</strong> means compiled Java code can run on any device equipped with a Java Virtual Machine (JVM).</p></div><div class='step'><h3>Step 2: Language Elements</h3><p>Every Java application must have at least one <strong>Class</strong> and one <strong>main method</strong>. The main method is the entry point where the program starts executing.</p></div><div class='step'><h3>Step 3: The JDK & IDEs</h3><p>The <strong>JDK (Java Development Kit)</strong> contains the compiler (`javac`) and the JVM (`java`). Programmers use IDEs (like Eclipse or IntelliJ) to make writing, compiling, and running code easier.</p></div>
+            </div>
+            <div class="lang-cn">
+                <div class='step'><h3>步骤 1：Java 概述</h3>Java 是一种面向对象的、跨平台的语言。其口号 <strong>“一次编写，到处运行” (Write Once, Run Anywhere)</strong> 意味着编译后的 Java 代码可以在任何配备了 Java 虚拟机 (JVM) 的设备上运行。</div><div class='step'><h3>步骤 2：语言元素</h3>每个 Java 应用程序必须至少有一个 <strong>类 (Class)</strong> 和一个 <strong>主方法 (main method)</strong>。主方法是程序开始执行的入口点。</div><div class='step'><h3>步骤 3：JDK 和 IDE</h3><strong>JDK (Java Development Kit)</strong> 包含编译器 (`javac`) 和 JVM (`java`)。程序员使用 IDE（如 Eclipse 或 IntelliJ）使编写、编译和运行代码更容易。</div>
+            </div>
+        </div>
+
+        <!-- SVG Animation Section -->
+        <div class="card">
+            <h2>
+                <span class="lang-en">Concept Visualization</span>
+                <span class="lang-cn">概念可视化</span>
+            </h2>
+            <div style="background: rgba(255,255,255,0.5); border-radius: 8px; padding: 20px; text-align: center; border: 1px solid rgba(255,255,255,0.8);">
+                <svg height="200" max-width="800" viewbox="0 0 800 200" width="100%" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<lineargradient id="navyGrad" x1="0%" x2="100%" y1="0%" y2="100%">
+<stop offset="0%" stop-color="#1E3A8A"></stop>
+<stop offset="100%" stop-color="#0A192F"></stop>
+</lineargradient>
+</defs>
+<rect fill="url(#navyGrad)" height="60" rx="10" width="120" x="20" y="60"></rect>
+<text fill="#FFF" font-family="Outfit" font-size="14" font-weight="bold" text-anchor="middle" x="80" y="95">Source Code</text>
+<circle cx="230" cy="90" fill="none" r="40" stroke="#FF6B6B" stroke-width="4"></circle>
+<text fill="#FF6B6B" font-family="Outfit" font-size="12" font-weight="bold" text-anchor="middle" x="230" y="95">Compiler</text>
+<text fill="#1E3A8A" font-family="Outfit" font-size="10" text-anchor="middle" x="230" y="110">(javac)</text>
+<rect fill="url(#navyGrad)" height="60" rx="10" width="120" x="330" y="60"></rect>
+<text fill="#FFF" font-family="Outfit" font-size="14" font-weight="bold" text-anchor="middle" x="390" y="95">Bytecode (.class)</text>
+<circle cx="540" cy="90" fill="none" r="40" stroke="#FF6B6B" stroke-width="4"></circle>
+<text fill="#FF6B6B" font-family="Outfit" font-size="14" font-weight="bold" text-anchor="middle" x="540" y="95">JVM</text>
+<rect fill="url(#navyGrad)" height="60" rx="10" width="120" x="640" y="60"></rect>
+<text fill="#FFF" font-family="Outfit" font-size="14" font-weight="bold" text-anchor="middle" x="700" y="95">Output</text>
+<path d="M 140 90 L 190 90" fill="none" id="p1" stroke="#1E3A8A" stroke-width="3"></path>
+<path d="M 270 90 L 330 90" fill="none" id="p2" stroke="#1E3A8A" stroke-width="3"></path>
+<path d="M 450 90 L 500 90" fill="none" id="p3" stroke="#1E3A8A" stroke-width="3"></path>
+<path d="M 580 90 L 640 90" fill="none" id="p4" stroke="#1E3A8A" stroke-width="3"></path>
+<circle fill="#FF6B6B" r="6">
+<animatemotion calcmode="linear" dur="5s" keypoints="0;0.25;0.25;0.5;0.5;0.75;0.75;1;1" keytimes="0;0.2;0.25;0.45;0.5;0.7;0.75;0.95;1" repeatcount="indefinite">
+<mpath href="#p1"></mpath>
+</animatemotion>
+</circle>
+<circle fill="#FF6B6B" opacity="0" r="6">
+<animate attributename="opacity" dur="5s" keytimes="0;0.25;0.26;0.45;0.46" repeatcount="indefinite" values="0;0;1;1;0"></animate>
+<animatemotion calcmode="linear" dur="5s" keypoints="0;1" keytimes="0.25;0.45" repeatcount="indefinite">
+<mpath href="#p2"></mpath>
+</animatemotion>
+</circle>
+<circle fill="#FF6B6B" opacity="0" r="6">
+<animate attributename="opacity" dur="5s" keytimes="0;0.5;0.51;0.7;0.71" repeatcount="indefinite" values="0;0;1;1;0"></animate>
+<animatemotion calcmode="linear" dur="5s" keypoints="0;1" keytimes="0.5;0.7" repeatcount="indefinite">
+<mpath href="#p3"></mpath>
+</animatemotion>
+</circle>
+<circle fill="#FF6B6B" opacity="0" r="6">
+<animate attributename="opacity" dur="5s" keytimes="0;0.75;0.76;0.95;0.96" repeatcount="indefinite" values="0;0;1;1;0"></animate>
+<animatemotion calcmode="linear" dur="5s" keypoints="0;1" keytimes="0.75;0.95" repeatcount="indefinite">
+<mpath href="#p4"></mpath>
+</animatemotion>
+</circle>
+</svg>
+            </div>
+        </div>
+
+        <!-- Tips Section -->
+        <div class="card" style="border-left: 5px solid #10B981;">
+            <h2>
+                <span class="lang-en">Tips</span>
+                <span class="lang-cn">提示</span>
+            </h2>
+            <div class="lang-en"><ul>
+<li><strong>"Write Once, Run Anywhere":</strong> You will definitely be tested on why Java is platform-independent. The secret is the JVM! The compiler doesn't compile to machine code, it compiles to <em>bytecode</em>.</li>
+<li><strong>Class naming rule:</strong> The name of the public class MUST match the filename exactly (e.g., `public class Main` must be in `Main.java`).</li>
+</ul></div>
+            <div class="lang-cn"><ul><li><strong>一次编写，到处运行：</strong>你肯定会考到为什么 Java 具有平台独立性。秘诀就在于 JVM！编译器不编译为机器码，而是编译为<em>字节码</em>。</li><li><strong>类命名规则：</strong>公共类的名称必须与文件名完全匹配（例如：`public class Main` 必须在 `Main.java` 中）。</li></ul></div>
+        </div>
+
+        <!-- Quiz Section -->
+        <div class="card">
+            <h2>
+                <span class="lang-en">Knowledge Check</span>
+                <span class="lang-cn">知识自测</span>
+            </h2>
+            <div id="quiz-container">
+                <div class='quiz-q'>
+            <p><b>1. 
+                <span class="lang-en">Which command is used to compile a Java file?</span>
+                <span class="lang-cn">哪个命令用于编译 Java 文件？</span>
+            </b></p>
+            <label class='quiz-label'>
+                <input type='radio' name='q0' value='0'>
+                <span class="lang-en">javac</span>
+                <span class="lang-cn">javac</span>
+            </label><label class='quiz-label'>
+                <input type='radio' name='q0' value='1'>
+                <span class="lang-en">java</span>
+                <span class="lang-cn">java</span>
+            </label>
+        </div><div class='quiz-q'>
+            <p><b>2. 
+                <span class="lang-en">What is the output of the Java compiler?</span>
+                <span class="lang-cn">Java 编译器的输出是什么？</span>
+            </b></p>
+            <label class='quiz-label'>
+                <input type='radio' name='q1' value='0'>
+                <span class="lang-en">Bytecode (.class)</span>
+                <span class="lang-cn">字节码 (.class)</span>
+            </label><label class='quiz-label'>
+                <input type='radio' name='q1' value='1'>
+                <span class="lang-en">Machine code (.exe)</span>
+                <span class="lang-cn">机器码 (.exe)</span>
+            </label>
+        </div><div class='quiz-q'>
+            <p><b>3. 
+                <span class="lang-en">Which software executes Java Bytecode?</span>
+                <span class="lang-cn">哪个软件执行 Java 字节码？</span>
+            </b></p>
+            <label class='quiz-label'>
+                <input type='radio' name='q2' value='0'>
+                <span class="lang-en">JVM (Java Virtual Machine)</span>
+                <span class="lang-cn">JVM (Java Virtual Machine)</span>
+            </label><label class='quiz-label'>
+                <input type='radio' name='q2' value='1'>
+                <span class="lang-en">The Operating System directly</span>
+                <span class="lang-cn">操作系统直接执行</span>
+            </label>
+        </div><div class='quiz-q'>
+            <p><b>4. 
+                <span class="lang-en">Every Java program must have at least one:</span>
+                <span class="lang-cn">每个 Java 程序必须至少包含一个：</span>
+            </b></p>
+            <label class='quiz-label'>
+                <input type='radio' name='q3' value='0'>
+                <span class="lang-en">Package</span>
+                <span class="lang-cn">Scanner</span>
+            </label><label class='quiz-label'>
+                <input type='radio' name='q3' value='1'>
+                <span class="lang-en">Class</span>
+                <span class="lang-cn">类 (Class)</span>
+            </label>
+        </div><div class='quiz-q'>
+            <p><b>5. 
+                <span class="lang-en">The main method is defined as:</span>
+                <span class="lang-cn">如果你的公共类名为 `Calculator`，文件名必须是什么？</span>
+            </b></p>
+            <label class='quiz-label'>
+                <input type='radio' name='q4' value='0'>
+                <span class="lang-en">public static void main(String[] args)</span>
+                <span class="lang-cn">Calculator.java</span>
+            </label><label class='quiz-label'>
+                <input type='radio' name='q4' value='1'>
+                <span class="lang-en">public void main()</span>
+                <span class="lang-cn">calculator.class</span>
+            </label>
+        </div>
+                <button class="btn" onclick="checkQuiz()">
+                    <span class="lang-en">Submit Answers</span>
+                    <span class="lang-cn">提交答案</span>
+                </button>
+                <div id="quiz-result"></div>
+            </div>
+        </div>
+
+        <!-- Fill in the Blanks -->
+        <div class="card">
+            <h2>
+                <span class="lang-en">Fill in the Blanks</span>
+                <span class="lang-cn">填空练习</span>
+            </h2>
+            <p>
+            <span class="lang-en">Java programs are compiled into <input type='text' id='blank0' class='blank-input' style='width:100px;'> code.</span>
+            <span class="lang-cn">Java程序被编译为<input type='text' id='blank_cn0' class='blank-input' style='width:100px;'>代码。</span>
+        </p><p>
+            <span class="lang-en">The tool that executes compiled Java bytecode is the <input type='text' id='blank1' class='blank-input' style='width:100px;'>.</span>
+            <span class="lang-cn">执行编译后的Java字节码的工具是<input type='text' id='blank_cn1' class='blank-input' style='width:100px;'>。</span>
+        </p>
+            <button class="btn" onclick="checkBlanks()">
+                <span class="lang-en">Check Answers</span>
+                <span class="lang-cn">检查答案</span>
+            </button>
+            <div id="blanks-result"></div>
+        </div>
+
+        <!-- Coding Activities -->
+        <div class="card">
+            <h2>
+                <span class="lang-en">Coding Practice</span>
+                <span class="lang-cn">编程实践</span>
+            </h2>
+            <div class='step'>
+            <p><b>
+                <span class="lang-en">Exercise 1: Class Declaration: Declare a public class named MyProgram.</span>
+                <span class="lang-cn">练习 1：类声明: 在 Java 中声明一个名为 `Hello` 的公共类。</span>
+            </b></p>
+            <div class='code-editor'>public _______ MyProgram {}</div>
+            <button class="btn" onclick="showCodeAns('w4c0')">
+                <span class="lang-en">Show Answer</span>
+                <span class="lang-cn">显示答案</span>
+            </button>
+            <div class='code-editor' id='code-ans-w4c0' style='display:none;'>public class Hello</div>
+        </div><div class='step'>
+            <p><b>
+                <span class="lang-en">Exercise 2: The Main Method Signature: Complete the method signature for the main method.</span>
+                <span class="lang-cn">练习 2：编译器运行: 在终端中键入命令以编译名为 `Test.java` 的 Java 文件。</span>
+            </b></p>
+            <div class='code-editor'>public static _______ main(String[] args) {}</div>
+            <button class="btn" onclick="showCodeAns('w4c1')">
+                <span class="lang-en">Show Answer</span>
+                <span class="lang-cn">显示答案</span>
+            </button>
+            <div class='code-editor' id='code-ans-w4c1' style='display:none;'>javac Test.java</div>
+        </div><div class='step'>
+            <p><b>
+                <span class="lang-en">Exercise 3: Compilation Command: If your file is named App.java, what is the command to compile it?</span>
+                <span class="lang-cn">练习 3：运行字节码: 编译后，在终端中输入命令来执行编译后的类 `Test`。</span>
+            </b></p>
+            <div class='code-editor'>> _______</div>
+            <button class="btn" onclick="showCodeAns('w4c2')">
+                <span class="lang-en">Show Answer</span>
+                <span class="lang-cn">显示答案</span>
+            </button>
+            <div class='code-editor' id='code-ans-w4c2' style='display:none;'>java Test</div>
+        </div>
+        </div>
+
+        <!-- Matching Game -->
+        <div class="card">
+            <h2>
+                <span class="lang-en">Matching Game</span>
+                <span class="lang-cn">配对游戏</span>
+            </h2>
+            <p>
+                <span class="lang-en">Match the term on the left with its definition on the right.</span>
+                <span class="lang-cn">将左侧的术语与右侧的定义进行配对。</span>
+            </p>
+            <div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px;">
+                <div style="width: 45%;">
+                    <div class='step' style='padding:10px; cursor:pointer;'>javac</div><div class='step' style='padding:10px; cursor:pointer;'>java</div><div class='step' style='padding:10px; cursor:pointer;'>JDK</div><div class='step' style='padding:10px; cursor:pointer;'>IDE</div>
+                </div>
+                <div style="width: 45%;">
+                    <div class='step' style='padding:10px; cursor:pointer;'>
+            <span class="lang-en">Java Compiler tool</span>
+            <span class="lang-cn">Java 编译器工具</span>
+        </div><div class='step' style='padding:10px; cursor:pointer;'>
+            <span class="lang-en">Java Interpreter/JVM tool</span>
+            <span class="lang-cn">Java 解释器/JVM工具</span>
+        </div><div class='step' style='padding:10px; cursor:pointer;'>
+            <span class="lang-en">Java Development Kit</span>
+            <span class="lang-cn">Java 开发工具包</span>
+        </div><div class='step' style='padding:10px; cursor:pointer;'>
+            <span class="lang-en">Software used to write and run code</span>
+            <span class="lang-cn">用于编写和运行代码的软件</span>
+        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleLanguage() {
+            document.body.classList.toggle('cn-active');
+        }
+
+        function checkQuiz() {
+            let score = 0;
+            
+        const q0 = document.querySelector('input[name="q0"]:checked');
+        if (q0 && parseInt(q0.value) === 0) score++;
+        
+        const q1 = document.querySelector('input[name="q1"]:checked');
+        if (q1 && parseInt(q1.value) === 0) score++;
+        
+        const q2 = document.querySelector('input[name="q2"]:checked');
+        if (q2 && parseInt(q2.value) === 0) score++;
+        
+        const q3 = document.querySelector('input[name="q3"]:checked');
+        if (q3 && parseInt(q3.value) === 1) score++;
+        
+        const q4 = document.querySelector('input[name="q4"]:checked');
+        if (q4 && parseInt(q4.value) === 0) score++;
+        
+            document.getElementById('quiz-result').innerHTML = `<span class='correct-ans'>
+                <span class="lang-en">You scored: ${score} / 5</span>
+                <span class="lang-cn">得分：${score} / 5</span>
+            </span>`;
+        }
+
+        function checkBlanks() {
+            
+        const b0 = (document.getElementById('blank0').value || document.getElementById('blank_cn0').value).toLowerCase().trim();
+        if(b0 === 'bytecode') {
+            document.getElementById('blank0').style.borderBottomColor = '#2E8B57';
+            document.getElementById('blank_cn0').style.borderBottomColor = '#2E8B57';
+        } else {
+            document.getElementById('blank0').style.borderBottomColor = '#C70039';
+            document.getElementById('blank_cn0').style.borderBottomColor = '#C70039';
+        }
+        
+        const b1 = (document.getElementById('blank1').value || document.getElementById('blank_cn1').value).toLowerCase().trim();
+        if(b1 === 'jvm') {
+            document.getElementById('blank1').style.borderBottomColor = '#2E8B57';
+            document.getElementById('blank_cn1').style.borderBottomColor = '#2E8B57';
+        } else {
+            document.getElementById('blank1').style.borderBottomColor = '#C70039';
+            document.getElementById('blank_cn1').style.borderBottomColor = '#C70039';
+        }
+        
+        }
+
+        function showCodeAns(id) {
+            const el = document.getElementById('code-ans-' + id);
+            el.style.display = el.style.display === 'none' ? 'block' : 'none';
+        }
+    </script>
+</body>
+</html>

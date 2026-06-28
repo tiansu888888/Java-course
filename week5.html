@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Week 5: Variables & Data Types - DBFP2423</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Macaron Palette */
+            --pastel-pink: #FFD1DC;
+            --pastel-mint: #B0EACD;
+            --pastel-blue: #AEC6CF;
+            --pastel-lavender: #C3B1E1;
+            --pastel-yellow: #FDFD96;
+            
+            --ink: #111111;
+            --ink-muted: #333333;
+            
+            --glass-bg: rgba(255, 255, 255, 0.45);
+            --glass-border: rgba(255, 255, 255, 0.6);
+            --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+            --radius-lg: 32px;
+            --radius-md: 16px;
+            
+            --spring: cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background: linear-gradient(135deg, var(--pastel-pink), var(--pastel-lavender), var(--pastel-blue), var(--pastel-mint));
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            color: var(--ink);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Floating Auras */
+        body::before {
+            content: ''; position: fixed; top: -10%; left: -10%; width: 50vw; height: 50vw;
+            background: radial-gradient(circle, var(--pastel-yellow) 0%, transparent 70%);
+            filter: blur(80px); opacity: 0.6; z-index: -1;
+            animation: floatAura 20s ease-in-out infinite alternate;
+        }
+        body::after {
+            content: ''; position: fixed; bottom: -10%; right: -10%; width: 60vw; height: 60vw;
+            background: radial-gradient(circle, var(--pastel-pink) 0%, transparent 70%);
+            filter: blur(100px); opacity: 0.5; z-index: -1;
+            animation: floatAura 25s ease-in-out infinite alternate-reverse;
+        }
+
+        @keyframes floatAura {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(100px, 100px) scale(1.2); }
+        }
+
+        h1, h2, h3 { font-family: 'Orbitron', sans-serif; color: var(--ink); }
+        
+        .header { text-align: center; padding: 40px 20px 20px; position: relative; }
+        .header h1 { font-size: 2.5rem; margin-top: 20px; font-weight: 800; color: var(--ink); }
+        .nav-link { color: var(--ink-muted); text-decoration: none; font-weight: 700; display: inline-block; transition: all 0.4s var(--spring); font-size: 1.1rem; text-transform: uppercase; letter-spacing: 0.05em; background: var(--glass-bg); padding: 8px 16px; border-radius: 20px; border: 1px solid var(--glass-border); }
+        .nav-link:hover { color: var(--ink); transform: translateY(-3px); box-shadow: 0 4px 15px rgba(0,0,0,0.1); background: rgba(255,255,255,0.7); }
+        
+        .lang-btn {
+            position: absolute;
+            top: 40px;
+            right: 40px;
+            z-index: 10;
+        }
+
+        .container { max-width: 900px; margin: 20px auto 40px; padding: 0 20px; position: relative; z-index: 1; }
+        
+        .card { 
+            background: var(--glass-bg); 
+            border-radius: var(--radius-lg); 
+            padding: 40px; 
+            box-shadow: var(--glass-shadow); 
+            margin-bottom: 30px;
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            transition: all 0.5s var(--spring);
+        }
+        .card h2 { border-bottom: 2px solid rgba(255,255,255,0.5); padding-bottom: 15px; margin-top: 0; font-size: 1.8rem;}
+        
+        .step { background: rgba(255,255,255,0.3); padding: 20px; margin-bottom: 15px; border-radius: var(--radius-md); border: 1px solid var(--glass-border); }
+        .step h3 { margin-top: 0; font-size: 1.3rem; }
+        
+        .btn { 
+            background: linear-gradient(135deg, var(--pastel-lavender), var(--pastel-pink));
+            color: var(--ink); 
+            padding: 12px 28px; 
+            border: 2px solid rgba(255,255,255,0.8); 
+            border-radius: 12px; 
+            cursor: pointer; 
+            font-weight: 700; 
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.1rem;
+            transition: all 0.4s var(--spring);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            display: inline-block;
+            margin-top: 10px;
+        }
+        .btn:hover { transform: translateY(-4px); box-shadow: 0 8px 25px rgba(195, 177, 225, 0.4); background: linear-gradient(135deg, var(--pastel-pink), var(--pastel-lavender)); }
+        
+        /* Quiz */
+        .quiz-q { margin-bottom: 25px; }
+        .quiz-label { display: block; padding: 12px 16px; cursor: pointer; transition: all 0.4s var(--spring); border-radius: 12px; border: 1px solid transparent; font-weight: 600; font-size: 1.1rem;}
+        .quiz-label:hover { background: rgba(255,255,255,0.4); border: 1px solid var(--glass-border); transform: translateX(5px);}
+        
+        /* Coding */
+        .code-editor { background: rgba(0,0,0,0.8); color: #F8F9FA; padding: 20px; border-radius: var(--radius-md); font-family: 'JetBrains Mono', monospace; line-height: 1.8; margin-top: 10px; font-size: 1rem; border: 1px solid rgba(255,255,255,0.2); box-shadow: inset 0 2px 10px rgba(0,0,0,0.5); white-space: pre-wrap; }
+        .blank-input { border: none; border-bottom: 2px solid var(--pastel-mint); background: transparent; color: var(--ink); font-family: inherit; font-size: 1.1rem; text-align: center; outline: none; transition: all 0.4s var(--spring); font-weight: 700;}
+        .blank-input:focus { border-bottom: 2px solid var(--pastel-lavender); background: rgba(255,255,255,0.1); border-radius: 4px;}
+        .correct-ans { color: #0f5132; font-weight: 700; margin-top: 15px; display: inline-block; padding: 10px 16px; background: rgba(176, 234, 205, 0.6); border-radius: 12px; border: 1px solid var(--pastel-mint);}
+        .wrong-ans { color: #842029; font-weight: 700; margin-top: 15px; display: inline-block; padding: 10px 16px; background: rgba(255, 209, 220, 0.6); border-radius: 12px; border: 1px solid var(--pastel-pink);}
+        
+        /* Tips Section override */
+        .card[style*="border-left"] { border-left: none !important; position: relative; overflow: hidden; background: linear-gradient(135deg, rgba(176, 234, 205, 0.3), rgba(255, 255, 255, 0.4)); }
+        .card[style*="border-left"]::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 6px; background: var(--pastel-mint); box-shadow: 0 0 10px var(--pastel-mint); }
+        .card[style*="border-left"] h2 { border-bottom: none; color: #0f5132; }
+        
+        /* SVG Tweaks for Macaron Glassmorphism & High Contrast */
+        svg { background: transparent !important; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.05)); }
+        svg text { font-family: 'Rajdhani', sans-serif !important; font-weight: 700 !important; fill: #111111 !important; }
+        svg [fill="url(#navyGrad)"] { fill: rgba(255,255,255,0.8) !important; stroke: #111111 !important; stroke-width: 2px; }
+        svg [fill="#FFF"] { fill: rgba(255,255,255,0.8) !important; stroke: #111111 !important; stroke-width: 1px; }
+        svg [stroke="#1E3A8A"] { stroke: #111111 !important; stroke-width: 2px !important; }
+        svg [fill="#1E3A8A"] { fill: #111111 !important; }
+        svg [stroke="#FF6B6B"] { stroke: #D81B60 !important; }
+        svg [fill="#FF6B6B"] { fill: #D81B60 !important; }
+
+        /* Translation CSS Rules */
+        .lang-cn { display: none !important; }
+        body.cn-active .lang-en { display: none !important; }
+        body.cn-active .lang-cn { display: block !important; }
+        
+        span.lang-cn { display: none !important; }
+        body.cn-active span.lang-en { display: none !important; }
+        body.cn-active span.lang-cn { display: inline !important; }
+
+        @media (max-width: 768px) {
+            .lang-btn {
+                position: static;
+                margin-top: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="index.html" class="nav-link">
+            <span class="lang-en">← Back to Hub</span>
+            <span class="lang-cn">← 返回主页</span>
+        </a>
+        <h1>
+            <span class="lang-en">Week 5: Variables & Data Types</span>
+            <span class="lang-cn">第 5 周：变量与数据类型</span>
+        </h1>
+        <button class="btn lang-btn" onclick="toggleLanguage()">🌐 EN / 中文</button>
+    </div>
+
+    <div class="container">
+        <!-- Notes Section -->
+        <div class="card">
+            <h2>
+                <span class="lang-en">Step-by-Step Guide</span>
+                <span class="lang-cn">分步指南</span>
+            </h2>
+            <div class="lang-en">
+                <div class='step'><h3>Step 1: Variables</h3><p>A <strong>variable</strong> is a named memory location used to store data. In Java, you must declare a variable's data type before using it (e.g., <code>int age = 20;</code>).</p></div><div class='step'><h3>Step 2: Primitive Data Types</h3><p>Java has 8 primitive data types, but the most common are:</p>
+<ul>
+<li><strong>int:</strong> Whole numbers (e.g., 5, -10)</li>
+<li><strong>double:</strong> Decimal numbers (e.g., 3.14)</li>
+<li><strong>char:</strong> Single character in single quotes (e.g., 'A')</li>
+<li><strong>boolean:</strong> True or False</li>
+</ul></div><div class='step'><h3>Step 3: The String Class</h3><p><strong>String</strong> is not a primitive; it is a Class (object). It stores text inside double quotes (e.g., <code>"Hello"</code>). You can use the <code>+</code> operator to concatenate (join) strings.</p></div>
+            </div>
+            <div class="lang-cn">
+                <div class='step'><h3>步骤 1: 什么是变量？</h3>变量是内存中的一个命名存储位置，其值在程序运行期间可以改变。在 Java 中，所有变量在使用前必须先声明其类型。</div><div class='step'><h3>步骤 2: 标识符规则</h3>标识符（变量、类和方法名）可以包含字母、数字、下划线 (_) 和美元符号 ($)。但<strong>不能以数字开头</strong>，也不能是 Java 关键字。</div><div class='step'><h3>步骤 3: 基本数据类型</h3>Java 有 8 种基本数据类型，常用的包括：<br><ul><li><code>int</code>：整数</li><li><code>double</code>：浮点数/小数</li><li><code>char</code>：单个字符</li><li><code>boolean</code>：真或假 (true/false)</li></ul></div>
+            </div>
+        </div>
+
+        <!-- SVG Animation Section -->
+        <div class="card">
+            <h2>
+                <span class="lang-en">Concept Visualization</span>
+                <span class="lang-cn">概念可视化</span>
+            </h2>
+            <div style="background: rgba(255,255,255,0.5); border-radius: 8px; padding: 20px; text-align: center; border: 1px solid rgba(255,255,255,0.8);">
+                <svg height="200" max-width="600" viewbox="0 0 600 200" width="100%" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<lineargradient id="navyGrad" x1="0%" x2="100%" y1="0%" y2="100%">
+<stop offset="0%" stop-color="#1E3A8A"></stop>
+<stop offset="100%" stop-color="#0A192F"></stop>
+</lineargradient>
+</defs>
+<!-- int box -->
+<rect fill="url(#navyGrad)" height="100" rx="10" width="100" x="50" y="50"></rect>
+<text fill="#FFF" font-family="Outfit" font-size="14" font-weight="bold" text-anchor="middle" x="100" y="80">int age</text>
+<text fill="#FF6B6B" font-family="JetBrains Mono" font-size="24" font-weight="bold" text-anchor="middle" x="100" y="115">25</text>
+<!-- double box -->
+<rect fill="url(#navyGrad)" height="100" rx="10" width="120" x="180" y="50"></rect>
+<text fill="#FFF" font-family="Outfit" font-size="14" font-weight="bold" text-anchor="middle" x="240" y="80">double price</text>
+<text fill="#FF6B6B" font-family="JetBrains Mono" font-size="24" font-weight="bold" text-anchor="middle" x="240" y="115">9.99</text>
+<!-- char box -->
+<rect fill="url(#navyGrad)" height="100" rx="10" width="80" x="330" y="50"></rect>
+<text fill="#FFF" font-family="Outfit" font-size="14" font-weight="bold" text-anchor="middle" x="370" y="80">char</text>
+<text fill="#FF6B6B" font-family="JetBrains Mono" font-size="24" font-weight="bold" text-anchor="middle" x="370" y="115">'A'</text>
+<!-- String box -->
+<rect fill="url(#navyGrad)" height="100" rx="10" stroke="#FF6B6B" stroke-width="3" width="120" x="440" y="50"></rect>
+<text fill="#FFF" font-family="Outfit" font-size="14" font-weight="bold" text-anchor="middle" x="500" y="80">String name</text>
+<text fill="#FF6B6B" font-family="JetBrains Mono" font-size="20" font-weight="bold" text-anchor="middle" x="500" y="115">"Java"</text>
+<text fill="#FFF" font-family="Outfit" font-size="10" text-anchor="middle" x="500" y="140">(Object Box)</text>
+</svg>
+            </div>
+        </div>
+
+        <!-- Tips Section -->
+        <div class="card" style="border-left: 5px solid #10B981;">
+            <h2>
+                <span class="lang-en">Tips</span>
+                <span class="lang-cn">提示</span>
+            </h2>
+            <div class="lang-en"><ul>
+<li><strong>String is an Object:</strong> Notice how `String` starts with a capital 'S', but primitives like `int` and `double` are lowercase. This is a common trap!</li>
+<li><strong>Character vs String:</strong> `char` uses single quotes (`'A'`), while `String` uses double quotes (`"A"`). Mixing them up will cause a syntax error!</li>
+</ul></div>
+            <div class="lang-cn"><ul><li><strong>命名规范：</strong>变量和方法名使用驼峰命名法（例如 <code>studentAge</code>），类名首字母大写（例如 <code>StudentClass</code>）。</li><li><strong>关键字限制：</strong>记住 <code>class</code>、<code>public</code>、<code>static</code> 和 <code>void</code> 等是 Java 保留关键字，绝不能用作变量名！</li></ul></div>
+        </div>
+
+        <!-- Quiz Section -->
+        <div class="card">
+            <h2>
+                <span class="lang-en">Knowledge Check</span>
+                <span class="lang-cn">知识自测</span>
+            </h2>
+            <div id="quiz-container">
+                <div class='quiz-q'>
+            <p><b>1. 
+                <span class="lang-en">Which data type is used to store decimal numbers?</span>
+                <span class="lang-cn">在 Java 中，以下哪个是有效的变量名？</span>
+            </b></p>
+            <label class='quiz-label'>
+                <input type='radio' name='q0' value='0'>
+                <span class="lang-en">int</span>
+                <span class="lang-cn">3dPoint</span>
+            </label><label class='quiz-label'>
+                <input type='radio' name='q0' value='1'>
+                <span class="lang-en">double</span>
+                <span class="lang-cn">point_3d</span>
+            </label>
+        </div><div class='quiz-q'>
+            <p><b>2. 
+                <span class="lang-en">Which of the following is NOT a primitive data type?</span>
+                <span class="lang-cn">存储小数（如 3.14）最好使用哪种基本类型？</span>
+            </b></p>
+            <label class='quiz-label'>
+                <input type='radio' name='q1' value='0'>
+                <span class="lang-en">String</span>
+                <span class="lang-cn">int</span>
+            </label><label class='quiz-label'>
+                <input type='radio' name='q1' value='1'>
+                <span class="lang-en">boolean</span>
+                <span class="lang-cn">double</span>
+            </label>
+        </div><div class='quiz-q'>
+            <p><b>3. 
+                <span class="lang-en">How do you properly declare a char variable?</span>
+                <span class="lang-cn">用什么数据类型来存储单个字符 'A'？</span>
+            </b></p>
+            <label class='quiz-label'>
+                <input type='radio' name='q2' value='0'>
+                <span class="lang-en">char grade = 'A';</span>
+                <span class="lang-cn">char</span>
+            </label><label class='quiz-label'>
+                <input type='radio' name='q2' value='1'>
+                <span class="lang-en">char grade = "A";</span>
+                <span class="lang-cn">String</span>
+            </label>
+        </div><div class='quiz-q'>
+            <p><b>4. 
+                <span class="lang-en">What is the output of `"Java" + "101"`?</span>
+                <span class="lang-cn">Java 是一种强类型语言。这意味着：</span>
+            </b></p>
+            <label class='quiz-label'>
+                <input type='radio' name='q3' value='0'>
+                <span class="lang-en">Error</span>
+                <span class="lang-cn">所有变量在使用前必须声明其类型。</span>
+            </label><label class='quiz-label'>
+                <input type='radio' name='q3' value='1'>
+                <span class="lang-en">Java101</span>
+                <span class="lang-cn">变量类型在运行时可以随时任意改变。</span>
+            </label>
+        </div><div class='quiz-q'>
+            <p><b>5. 
+                <span class="lang-en">A boolean variable can hold which values?</span>
+                <span class="lang-cn">以下哪项是 Java 关键字，不能用作变量名？</span>
+            </b></p>
+            <label class='quiz-label'>
+                <input type='radio' name='q4' value='0'>
+                <span class="lang-en">true or false</span>
+                <span class="lang-cn">public</span>
+            </label><label class='quiz-label'>
+                <input type='radio' name='q4' value='1'>
+                <span class="lang-en">1 or 0</span>
+                <span class="lang-cn">totalSum</span>
+            </label>
+        </div>
+                <button class="btn" onclick="checkQuiz()">
+                    <span class="lang-en">Submit Answers</span>
+                    <span class="lang-cn">提交答案</span>
+                </button>
+                <div id="quiz-result"></div>
+            </div>
+        </div>
+
+        <!-- Fill in the Blanks -->
+        <div class="card">
+            <h2>
+                <span class="lang-en">Fill in the Blanks</span>
+                <span class="lang-cn">填空练习</span>
+            </h2>
+            <p>
+            <span class="lang-en">Variables in Java must have a declared <input type='text' id='blank0' class='blank-input' style='width:100px;'> before use.</span>
+            <span class="lang-cn">Java中的变量在使用前必须声明其<input type='text' id='blank_cn0' class='blank-input' style='width:100px;'>。</span>
+        </p><p>
+            <span class="lang-en">A <input type='text' id='blank1' class='blank-input' style='width:100px;'> type stores only true or false.</span>
+            <span class="lang-cn"><input type='text' id='blank_cn1' class='blank-input' style='width:100px;'>类型仅存储 true 或 false。</span>
+        </p>
+            <button class="btn" onclick="checkBlanks()">
+                <span class="lang-en">Check Answers</span>
+                <span class="lang-cn">检查答案</span>
+            </button>
+            <div id="blanks-result"></div>
+        </div>
+
+        <!-- Coding Activities -->
+        <div class="card">
+            <h2>
+                <span class="lang-en">Coding Practice</span>
+                <span class="lang-cn">编程实践</span>
+            </h2>
+            <div class='step'>
+            <p><b>
+                <span class="lang-en">Exercise 1: Integer Declaration: Declare an integer variable named score and assign it the value 100.</span>
+                <span class="lang-cn">练习 1: 声明一个整数: 声明一个名为 <code>age</code> 的整数变量，并赋初值为 20。</span>
+            </b></p>
+            <div class='code-editor'>_______ score = 100;</div>
+            <button class="btn" onclick="showCodeAns('w5c0')">
+                <span class="lang-en">Show Answer</span>
+                <span class="lang-cn">显示答案</span>
+            </button>
+            <div class='code-editor' id='code-ans-w5c0' style='display:none;'>int age = 20;</div>
+        </div><div class='step'>
+            <p><b>
+                <span class="lang-en">Exercise 2: Double Assignment: Assign the value 3.14 to a double variable named pi.</span>
+                <span class="lang-cn">练习 2: 声明一个双精度浮点数: 声明一个名为 <code>price</code> 的 double 类型变量，初值为 9.99。</span>
+            </b></p>
+            <div class='code-editor'>double pi = _______;</div>
+            <button class="btn" onclick="showCodeAns('w5c1')">
+                <span class="lang-en">Show Answer</span>
+                <span class="lang-cn">显示答案</span>
+            </button>
+            <div class='code-editor' id='code-ans-w5c1' style='display:none;'>double price = 9.99;</div>
+        </div><div class='step'>
+            <p><b>
+                <span class="lang-en">Exercise 3: String Concatenation: Use the concatenation operator to join "Hello " and "World".</span>
+                <span class="lang-cn">练习 3: 声明一个布尔变量: 声明一个名为 <code>isJavaFun</code> 的布尔变量，赋初值为 <code>true</code>。</span>
+            </b></p>
+            <div class='code-editor'>String msg = "Hello " _______ "World";</div>
+            <button class="btn" onclick="showCodeAns('w5c2')">
+                <span class="lang-en">Show Answer</span>
+                <span class="lang-cn">显示答案</span>
+            </button>
+            <div class='code-editor' id='code-ans-w5c2' style='display:none;'>boolean isJavaFun = true;</div>
+        </div>
+        </div>
+
+        <!-- Matching Game -->
+        <div class="card">
+            <h2>
+                <span class="lang-en">Matching Game</span>
+                <span class="lang-cn">配对游戏</span>
+            </h2>
+            <p>
+                <span class="lang-en">Match the term on the left with its definition on the right.</span>
+                <span class="lang-cn">将左侧的术语与右侧的定义进行配对。</span>
+            </p>
+            <div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px;">
+                <div style="width: 45%;">
+                    <div class='step' style='padding:10px; cursor:pointer;'>int</div><div class='step' style='padding:10px; cursor:pointer;'>double</div><div class='step' style='padding:10px; cursor:pointer;'>char</div><div class='step' style='padding:10px; cursor:pointer;'>String</div>
+                </div>
+                <div style="width: 45%;">
+                    <div class='step' style='padding:10px; cursor:pointer;'>
+            <span class="lang-en">Primitive type for integers</span>
+            <span class="lang-cn">整数的基本类型</span>
+        </div><div class='step' style='padding:10px; cursor:pointer;'>
+            <span class="lang-en">Primitive type for decimal numbers</span>
+            <span class="lang-cn">小数的基本类型</span>
+        </div><div class='step' style='padding:10px; cursor:pointer;'>
+            <span class="lang-en">Primitive type for single characters</span>
+            <span class="lang-cn">单个字符的基本类型</span>
+        </div><div class='step' style='padding:10px; cursor:pointer;'>
+            <span class="lang-en">Class type for text messages</span>
+            <span class="lang-cn">文本消息的类类型</span>
+        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleLanguage() {
+            document.body.classList.toggle('cn-active');
+        }
+
+        function checkQuiz() {
+            let score = 0;
+            
+        const q0 = document.querySelector('input[name="q0"]:checked');
+        if (q0 && parseInt(q0.value) === 1) score++;
+        
+        const q1 = document.querySelector('input[name="q1"]:checked');
+        if (q1 && parseInt(q1.value) === 1) score++;
+        
+        const q2 = document.querySelector('input[name="q2"]:checked');
+        if (q2 && parseInt(q2.value) === 0) score++;
+        
+        const q3 = document.querySelector('input[name="q3"]:checked');
+        if (q3 && parseInt(q3.value) === 0) score++;
+        
+        const q4 = document.querySelector('input[name="q4"]:checked');
+        if (q4 && parseInt(q4.value) === 0) score++;
+        
+            document.getElementById('quiz-result').innerHTML = `<span class='correct-ans'>
+                <span class="lang-en">You scored: ${score} / 5</span>
+                <span class="lang-cn">得分：${score} / 5</span>
+            </span>`;
+        }
+
+        function checkBlanks() {
+            
+        const b0 = (document.getElementById('blank0').value || document.getElementById('blank_cn0').value).toLowerCase().trim();
+        if(b0 === 'type') {
+            document.getElementById('blank0').style.borderBottomColor = '#2E8B57';
+            document.getElementById('blank_cn0').style.borderBottomColor = '#2E8B57';
+        } else {
+            document.getElementById('blank0').style.borderBottomColor = '#C70039';
+            document.getElementById('blank_cn0').style.borderBottomColor = '#C70039';
+        }
+        
+        const b1 = (document.getElementById('blank1').value || document.getElementById('blank_cn1').value).toLowerCase().trim();
+        if(b1 === 'boolean') {
+            document.getElementById('blank1').style.borderBottomColor = '#2E8B57';
+            document.getElementById('blank_cn1').style.borderBottomColor = '#2E8B57';
+        } else {
+            document.getElementById('blank1').style.borderBottomColor = '#C70039';
+            document.getElementById('blank_cn1').style.borderBottomColor = '#C70039';
+        }
+        
+        }
+
+        function showCodeAns(id) {
+            const el = document.getElementById('code-ans-' + id);
+            el.style.display = el.style.display === 'none' ? 'block' : 'none';
+        }
+    </script>
+</body>
+</html>
