@@ -1,477 +1,1005 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Week 2: Introduction to Problem Solving - DBFP2423</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            /* Macaron Palette */
-            --pastel-pink: #FFD1DC;
-            --pastel-mint: #B0EACD;
-            --pastel-blue: #AEC6CF;
-            --pastel-lavender: #C3B1E1;
-            --pastel-yellow: #FDFD96;
-            
-            --ink: #111111;
-            --ink-muted: #333333;
-            
-            --glass-bg: rgba(255, 255, 255, 0.45);
-            --glass-border: rgba(255, 255, 255, 0.6);
-            --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
-            --radius-lg: 32px;
-            --radius-md: 16px;
-            
-            --spring: cubic-bezier(0.16, 1, 0.3, 1);
-        }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Java Problem Solving · The Software Development Method</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+<style>
+  /* ---------- Week 2 Macaron Palette & Tokens ---------- */
+  :root {
+    --pastel-pink: #FFD1DC;
+    --pastel-mint: #B0EACD;
+    --pastel-blue: #AEC6CF;
+    --pastel-lavender: #C3B1E1;
+    --pastel-yellow: #FDFD96;
+    
+    --ink: #111111;
+    --ink-muted: #333333;
+    
+    --glass-bg: rgba(255, 255, 255, 0.45);
+    --glass-border: rgba(255, 255, 255, 0.6);
+    --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+    --radius-lg: 32px;
+    --radius-md: 16px;
+    
+    --spring: cubic-bezier(0.16, 1, 0.3, 1);
+  }
 
-        body {
-            font-family: 'Rajdhani', sans-serif;
-            background: linear-gradient(135deg, var(--pastel-pink), var(--pastel-lavender), var(--pastel-blue), var(--pastel-mint));
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
-            color: var(--ink);
-            margin: 0;
-            padding: 0;
-            line-height: 1.6;
-            min-height: 100vh;
-        }
+  *, *::before, *::after { box-sizing: border-box; }
 
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
+  /* ---------- Body & Animated Background ---------- */
+  body {
+    margin: 0;
+    font-family: 'Rajdhani', sans-serif;
+    background: linear-gradient(135deg, var(--pastel-pink), var(--pastel-lavender), var(--pastel-blue), var(--pastel-mint));
+    background-size: 400% 400%;
+    animation: gradientBG 15s ease infinite;
+    color: var(--ink);
+    line-height: 1.6;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
 
-        /* Floating Auras */
-        body::before {
-            content: ''; position: fixed; top: -10%; left: -10%; width: 50vw; height: 50vw;
-            background: radial-gradient(circle, var(--pastel-yellow) 0%, transparent 70%);
-            filter: blur(80px); opacity: 0.6; z-index: -1;
-            animation: floatAura 20s ease-in-out infinite alternate;
-        }
-        body::after {
-            content: ''; position: fixed; bottom: -10%; right: -10%; width: 60vw; height: 60vw;
-            background: radial-gradient(circle, var(--pastel-pink) 0%, transparent 70%);
-            filter: blur(100px); opacity: 0.5; z-index: -1;
-            animation: floatAura 25s ease-in-out infinite alternate-reverse;
-        }
+  @keyframes gradientBG {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
 
-        @keyframes floatAura {
-            0% { transform: translate(0, 0) scale(1); }
-            100% { transform: translate(100px, 100px) scale(1.2); }
-        }
+  /* Floating Auras */
+  body::before {
+    content: ''; position: fixed; top: -10%; left: -10%; width: 50vw; height: 50vw;
+    background: radial-gradient(circle, var(--pastel-yellow) 0%, transparent 70%);
+    filter: blur(80px); opacity: 0.6; z-index: -1;
+    animation: floatAura 20s ease-in-out infinite alternate;
+  }
+  body::after {
+    content: ''; position: fixed; bottom: -10%; right: -10%; width: 60vw; height: 60vw;
+    background: radial-gradient(circle, var(--pastel-pink) 0%, transparent 70%);
+    filter: blur(100px); opacity: 0.5; z-index: -1;
+    animation: floatAura 25s ease-in-out infinite alternate-reverse;
+  }
 
-        h1, h2, h3 { font-family: 'Orbitron', sans-serif; color: var(--ink); }
-        
-        .header { text-align: center; padding: 40px 20px 20px; position: relative; }
-        .header h1 { font-size: 2.5rem; margin-top: 20px; font-weight: 800; color: var(--ink); }
-        .nav-link { color: var(--ink-muted); text-decoration: none; font-weight: 700; display: inline-block; transition: all 0.4s var(--spring); font-size: 1.1rem; text-transform: uppercase; letter-spacing: 0.05em; background: var(--glass-bg); padding: 8px 16px; border-radius: 20px; border: 1px solid var(--glass-border); }
-        .nav-link:hover { color: var(--ink); transform: translateY(-3px); box-shadow: 0 4px 15px rgba(0,0,0,0.1); background: rgba(255,255,255,0.7); }
-        
-        .lang-btn {
-            position: absolute;
-            top: 40px;
-            right: 40px;
-            z-index: 10;
-        }
+  @keyframes floatAura {
+    0% { transform: translate(0, 0) scale(1); }
+    100% { transform: translate(100px, 100px) scale(1.2); }
+  }
 
-        .container { max-width: 900px; margin: 20px auto 40px; padding: 0 20px; position: relative; z-index: 1; }
-        
-        .card { 
-            background: var(--glass-bg); 
-            border-radius: var(--radius-lg); 
-            padding: 40px; 
-            box-shadow: var(--glass-shadow); 
-            margin-bottom: 30px;
-            border: 1px solid var(--glass-border);
-            backdrop-filter: blur(40px);
-            -webkit-backdrop-filter: blur(40px);
-            transition: all 0.5s var(--spring);
-        }
-        .card h2 { border-bottom: 2px solid rgba(255,255,255,0.5); padding-bottom: 15px; margin-top: 0; font-size: 1.8rem;}
-        
-        .step { background: rgba(255,255,255,0.3); padding: 20px; margin-bottom: 15px; border-radius: var(--radius-md); border: 1px solid var(--glass-border); }
-        .step h3 { margin-top: 0; font-size: 1.3rem; }
-        
-        .btn { 
-            background: linear-gradient(135deg, var(--pastel-lavender), var(--pastel-pink));
-            color: var(--ink); 
-            padding: 12px 28px; 
-            border: 2px solid rgba(255,255,255,0.8); 
-            border-radius: 12px; 
-            cursor: pointer; 
-            font-weight: 700; 
-            font-family: 'Rajdhani', sans-serif;
-            font-size: 1.1rem;
-            transition: all 0.4s var(--spring);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            display: inline-block;
-            margin-top: 10px;
-        }
-        .btn:hover { transform: translateY(-4px); box-shadow: 0 8px 25px rgba(195, 177, 225, 0.4); background: linear-gradient(135deg, var(--pastel-pink), var(--pastel-lavender)); }
-        
-        /* Quiz */
-        .quiz-q { margin-bottom: 25px; }
-        .quiz-label { display: block; padding: 12px 16px; cursor: pointer; transition: all 0.4s var(--spring); border-radius: 12px; border: 1px solid transparent; font-weight: 600; font-size: 1.1rem;}
-        .quiz-label:hover { background: rgba(255,255,255,0.4); border: 1px solid var(--glass-border); transform: translateX(5px);}
-        
-        /* Coding */
-        .code-editor { background: rgba(0,0,0,0.8); color: #F8F9FA; padding: 20px; border-radius: var(--radius-md); font-family: 'JetBrains Mono', monospace; line-height: 1.8; margin-top: 10px; font-size: 1rem; border: 1px solid rgba(255,255,255,0.2); box-shadow: inset 0 2px 10px rgba(0,0,0,0.5); white-space: pre-wrap; }
-        .blank-input { border: none; border-bottom: 2px solid var(--pastel-mint); background: transparent; color: var(--ink); font-family: inherit; font-size: 1.1rem; text-align: center; outline: none; transition: all 0.4s var(--spring); font-weight: 700;}
-        .blank-input:focus { border-bottom: 2px solid var(--pastel-lavender); background: rgba(255,255,255,0.1); border-radius: 4px;}
-        .correct-ans { color: #0f5132; font-weight: 700; margin-top: 15px; display: inline-block; padding: 10px 16px; background: rgba(176, 234, 205, 0.6); border-radius: 12px; border: 1px solid var(--pastel-mint);}
-        .wrong-ans { color: #842029; font-weight: 700; margin-top: 15px; display: inline-block; padding: 10px 16px; background: rgba(255, 209, 220, 0.6); border-radius: 12px; border: 1px solid var(--pastel-pink);}
-        
-        /* Tips Section override */
-        .card[style*="border-left"] { border-left: none !important; position: relative; overflow: hidden; background: linear-gradient(135deg, rgba(176, 234, 205, 0.3), rgba(255, 255, 255, 0.4)); }
-        .card[style*="border-left"]::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 6px; background: var(--pastel-mint); box-shadow: 0 0 10px var(--pastel-mint); }
-        .card[style*="border-left"] h2 { border-bottom: none; color: #0f5132; }
-        
-        /* SVG Tweaks for Macaron Glassmorphism & High Contrast */
-        svg { background: transparent !important; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.05)); }
-        svg text { font-family: 'Rajdhani', sans-serif !important; font-weight: 700 !important; fill: #111111 !important; }
-        svg [fill="url(#navyGrad)"] { fill: rgba(255,255,255,0.8) !important; stroke: #111111 !important; stroke-width: 2px; }
-        svg [fill="#FFF"] { fill: rgba(255,255,255,0.8) !important; stroke: #111111 !important; stroke-width: 1px; }
-        svg [stroke="#1E3A8A"] { stroke: #111111 !important; stroke-width: 2px !important; }
-        svg [fill="#1E3A8A"] { fill: #111111 !important; }
-        svg [stroke="#FF6B6B"] { stroke: #D81B60 !important; }
-        svg [fill="#FF6B6B"] { fill: #D81B60 !important; }
+  /* ---------- Typography ---------- */
+  h1, h2, h3 { font-family: 'Orbitron', sans-serif; color: var(--ink); margin-top: 0; }
+  h2 { font-size: 1.8rem; margin: 0 0 15px 0; padding-bottom: 15px; border-bottom: 2px solid rgba(255,255,255,0.5); }
+  h3 { font-size: 1.3rem; margin: 20px 0 10px; }
+  h4 { font-family: 'Rajdhani', sans-serif; font-size: 1.1rem; margin: 10px 0 5px; color: var(--ink-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
+  p { color: var(--ink); font-size: 1.05rem; }
+  a { color: var(--ink-muted); text-decoration: none; font-weight: 700; }
+  .muted { color: var(--ink-muted); }
 
-        /* Translation CSS Rules */
-        .lang-cn { display: none !important; }
-        body.cn-active .lang-en { display: none !important; }
-        body.cn-active .lang-cn { display: block !important; }
-        
-        span.lang-cn { display: none !important; }
-        body.cn-active span.lang-en { display: none !important; }
-        body.cn-active span.lang-cn { display: inline !important; }
+  /* ---------- Layout & Glass Cards ---------- */
+  .layout { max-width: 900px; margin: 20px auto 40px; padding: 0 20px; position: relative; z-index: 1; }
+  
+  aside {
+    background: var(--glass-bg); 
+    border-radius: var(--radius-lg); 
+    padding: 30px; 
+    margin-bottom: 30px;
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(40px);
+    -webkit-backdrop-filter: blur(40px);
+    box-shadow: var(--glass-shadow);
+    position: relative; 
+    height: auto; 
+    overflow: hidden;
+  }
+  .brand { text-align: center; margin-bottom: 20px; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+  .brand .logo {
+    width: 50px; height: 50px; border-radius: 12px;
+    background: linear-gradient(135deg, var(--pastel-lavender), var(--pastel-pink));
+    display: grid; place-items: center; color: var(--ink); font-weight: 800;
+    font-family: 'Orbitron', sans-serif; border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
+  }
+  .brand h1 { font-size: 1.5rem; margin: 0; }
+  .brand small { color: var(--ink-muted); font-size: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+  
+  nav ul { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  nav li { margin: 0; }
+  nav a {
+    display: block; padding: 10px 12px; border-radius: 12px;
+    color: var(--ink); font-size: 14px; font-weight: 600;
+    background: rgba(255,255,255,0.3); border: 1px solid var(--glass-border);
+    text-align: center; transition: all 0.4s var(--spring); text-transform: uppercase; letter-spacing: 0.03em;
+  }
+  nav a:hover { background: rgba(255,255,255,0.7); transform: translateY(-3px); text-decoration: none; }
+  nav a.active { background: linear-gradient(135deg, var(--pastel-lavender), var(--pastel-pink)); border-color: rgba(255,255,255,0.8); }
+  nav .group-title { font-family: 'Orbitron', sans-serif; font-size: 12px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--ink-muted); margin: 20px 0 10px; grid-column: span 2; }
 
-        @media (max-width: 768px) {
-            .lang-btn {
-                position: static;
-                margin-top: 15px;
-            }
-        }
-    </style>
+  main { padding: 0; max-width: 100%; }
+  header.hero { 
+    text-align: center; margin-bottom: 30px; 
+    background: var(--glass-bg); 
+    border-radius: var(--radius-lg); 
+    padding: 40px; 
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(40px); -webkit-backdrop-filter: blur(40px);
+    box-shadow: var(--glass-shadow);
+  }
+  .pill {
+    display: inline-block; padding: 6px 12px; border-radius: 20px;
+    background: rgba(255,255,255,0.4); color: var(--ink-muted);
+    font-size: 12px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase;
+    border: 1px solid var(--glass-border); margin-bottom: 15px;
+  }
+
+  section { 
+    background: var(--glass-bg); 
+    border-radius: var(--radius-lg); 
+    padding: 40px; 
+    box-shadow: var(--glass-shadow); 
+    margin-bottom: 30px;
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(40px); -webkit-backdrop-filter: blur(40px);
+    transition: all 0.5s var(--spring);
+    border-top: 0;
+  }
+
+  .card {
+    background: rgba(255,255,255,0.3); 
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-md); 
+    padding: 20px; 
+    box-shadow: none; 
+    margin: 15px 0;
+  }
+  .grid { display: grid; gap: 20px; }
+  .grid.cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .grid.cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  @media (max-width: 820px) { .grid.cols-2, .grid.cols-3 { grid-template-columns: 1fr; } }
+
+  /* ---------- Code blocks ---------- */
+  pre, code { font-family: "JetBrains Mono", monospace; }
+  pre {
+    background: rgba(0,0,0,0.8); 
+    color: #F8F9FA; 
+    padding: 20px; 
+    border-radius: var(--radius-md); 
+    border: 1px solid rgba(255,255,255,0.2); 
+    box-shadow: inset 0 2px 10px rgba(0,0,0,0.5); 
+    white-space: pre-wrap;
+    overflow-x: auto; line-height: 1.55; font-size: 14px; 
+    margin: 15px 0;
+  }
+  .code-wrap { position: relative; }
+  .code-wrap .copy {
+    position: absolute; top: 10px; right: 10px;
+    background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.4);
+    color: #F8F9FA; font-size: 12px; padding: 5px 10px; border-radius: 8px;
+    cursor: pointer; font-family: 'Rajdhani'; font-weight: 700; transition: all 0.3s ease;
+  }
+  .code-wrap .copy:hover { background: rgba(255,255,255,0.4); }
+  .token.kw { color: #c084fc; } .token.tp { color: #38bdf8; } .token.st { color: #fcd34d; } .token.cm { color: #64748b; } .token.nm { color: #f472b6; } .token.fn { color: #93c5fd; }
+
+  /* ---------- Step lists ---------- */
+  ol.steps { counter-reset: step; list-style: none; padding: 0; }
+  ol.steps > li {
+    counter-increment: step;
+    background: rgba(255,255,255,0.3); 
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-md); 
+    padding: 20px 20px 20px 70px; 
+    margin: 12px 0; 
+    position: relative; 
+    transition: all 0.4s var(--spring);
+  }
+  ol.steps > li:hover { background: rgba(255,255,255,0.5); transform: translateY(-2px); }
+  ol.steps > li::before {
+    content: counter(step);
+    position: absolute; left: 20px; top: 20px; 
+    width: 36px; height: 36px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--pastel-lavender), var(--pastel-pink)); 
+    color: var(--ink); font-weight: 800; font-family: 'Orbitron', sans-serif;
+    display: grid; place-items: center; font-size: 14px;
+    border: 2px solid rgba(255,255,255,0.8); box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  }
+  ol.steps > li b { color: var(--ink); font-family: 'Orbitron', sans-serif; font-size: 1.1rem; }
+
+  /* ---------- Callouts ---------- */
+  .callout {
+    border-left: 5px solid var(--pastel-blue); 
+    background: rgba(255,255,255,0.4); 
+    padding: 15px; border-radius: var(--radius-md); 
+    margin: 15px 0; font-size: 1rem; 
+    border: 1px solid var(--glass-border);
+  }
+  .callout.warn { border-left: 5px solid var(--pastel-yellow); background: rgba(253, 253, 150, 0.25); }
+  .callout.tip  { border-left: 5px solid var(--pastel-mint); background: rgba(176, 234, 205, 0.25); }
+  .callout b { color: var(--ink); }
+
+  /* ---------- Buttons / Inputs ---------- */
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px; 
+    padding: 12px 28px; border-radius: 12px; 
+    background: linear-gradient(135deg, var(--pastel-lavender), var(--pastel-pink)); 
+    color: var(--ink); border: 2px solid rgba(255,255,255,0.8); 
+    cursor: pointer; font-weight: 700; font-family: 'Rajdhani', sans-serif; font-size: 1.1rem; 
+    transition: all 0.4s var(--spring); box-shadow: 0 4px 15px rgba(0,0,0,0.05); 
+    margin-top: 10px; text-transform: uppercase; letter-spacing: 0.03em;
+  }
+  .btn:hover { transform: translateY(-4px); box-shadow: 0 8px 25px rgba(195, 177, 225, 0.4); background: linear-gradient(135deg, var(--pastel-pink), var(--pastel-lavender)); }
+  .btn.ghost { background: rgba(255,255,255,0.3); border: 1px solid var(--glass-border); }
+  .btn.small { padding: 8px 16px; font-size: 0.9rem; border-radius: 10px; }
+  .row { display: flex; flex-wrap: wrap; gap: 15px; align-items: center; }
+  input[type="text"], input[type="number"], select, textarea {
+    background: rgba(255,255,255,0.5); border: 1px solid var(--glass-border); 
+    color: var(--ink); padding: 8px 12px; border-radius: 8px; font-size: 16px; 
+    font-family: 'Rajdhani'; font-weight: 600; outline: none; transition: all 0.3s ease;
+  }
+  input:focus, select:focus { border-color: var(--pastel-lavender); background: #fff; }
+
+  /* ---------- Visualizer ---------- */
+  .viz {
+    background: rgba(255,255,255,0.3); 
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-md); 
+    padding: 20px; 
+  }
+  .bars { display: flex; align-items: flex-end; gap: 4px; height: 250px; padding: 10px; background: rgba(0,0,0,0.05); border-radius: 12px; border: 1px solid var(--glass-border); }
+  .bar {
+    flex: 1; min-width: 6px; background: linear-gradient(180deg, var(--pastel-blue), var(--pastel-lavender));
+    border-radius: 6px 6px 0 0; transition: height .2s ease, background .2s ease;
+    position: relative; border: 1px solid rgba(255,255,255,0.5);
+  }
+  .bar.compare { background: linear-gradient(180deg, var(--pastel-yellow), #f59e0b); }
+  .bar.swap { background: linear-gradient(180deg, var(--pastel-pink), #ef4444); }
+  .bar.sorted { background: linear-gradient(180deg, var(--pastel-mint), #10b981); }
+  .bar .num { position: absolute; bottom: -24px; left: 50%; transform: translateX(-50%); font-size: 12px; color: var(--ink-muted); font-weight: 700; }
+  .legend { display: flex; gap: 15px; flex-wrap: wrap; font-size: 14px; margin-top: 30px; font-weight: 600; }
+  .legend .dot { display: inline-block; width: 12px; height: 12px; border-radius: 4px; margin-right: 6px; vertical-align: middle; border: 1px solid rgba(255,255,255,0.5); }
+
+  /* ---------- Quiz ---------- */
+  .quiz .option {
+    display: flex; align-items: center; gap: 10px; padding: 12px 16px; border-radius: 12px; 
+    border: 1px solid var(--glass-border); margin: 10px 0; cursor: pointer; 
+    background: rgba(255,255,255,0.3); transition: all 0.4s var(--spring); 
+    font-weight: 600; font-size: 1.05rem; color: var(--ink);
+  }
+  .quiz .option:hover { background: rgba(255,255,255,0.5); transform: translateX(5px); border-color: var(--pastel-lavender); }
+  .quiz .option.correct { border-color: var(--pastel-mint); background: rgba(176, 234, 205, 0.6); }
+  .quiz .option.wrong { border-color: var(--pastel-pink); background: rgba(255, 209, 220, 0.6); }
+  .quiz input[type="radio"] { accent-color: var(--pastel-lavender); width: 18px; height: 18px; }
+
+  /* ---------- Tabs ---------- */
+  .tabs { display: flex; gap: 10px; border-bottom: 1px solid var(--glass-border); margin: 15px 0; padding-bottom: 10px; flex-wrap: wrap; }
+  .tabs button {
+    background: rgba(255,255,255,0.3); border: 1px solid var(--glass-border); 
+    color: var(--ink); padding: 8px 16px; cursor: pointer; border-radius: 12px; 
+    font-family: 'Rajdhani'; font-weight: 700; font-size: 1rem; transition: all 0.4s var(--spring);
+  }
+  .tabs button:hover { background: rgba(255,255,255,0.5); transform: translateY(-2px); }
+  .tabs button.active { background: linear-gradient(135deg, var(--pastel-lavender), var(--pastel-pink)); border-color: rgba(255,255,255,0.8); }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* ---------- Footer & Details ---------- */
+  footer { padding: 30px 0 10px; color: var(--ink-muted); font-size: 14px; text-align: center; }
+  details { background: rgba(255,255,255,0.3); padding: 15px; border-radius: 12px; margin-top: 10px; border: 1px solid var(--glass-border); cursor: pointer; }
+  summary { font-weight: 700; font-family: 'Orbitron', sans-serif; font-size: 1.1rem; color: var(--ink-muted); }
+
+  @media (max-width: 820px) {
+    .layout { padding: 0 10px; }
+    aside, header.hero, section { padding: 20px; }
+    nav ul { grid-template-columns: 1fr; }
+  }
+</style>
 </head>
 <body>
-    <div class="header">
-        <a href="index.html" class="nav-link">
-            <span class="lang-en">← Back to Hub</span>
-            <span class="lang-cn">← 返回主页</span>
-        </a>
-        <h1>
-            <span class="lang-en">Week 2: Introduction to Problem Solving</span>
-            <span class="lang-cn">第 2 周：问题求解与算法</span>
-        </h1>
-        <button class="btn lang-btn" onclick="toggleLanguage()">🌐 EN / 中文</button>
+
+<div class="layout">
+
+  <!-- ============== SIDEBAR (Top Glass Nav) ============== -->
+  <aside>
+    <div class="brand">
+      <div class="logo">JS</div>
+      <div>
+        <h1>Java Problem Solving</h1>
+        <small>Module 1 · Foundations</small>
+      </div>
     </div>
+    <nav>
+      <div class="group-title">Overview</div>
+      <ul>
+        <li><a href="#s1" class="active">Welcome & Objectives</a></li>
+      </ul>
+      <div class="group-title">Software Development</div>
+      <ul>
+        <li><a href="#s2">The SDM</a></li>
+        <li><a href="#s3">Applying the SDM</a></li>
+      </ul>
+      <div class="group-title">Algorithms</div>
+      <ul>
+        <li><a href="#s4">Intro to Algorithms</a></li>
+        <li><a href="#s5">Algorithm Steps</a></li>
+      </ul>
+      <div class="group-title">Practice</div>
+      <ul>
+        <li><a href="#s6">Live Code</a></li>
+        <li><a href="#s7">Visualizer</a></li>
+        <li><a href="#s8">Worked Problems</a></li>
+        <li><a href="#s9">Quiz</a></li>
+      </ul>
+    </nav>
+  </aside>
 
-    <div class="container">
-        <!-- Notes Section -->
+  <!-- ============== MAIN ============== -->
+  <main>
+
+    <!-- ====== Hero ====== -->
+    <header class="hero" id="s1">
+      <span class="pill">Module 1 · CLO1</span>
+      <h2 style="border: none; padding: 0; text-align: center; font-size: 2rem;">Introduction to Problem Solving</h2>
+      <p class="muted" style="max-width: 720px; margin: 0 auto;">
+        Before we write a single line of Java, we need a <b>method</b> for turning a fuzzy real-world problem into a working, tested program — and a way to describe the steps as an <b>algorithm</b>. This module walks you through that journey with diagrams, real Java code, and interactive demos.
+      </p>
+
+      <div class="card" style="margin-top: 25px; text-align: left;">
+        <h3 style="margin-top:0">Learning Objectives</h3>
+        <ol>
+          <li>Explain the concept of the <b>computer program development method</b>. <span class="muted">(CLO1)</span></li>
+          <li>Apply the <b>software development method steps</b> to define business problems.</li>
+          <li>Describe the <b>key steps in algorithm development</b>.</li>
+        </ol>
+        <div class="callout tip">
+          <b>How to use this page.</b> Read top-to-bottom for first pass, then jump back via the top navigation. Every code block is real Java you can paste into any IDE. Try the visualizer and quiz at the end.
+        </div>
+      </div>
+    </header>
+
+    <!-- ====== 1. SDM Overview ====== -->
+    <section id="s2">
+      <h2>1 · The Software Development Method</h2>
+      <p>
+        A <b>program development method</b> is a repeatable, disciplined procedure that takes you from a real-world need to a working, maintainable program. Writing code is only one step — and usually <i>not</i> the first one. The most common model is a five-stage cycle:
+      </p>
+
+      <div class="grid cols-3">
         <div class="card">
-            <h2>
-                <span class="lang-en">Step-by-Step Guide</span>
-                <span class="lang-cn">分步指南</span>
-            </h2>
-            <div class="lang-en">
-                <div class='step'><h3>Step 1: The Software Development Method</h3><p>Solving a problem with a computer requires a systematic approach:</p>
-<ol>
-<li><strong>Specification:</strong> Understand the problem.</li>
-<li><strong>Analysis:</strong> Identify inputs and outputs.</li>
-<li><strong>Design:</strong> Create an algorithm (blueprint).</li>
-<li><strong>Implementation:</strong> Translate into Java code.</li>
-<li><strong>Testing:</strong> Find and fix bugs.</li>
-<li><strong>Maintenance:</strong> Update software over time.</li>
-</ol></div><div class='step'><h3>Step 2: What is an Algorithm?</h3><p>An <strong>algorithm</strong> is a precise sequence of instructions for solving a problem.</p></div>
-            </div>
-            <div class="lang-cn">
-                <div class='step'><h3>步骤 1：软件开发方法</h3>使用计算机解决问题需要系统的方法：<br><ol><li><strong>需求规范：</strong>理解问题。</li><li><strong>分析：</strong>确定输入和输出。</li><li><strong>设计：</strong>创建算法（蓝图）。</li><li><strong>实现：</strong>翻译成 Java 代码。</li><li><strong>测试：</strong>发现并修复 bug。</li><li><strong>维护：</strong>随着时间的推移更新软件。</li></ol></div><div class='step'><h3>步骤 2：什么是算法？</h3><strong>算法</strong>是解决问题的一系列精确指令步骤。</div>
-            </div>
+          <h4 style="margin-top:0">① Analyze the Problem</h4>
+          <p class="muted">Understand inputs, outputs, constraints, and the success criteria. No code yet.</p>
         </div>
-
-        <!-- SVG Animation Section -->
         <div class="card">
-            <h2>
-                <span class="lang-en">Concept Visualization</span>
-                <span class="lang-cn">概念可视化</span>
-            </h2>
-            <div style="background: rgba(255,255,255,0.5); border-radius: 8px; padding: 20px; text-align: center; border: 1px solid rgba(255,255,255,0.8);">
-                <svg height="250" max-width="600" viewbox="0 0 600 250" width="100%" xmlns="http://www.w3.org/2000/svg">
-<defs>
-<lineargradient id="navyGrad" x1="0%" x2="100%" y1="0%" y2="100%">
-<stop offset="0%" stop-color="#1E3A8A"></stop>
-<stop offset="100%" stop-color="#0A192F"></stop>
-</lineargradient>
-</defs>
-<rect fill="url(#navyGrad)" height="50" rx="25" width="120" x="50" y="100"></rect>
-<text fill="#FFF" font-family="Outfit" font-size="14" font-weight="bold" text-anchor="middle" x="110" y="130">1. Design</text>
-<rect fill="url(#navyGrad)" height="50" rx="25" width="120" x="240" y="100"></rect>
-<text fill="#FFF" font-family="Outfit" font-size="14" font-weight="bold" text-anchor="middle" x="300" y="130">2. Implement</text>
-<rect fill="url(#navyGrad)" height="50" rx="25" width="120" x="430" y="100"></rect>
-<text fill="#FFF" font-family="Outfit" font-size="14" font-weight="bold" text-anchor="middle" x="490" y="130">3. Test</text>
-<path d="M 170 125 L 240 125 M 360 125 L 430 125 M 490 100 C 490 20, 110 20, 110 100" fill="none" id="loopPath" stroke="#FF6B6B" stroke-dasharray="5,5" stroke-width="3"></path>
-<text fill="#FF6B6B" font-family="Outfit" font-size="14" font-weight="bold" text-anchor="middle" x="300" y="45">Found a bug! Back to Design.</text>
-<circle fill="#FF6B6B" r="6">
-<animatemotion dur="4s" repeatcount="indefinite">
-<mpath href="#loopPath"></mpath>
-</animatemotion>
-</circle>
-</svg>
-            </div>
+          <h4 style="margin-top:0">② Design the Solution</h4>
+          <p class="muted">Plan algorithms, data structures, classes, and modules.</p>
         </div>
-
-        <!-- Tips Section -->
-        <div class="card" style="border-left: 5px solid #10B981;">
-            <h2>
-                <span class="lang-en">Tips</span>
-                <span class="lang-cn">提示</span>
-            </h2>
-            <div class="lang-en"><ul>
-<li><strong>Algorithm Design:</strong> Never skip the design phase. Writing pseudocode or drawing a flowchart first will save you hours of debugging later.</li>
-<li><strong>Exam Focus:</strong> You will frequently be asked to identify flowchart symbols (e.g., Diamond = Decision). Memorize them!</li>
-</ul></div>
-            <div class="lang-cn"><ul><li><strong>算法设计：</strong>切勿跳过设计阶段。先写伪代码或画流程图会为你节省数小时的调试时间。</li><li><strong>考试重点：</strong>你经常会被要求识别流程图符号（例如：菱形 = 决策）。记住它们！</li></ul></div>
-        </div>
-
-        <!-- Quiz Section -->
         <div class="card">
-            <h2>
-                <span class="lang-en">Knowledge Check</span>
-                <span class="lang-cn">知识自测</span>
-            </h2>
-            <div id="quiz-container">
-                <div class='quiz-q'>
-            <p><b>1. 
-                <span class="lang-en">Which step of the Software Development Method involves writing actual Java code?</span>
-                <span class="lang-cn">软件开发方法的哪一步涉及编写实际的 Java 代码？</span>
-            </b></p>
-            <label class='quiz-label'>
-                <input type='radio' name='q0' value='0'>
-                <span class="lang-en">Analysis</span>
-                <span class="lang-cn">分析</span>
-            </label><label class='quiz-label'>
-                <input type='radio' name='q0' value='1'>
-                <span class="lang-en">Implementation</span>
-                <span class="lang-cn">实现</span>
-            </label>
-        </div><div class='quiz-q'>
-            <p><b>2. 
-                <span class="lang-en">An algorithm can best be described as:</span>
-                <span class="lang-cn">算法最适合被描述为：</span>
-            </b></p>
-            <label class='quiz-label'>
-                <input type='radio' name='q1' value='0'>
-                <span class="lang-en">A random guess at a solution.</span>
-                <span class="lang-cn">对解决方案的随机猜测。</span>
-            </label><label class='quiz-label'>
-                <input type='radio' name='q1' value='1'>
-                <span class="lang-en">A precise sequence of instructions.</span>
-                <span class="lang-cn">一系列精确的指令。</span>
-            </label>
-        </div><div class='quiz-q'>
-            <p><b>3. 
-                <span class="lang-en">During the "Analysis" phase, a programmer primarily identifies:</span>
-                <span class="lang-cn">在“分析”阶段，程序员主要确定：</span>
-            </b></p>
-            <label class='quiz-label'>
-                <input type='radio' name='q2' value='0'>
-                <span class="lang-en">The required programming language.</span>
-                <span class="lang-cn">所需的编程语言。</span>
-            </label><label class='quiz-label'>
-                <input type='radio' name='q2' value='1'>
-                <span class="lang-en">Inputs, outputs, and formulas.</span>
-                <span class="lang-cn">输入、输出和公式。</span>
-            </label>
-        </div><div class='quiz-q'>
-            <p><b>4. 
-                <span class="lang-en">If a program works but gives the wrong mathematical answer, this is discovered during:</span>
-                <span class="lang-cn">如果程序可以运行但给出了错误的数学答案，这在哪个阶段被发现？</span>
-            </b></p>
-            <label class='quiz-label'>
-                <input type='radio' name='q3' value='0'>
-                <span class="lang-en">Testing</span>
-                <span class="lang-cn">测试</span>
-            </label><label class='quiz-label'>
-                <input type='radio' name='q3' value='1'>
-                <span class="lang-en">Maintenance</span>
-                <span class="lang-cn">维护</span>
-            </label>
-        </div><div class='quiz-q'>
-            <p><b>5. 
-                <span class="lang-en">Which comes FIRST in the Software Development Method?</span>
-                <span class="lang-cn">在软件开发方法中，哪一步最先发生？</span>
-            </b></p>
-            <label class='quiz-label'>
-                <input type='radio' name='q4' value='0'>
-                <span class="lang-en">Implementation</span>
-                <span class="lang-cn">实现</span>
-            </label><label class='quiz-label'>
-                <input type='radio' name='q4' value='1'>
-                <span class="lang-en">Requirements Specification</span>
-                <span class="lang-cn">需求规范</span>
-            </label>
+          <h4 style="margin-top:0">③ Code the Program</h4>
+          <p class="muted">Translate the design into Java — the language is the easy part if design is good.</p>
         </div>
-                <button class="btn" onclick="checkQuiz()">
-                    <span class="lang-en">Submit Answers</span>
-                    <span class="lang-cn">提交答案</span>
-                </button>
-                <div id="quiz-result"></div>
-            </div>
-        </div>
-
-        <!-- Fill in the Blanks -->
         <div class="card">
-            <h2>
-                <span class="lang-en">Fill in the Blanks</span>
-                <span class="lang-cn">填空练习</span>
-            </h2>
-            <p>
-            <span class="lang-en">An <input type='text' id='blank0' class='blank-input' style='width:100px;'> is a step-by-step procedure for solving a problem.</span>
-            <span class="lang-cn"><input type='text' id='blank_cn0' class='blank-input' style='width:100px;'>是解决问题的步骤过程。</span>
-        </p><p>
-            <span class="lang-en">The process of finding and fixing bugs in a program is called <input type='text' id='blank1' class='blank-input' style='width:100px;'>.</span>
-            <span class="lang-cn">在程序中查找和修复错误的过程称为<input type='text' id='blank_cn1' class='blank-input' style='width:100px;'>。</span>
-        </p>
-            <button class="btn" onclick="checkBlanks()">
-                <span class="lang-en">Check Answers</span>
-                <span class="lang-cn">检查答案</span>
-            </button>
-            <div id="blanks-result"></div>
+          <h4 style="margin-top:0">④ Test & Debug</h4>
+          <p class="muted">Verify against the success criteria. Fix defects. Re-test.</p>
         </div>
-
-        <!-- Coding Activities -->
         <div class="card">
-            <h2>
-                <span class="lang-en">Coding Practice</span>
-                <span class="lang-cn">编程实践</span>
-            </h2>
-            <div class='step'>
-            <p><b>
-                <span class="lang-en">Exercise 1: Formula Translation: Translate the math formula area = length × width into a Java assignment statement.</span>
-                <span class="lang-cn">练习 1：公式翻译: 将数学公式 area = length × width 翻译为 Java 赋值语句。</span>
-            </b></p>
-            <div class='code-editor'>int area = _______;</div>
-            <button class="btn" onclick="showCodeAns('w2c0')">
-                <span class="lang-en">Show Answer</span>
-                <span class="lang-cn">显示答案</span>
-            </button>
-            <div class='code-editor' id='code-ans-w2c0' style='display:none;'>length * width;</div>
-        </div><div class='step'>
-            <p><b>
-                <span class="lang-en">Exercise 2: Input/Output Trace: What is the output of this code snippet if hours = 2?</span>
-                <span class="lang-cn">练习 2：输入/输出跟踪: 如果 hours = 2，此代码段的输出是什么？</span>
-            </b></p>
-            <div class='code-editor'>int rate = 5;int total = hours * rate;System.out.println(total);Output: _______</div>
-            <button class="btn" onclick="showCodeAns('w2c1')">
-                <span class="lang-en">Show Answer</span>
-                <span class="lang-cn">显示答案</span>
-            </button>
-            <div class='code-editor' id='code-ans-w2c1' style='display:none;'>10</div>
-        </div><div class='step'>
-            <p><b>
-                <span class="lang-en">Exercise 3: Value Swapping: To swap two variables `x` and `y`, we need a temporary variable named `temp`. Fill in the blank to complete the swap.</span>
-                <span class="lang-cn">练习 3：变量交换: 为了交换两个变量 `x` and `y`，我们需要一个名为 `temp` 的临时变量。填空完成交换。</span>
-            </b></p>
-            <div class='code-editor'>int temp = x;x = _______;y = temp;</div>
-            <button class="btn" onclick="showCodeAns('w2c2')">
-                <span class="lang-en">Show Answer</span>
-                <span class="lang-cn">显示答案</span>
-            </button>
-            <div class='code-editor' id='code-ans-w2c2' style='display:none;'>y</div>
+          <h4 style="margin-top:0">⑤ Maintain & Document</h4>
+          <p class="muted">Deploy, fix issues found in production, evolve features.</p>
         </div>
-        </div>
-
-        <!-- Matching Game -->
         <div class="card">
-            <h2>
-                <span class="lang-en">Matching Game</span>
-                <span class="lang-cn">配对游戏</span>
-            </h2>
-            <p>
-                <span class="lang-en">Match the term on the left with its definition on the right.</span>
-                <span class="lang-cn">将左侧的术语与右侧的定义进行配对。</span>
-            </p>
-            <div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px;">
-                <div style="width: 45%;">
-                    <div class='step' style='padding:10px; cursor:pointer;'>Specification</div><div class='step' style='padding:10px; cursor:pointer;'>Analysis</div><div class='step' style='padding:10px; cursor:pointer;'>Design</div><div class='step' style='padding:10px; cursor:pointer;'>Implementation</div>
-                </div>
-                <div style="width: 45%;">
-                    <div class='step' style='padding:10px; cursor:pointer;'>
-            <span class="lang-en">Understand the problem requirements</span>
-            <span class="lang-cn">理解问题需求</span>
-        </div><div class='step' style='padding:10px; cursor:pointer;'>
-            <span class="lang-en">Identify inputs and outputs</span>
-            <span class="lang-cn">明确输入和输出</span>
-        </div><div class='step' style='padding:10px; cursor:pointer;'>
-            <span class="lang-en">Create algorithm blueprints</span>
-            <span class="lang-cn">创建算法蓝图</span>
-        </div><div class='step' style='padding:10px; cursor:pointer;'>
-            <span class="lang-en">Translate algorithm to code</span>
-            <span class="lang-cn">将算法转换为代码</span>
+          <h4 style="margin-top:0">🔁 Iterate</h4>
+          <p class="muted">Most projects loop back: testing reveals design gaps; new requirements restart analysis.</p>
         </div>
-                </div>
-            </div>
+      </div>
+
+      <div class="callout">
+        <b>Why a method?</b> Without one, you jump to coding and produce fragile, hard-to-change code. With one, you spend 30% of your time thinking and 70% building — and you ship faster.
+      </div>
+
+      <h3>The cycle, visually</h3>
+      <pre>
+       ┌──────────────────┐
+       │ 1. Analyze       │
+       └────────┬─────────┘
+                ▼
+       ┌──────────────────┐
+       │ 2. Design        │◀──┐
+       └────────┬─────────┘   │
+                ▼             │
+       ┌──────────────────┐   │
+       │ 3. Code          │   │
+       └────────┬─────────┘   │
+                ▼             │
+       ┌──────────────────┐   │
+       │ 4. Test & Debug  │───┘  (loop back when tests fail)
+       └────────┬─────────┘
+                ▼
+       ┌──────────────────┐
+       │ 5. Maintain      │
+       └──────────────────┘
+      </pre>
+    </section>
+
+    <!-- ====== 2. Applying the SDM ====== -->
+    <section id="s3">
+      <h2>2 · Applying the Software Development Method</h2>
+      <p>
+        Let's run the method on a real business problem. Suppose a café owner says: <i>"I want to know how much each customer's order costs, including a 6% service tax, and I want a grand total at the end of the day."</i>
+      </p>
+
+      <ol class="steps">
+        <li>
+          <b>Analyze.</b> Inputs: list of items (name + price). Process: sum prices, add 6% tax per order. Output: order subtotal, tax, total, and a daily grand total. Constraints: handle empty input gracefully.
+        </li>
+        <li>
+          <b>Design.</b> We need a loop reading items, accumulators for subtotal/tax/grand-total, and formatted output. Decide on <code>double</code> for money (we'll discuss <code>BigDecimal</code> later) and <code>Scanner</code> for input.
+        </li>
+        <li>
+          <b>Code.</b> Translate the design into Java. See the snippet below.
+        </li>
+        <li>
+          <b>Test & Debug.</b> Try: 0 items, 1 item, 100 items, items with decimals, sentinel value to stop.
+        </li>
+        <li>
+          <b>Maintain.</b> Later: support discounts, multiple tax rates, file I/O.
+        </li>
+      </ol>
+
+      <h3>The Java code for this problem</h3>
+      <div class="code-wrap">
+        <button class="copy" onclick="copyCode(this)">Copy</button>
+<pre>
+<span class="token kw">import</span> java.util.Scanner;
+
+<span class="token kw">public class</span> <span class="token tp">CafeBilling</span> {
+    <span class="token kw">public static void</span> <span class="token fn">main</span>(String[] args) {
+        Scanner sc = <span class="token kw">new</span> <span class="token tp">Scanner</span>(System.in);
+        <span class="token kw">final double</span> TAX_RATE = <span class="token nm">0.06</span>;
+        <span class="token kw">double</span> dailyTotal = <span class="token nm">0.0</span>;
+
+        System.out.print(<span class="token st">"Number of orders today: "</span>);
+        <span class="token kw">int</span> n = sc.nextInt();
+
+        <span class="token kw">for</span> (<span class="token kw">int</span> i = <span class="token nm">1</span>; i &lt;= n; i++) {
+            <span class="token kw">double</span> subtotal = <span class="token nm">0.0</span>;
+            System.out.println(<span class="token st">"\nOrder #"</span> + i + <span class="token st">" — enter prices (0 to finish):"</span>);
+            <span class="token kw">while</span> (<span class="token kw">true</span>) {
+                <span class="token kw">double</span> price = sc.nextDouble();
+                <span class="token kw">if</span> (price == <span class="token nm">0</span>) <span class="token kw">break</span>;
+                <span class="token kw">if</span> (price &lt; <span class="token nm">0</span>) {
+                    System.out.println(<span class="token st">"Price cannot be negative, ignored."</span>);
+                    <span class="token kw">continue</span>;
+                }
+                subtotal += price;
+            }
+            <span class="token kw">double</span> tax      = subtotal * TAX_RATE;
+            <span class="token kw">double</span> total    = subtotal + tax;
+            dailyTotal          += total;
+
+            System.out.printf(<span class="token st">"Subtotal: %.2f  Tax: %.2f  Total: %.2f%n"</span>,
+                              subtotal, tax, total);
+        }
+        System.out.printf(<span class="token st">"%nDaily Grand Total: %.2f%n"</span>, dailyTotal);
+        sc.close();
+    }
+}
+</pre>
+      </div>
+
+      <div class="callout warn">
+        <b>Money precision:</b> <code>double</code> is fine for learning, but production systems use <code>BigDecimal</code> to avoid floating-point rounding errors.
+      </div>
+    </section>
+
+    <!-- ====== 3. Introduction to Algorithms ====== -->
+    <section id="s4">
+      <h2>3 · Introduction to Algorithms</h2>
+      <p>
+        An <b>algorithm</b> is a finite, well-defined sequence of steps that solves a class of problems or computes a result. Three properties matter:
+      </p>
+      <ul>
+        <li><b>Definite</b> — every step is unambiguous.</li>
+        <li><b>Finite</b> — it must eventually stop.</li>
+        <li><b>Effective</b> — each step can actually be carried out.</li>
+      </ul>
+
+      <h3>Algorithm vs. Program</h3>
+      <div class="grid cols-2">
+        <div class="card">
+          <h4 style="margin-top:0">Algorithm</h4>
+          <p class="muted">Language-independent logic. Can be written in pseudocode, drawn as a flowchart, or expressed as math.</p>
+          <pre>
+Algorithm: FindMax(numbers)
+  max ← numbers[0]
+  for each n in numbers
+    if n > max then max ← n
+  return max
+          </pre>
         </div>
-    </div>
+        <div class="card">
+          <h4 style="margin-top:0">Program</h4>
+          <p class="muted">Algorithm encoded in a programming language, plus syntax, I/O, error handling.</p>
+          <pre>
+<span class="token kw">static int</span> <span class="token fn">findMax</span>(<span class="token kw">int</span>[] a) {
+    <span class="token kw">int</span> max = a[<span class="token nm">0</span>];
+    <span class="token kw">for</span> (<span class="token kw">int</span> n : a)
+        <span class="token kw">if</span> (n &gt; max) max = n;
+    <span class="token kw">return</span> max;
+}
+          </pre>
+        </div>
+      </div>
 
-    <script>
-        function toggleLanguage() {
-            document.body.classList.toggle('cn-active');
-        }
+      <h3>Two ways to describe an algorithm</h3>
+      <div class="tabs">
+        <button data-tab="flow" class="active">Flowchart</button>
+        <button data-tab="pseudo">Pseudocode</button>
+      </div>
+      <div class="tab-panel active" id="tab-flow">
+        <pre>
+            ┌───────────────┐
+            │     Start     │
+            └──────┬────────┘
+                   ▼
+            ┌───────────────┐
+            │  max ← a[0]   │
+            └──────┬────────┘
+                   ▼
+            ┌───────────────┐     ┌──────┐
+            │  more items?  │─No─▶│ Print│
+            └──────┬────────┘     │ max  │
+                   │Yes           └──┬───┘
+                   ▼                 ▲
+            ┌───────────────┐        │
+            │  n > max ?    │──Yes──▶┤
+            └──────┬────────┘        │
+                   │ No              │
+                   ▼                 │
+            ┌───────────────┐        │
+            │  next item    │────────┘
+            └───────────────┘
+        </pre>
+      </div>
+      <div class="tab-panel" id="tab-pseudo">
+<pre>
+<span class="token cm"># Pseudocode: Linear Search</span>
+<span class="token kw">function</span> linearSearch(list, target):
+    <span class="token kw">for</span> i <span class="token kw">from</span> 0 <span class="token kw">to</span> length(list)-1:
+        <span class="token kw">if</span> list[i] == target:
+            <span class="token kw">return</span> i
+    <span class="token kw">return</span> -1
+</pre>
+      </div>
+    </section>
 
-        function checkQuiz() {
-            let score = 0;
-            
-        const q0 = document.querySelector('input[name="q0"]:checked');
-        if (q0 && parseInt(q0.value) === 1) score++;
-        
-        const q1 = document.querySelector('input[name="q1"]:checked');
-        if (q1 && parseInt(q1.value) === 1) score++;
-        
-        const q2 = document.querySelector('input[name="q2"]:checked');
-        if (q2 && parseInt(q2.value) === 1) score++;
-        
-        const q3 = document.querySelector('input[name="q3"]:checked');
-        if (q3 && parseInt(q3.value) === 0) score++;
-        
-        const q4 = document.querySelector('input[name="q4"]:checked');
-        if (q4 && parseInt(q4.value) === 1) score++;
-        
-            document.getElementById('quiz-result').innerHTML = `<span class='correct-ans'>
-                <span class="lang-en">You scored: ${score} / 5</span>
-                <span class="lang-cn">得分：${score} / 5</span>
-            </span>`;
-        }
+    <!-- ====== 4. Steps in Algorithm Development ====== -->
+    <section id="s5">
+      <h2>4 · Steps in Algorithm Development</h2>
+      <p>
+        Algorithms are not just written — they are <b>developed</b>. A reliable flow looks like this:
+      </p>
 
-        function checkBlanks() {
-            
-        const b0 = (document.getElementById('blank0').value || document.getElementById('blank_cn0').value).toLowerCase().trim();
-        if(b0 === 'algorithm') {
-            document.getElementById('blank0').style.borderBottomColor = '#2E8B57';
-            document.getElementById('blank_cn0').style.borderBottomColor = '#2E8B57';
-        } else {
-            document.getElementById('blank0').style.borderBottomColor = '#C70039';
-            document.getElementById('blank_cn0').style.borderBottomColor = '#C70039';
-        }
-        
-        const b1 = (document.getElementById('blank1').value || document.getElementById('blank_cn1').value).toLowerCase().trim();
-        if(b1 === 'testing') {
-            document.getElementById('blank1').style.borderBottomColor = '#2E8B57';
-            document.getElementById('blank_cn1').style.borderBottomColor = '#2E8B57';
-        } else {
-            document.getElementById('blank1').style.borderBottomColor = '#C70039';
-            document.getElementById('blank_cn1').style.borderBottomColor = '#C70039';
-        }
-        
-        }
+      <ol class="steps">
+        <li>
+          <b>Understand the problem.</b> Restate it in your own words. What is given? What is the result? Any edge cases?
+        </li>
+        <li>
+          <b>Identify inputs and outputs.</b> Name them, give them types, decide on units.
+        </li>
+        <li>
+          <b>Work through examples by hand.</b> Trace small cases. This often reveals the algorithm itself.
+        </li>
+        <li>
+          <b>Choose an approach.</b> Brute force? Divide & conquer? Greedy? Iteration vs. recursion?
+        </li>
+        <li>
+          <b>Write the algorithm.</b> Use pseudocode or a flowchart first — not Java.
+        </li>
+        <li>
+          <b>Test the algorithm on paper.</b> Walk through it step-by-step with multiple inputs, including edge cases.
+        </li>
+        <li>
+          <b>Translate to code.</b> Only now — with a clean plan in hand — implement it in Java.
+        </li>
+        <li>
+          <b>Refine for clarity & efficiency.</b> Reduce duplication, improve variable names, then look at Big-O complexity.
+        </li>
+      </ol>
 
-        function showCodeAns(id) {
-            const el = document.getElementById('code-ans-' + id);
-            el.style.display = el.style.display === 'none' ? 'block' : 'none';
+      <h3>Example: Average of N numbers — full walkthrough</h3>
+      <div class="card">
+        <ol>
+          <li><b>Problem:</b> compute the average of N numbers entered by the user.</li>
+          <li><b>Inputs:</b> an integer N, then N double values. <b>Output:</b> the arithmetic mean.</li>
+          <li><b>By hand:</b> inputs 3, [10, 20, 30] → (10+20+30)/3 = 20.</li>
+          <li><b>Approach:</b> iterate once, accumulate a sum, divide by N at the end. Avoid re-reading or re-looping.</li>
+          <li><b>Pseudocode:</b>
+<pre>
+sum ← 0
+for i from 1 to N:
+    read x
+    sum ← sum + x
+average ← sum / N
+print average
+</pre>
+          </li>
+          <li><b>Translate to Java:</b>
+<div class="code-wrap">
+  <button class="copy" onclick="copyCode(this)">Copy</button>
+<pre>
+<span class="token kw">import</span> java.util.Scanner;
+
+<span class="token kw">public class</span> <span class="token tp">Average</span> {
+    <span class="token kw">public static void</span> <span class="token fn">main</span>(String[] args) {
+        Scanner sc = <span class="token kw">new</span> <span class="token tp">Scanner</span>(System.in);
+        System.out.print(<span class="token st">"How many numbers? "</span>);
+        <span class="token kw">int</span> n = sc.nextInt();
+        <span class="token kw">if</span> (n &lt;= <span class="token nm">0</span>) {
+            System.out.println(<span class="token st">"Count must be positive."</span>);
+            <span class="token kw">return</span>;
         }
-    </script>
+        <span class="token kw">double</span> sum = <span class="token nm">0</span>;
+        <span class="token kw">for</span> (<span class="token kw">int</span> i = <span class="token nm">0</span>; i &lt; n; i++) sum += sc.nextDouble();
+        System.out.printf(<span class="token st">"Average = %.2f%n"</span>, sum / n);
+        sc.close();
+    }
+}
+</pre>
+</div>
+          </li>
+          <li><b>Refine:</b> rename variables, handle <code>n &lt;= 0</code>, consider <code>BigDecimal</code> if needed.</li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ====== 5. Live Code Examples ====== -->
+    <section id="s6">
+      <h2>5 · Live Code Examples</h2>
+      <p>Three classic starter problems solved with the method above. Click any tab.</p>
+
+      <div class="tabs" id="codeTabs">
+        <button data-tab="c1" class="active">Largest of Three</button>
+        <button data-tab="c2">Even or Odd</button>
+        <button data-tab="c3">Sum 1..N</button>
+      </div>
+
+      <div class="tab-panel active" id="tab-c1">
+<div class="code-wrap">
+  <button class="copy" onclick="copyCode(this)">Copy</button>
+<pre>
+<span class="token kw">import</span> java.util.Scanner;
+<span class="token kw">public class</span> <span class="token tp">LargestOfThree</span> {
+    <span class="token kw">public static void</span> <span class="token fn">main</span>(String[] args) {
+        Scanner sc = <span class="token kw">new</span> <span class="token tp">Scanner</span>(System.in);
+        System.out.print(<span class="token st">"Enter three integers: "</span>);
+        <span class="token kw">int</span> a = sc.nextInt(), b = sc.nextInt(), c = sc.nextInt();
+        <span class="token kw">int</span> max = a;
+        <span class="token kw">if</span> (b &gt; max) max = b;
+        <span class="token kw">if</span> (c &gt; max) max = c;
+        System.out.println(<span class="token st">"Largest = "</span> + max);
+    }
+}
+</pre>
+</div>
+      </div>
+
+      <div class="tab-panel" id="tab-c2">
+<div class="code-wrap">
+  <button class="copy" onclick="copyCode(this)">Copy</button>
+<pre>
+<span class="token kw">import</span> java.util.Scanner;
+<span class="token kw">public class</span> <span class="token tp">EvenOdd</span> {
+    <span class="token kw">public static void</span> <span class="token fn">main</span>(String[] args) {
+        Scanner sc = <span class="token kw">new</span> <span class="token tp">Scanner</span>(System.in);
+        System.out.print(<span class="token st">"Enter an integer: "</span>);
+        <span class="token kw">int</span> n = sc.nextInt();
+        System.out.println(n + <span class="token st">" is "</span> + (n % <span class="token nm">2</span> == <span class="token nm">0</span> ? <span class="token st">"Even"</span> : <span class="token st">"Odd"</span>));
+    }
+}
+</pre>
+</div>
+      </div>
+
+      <div class="tab-panel" id="tab-c3">
+<div class="code-wrap">
+  <button class="copy" onclick="copyCode(this)">Copy</button>
+<pre>
+<span class="token kw">import</span> java.util.Scanner;
+<span class="token kw">public class</span> <span class="token tp">Sum1ToN</span> {
+    <span class="token kw">public static void</span> <span class="token fn">main</span>(String[] args) {
+        Scanner sc = <span class="token kw">new</span> <span class="token tp">Scanner</span>(System.in);
+        System.out.print(<span class="token st">"Enter N: "</span>);
+        <span class="token kw">long</span> n = sc.nextLong();
+        <span class="token kw">if</span> (n &lt; <span class="token nm">0</span>) { System.out.println(<span class="token st">"N must be ≥ 0"</span>); <span class="token kw">return</span>; }
+        <span class="token kw">long</span> sum = n * (n + <span class="token nm">1</span>) / <span class="token nm">2</span>;   <span class="token cm">// O(1) Gauss</span>
+        System.out.println(<span class="token st">"Sum 1.."</span> + n + <span class="token st">" = "</span> + sum);
+    }
+}
+</pre>
+</div>
+        <div class="callout tip">Notice the constant-time formula vs. an O(n) loop — that's the difference an <b>algorithm choice</b> makes.</div>
+      </div>
+    </section>
+
+    <!-- ====== 6. Visualizer ====== -->
+    <section id="s7">
+      <h2>6 · Algorithm Visualizer — Bubble Sort</h2>
+      <p>Watch an algorithm run step by step. Yellow = comparing, red = swapping, green = sorted.</p>
+
+      <div class="viz">
+        <div class="row" style="margin-bottom: 12px;">
+          <button class="btn small" id="genBtn">🎲 New Array</button>
+          <label class="muted">Size
+            <input type="number" id="sizeInput" value="20" min="5" max="60" style="width: 70px;" />
+          </label>
+          <label class="muted">Speed
+            <select id="speedSelect">
+              <option value="60">Fast</option>
+              <option value="150" selected>Normal</option>
+              <option value="350">Slow</option>
+            </select>
+          </label>
+          <button class="btn small" id="startBtn">▶ Start</button>
+          <button class="btn small ghost" id="stopBtn">⏹ Stop</button>
+        </div>
+        <div class="bars" id="bars"></div>
+        <div class="legend">
+          <span><span class="dot" style="background: linear-gradient(180deg, var(--pastel-blue), var(--pastel-lavender));"></span>Default</span>
+          <span><span class="dot" style="background: var(--pastel-yellow);"></span>Comparing</span>
+          <span><span class="dot" style="background: var(--pastel-pink);"></span>Swapping</span>
+          <span><span class="dot" style="background: var(--pastel-mint);"></span>Sorted</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====== 7. Worked Problems ====== -->
+    <section id="s8">
+      <h2>7 · Worked Problems</h2>
+      <p>Try the SDM on each one before peeking at the solution.</p>
+
+      <div class="card">
+        <h3 style="margin-top:0">Problem 1 — Grade Classifier</h3>
+        <p><b>Task:</b> Given a score 0–100, print A (≥90), B (80–89), C (70–79), D (60–69), F (&lt;60).</p>
+        <details>
+          <summary>💡 Hint</summary>
+          <p>Use <code>if / else if / else</code> in descending order. Validate the range first.</p>
+        </details>
+        <details>
+          <summary>✅ Show solution</summary>
+<div class="code-wrap">
+  <button class="copy" onclick="copyCode(this)">Copy</button>
+<pre>
+<span class="token kw">if</span> (score &lt; <span class="token nm">0</span> || score &gt; <span class="token nm">100</span>) System.out.println(<span class="token st">"Invalid"</span>);
+<span class="token kw">else if</span> (score &gt;= <span class="token nm">90</span>) System.out.println(<span class="token st">"A"</span>);
+<span class="token kw">else if</span> (score &gt;= <span class="token nm">80</span>) System.out.println(<span class="token st">"B"</span>);
+<span class="token kw">else if</span> (score &gt;= <span class="token nm">70</span>) System.out.println(<span class="token st">"C"</span>);
+<span class="token kw">else if</span> (score &gt;= <span class="token nm">60</span>) System.out.println(<span class="token st">"D"</span>);
+<span class="token kw">else</span>                      System.out.println(<span class="token st">"F"</span>);
+</pre>
+</div>
+        </details>
+      </div>
+
+      <div class="card">
+        <h3 style="margin-top:0">Problem 2 — Sum of Digits</h3>
+        <p><b>Task:</b> Given an integer, return the sum of its digits (e.g. <code>1729 → 1+7+2+9 = 19</code>).</p>
+        <details>
+          <summary>💡 Hint</summary>
+          <p>Use <code>n % 10</code> to peel off the last digit, and <code>n /= 10</code> to shrink. Loop until <code>n == 0</code>.</p>
+        </details>
+        <details>
+          <summary>✅ Show solution</summary>
+<div class="code-wrap">
+  <button class="copy" onclick="copyCode(this)">Copy</button>
+<pre>
+<span class="token kw">int</span> <span class="token fn">digitSum</span>(<span class="token kw">int</span> n) {
+    n = Math.abs(n);
+    <span class="token kw">int</span> sum = <span class="token nm">0</span>;
+    <span class="token kw">while</span> (n &gt; <span class="token nm">0</span>) {
+        sum += n % <span class="token nm">10</span>;
+        n   /= <span class="token nm">10</span>;
+    }
+    <span class="token kw">return</span> sum;
+}
+</pre>
+</div>
+        </details>
+      </div>
+
+      <div class="card">
+        <h3 style="margin-top:0">Problem 3 — Reverse a String</h3>
+        <p><b>Task:</b> Reverse a string without using library reverse.</p>
+        <details>
+          <summary>💡 Hint</summary>
+          <p>Swap chars from both ends moving inward — a classic two-pointer algorithm.</p>
+        </details>
+        <details>
+          <summary>✅ Show solution</summary>
+<div class="code-wrap">
+  <button class="copy" onclick="copyCode(this)">Copy</button>
+<pre>
+String <span class="token fn">reverse</span>(String s) {
+    <span class="token kw">char</span>[] a = s.toCharArray();
+    <span class="token kw">int</span> i = <span class="token nm">0</span>, j = a.length - <span class="token nm">1</span>;
+    <span class="token kw">while</span> (i &lt; j) {
+        <span class="token kw">char</span> t = a[i]; a[i] = a[j]; a[j] = t;
+        i++; j--;
+    }
+    <span class="token kw">return new</span> <span class="token tp">String</span>(a);
+}
+</pre>
+</div>
+        </details>
+      </div>
+    </section>
+
+    <!-- ====== 8. Quiz ====== -->
+    <section id="s9">
+      <h2>8 · Check Your Understanding</h2>
+      <div class="quiz card" id="quiz">
+        <p><b>Q1.</b> In the Software Development Method, which step comes <i>before</i> writing code?</p>
+        <div data-correct="b">
+          <label class="option"><input type="radio" name="q1" value="a"> Debugging</label>
+          <label class="option"><input type="radio" name="q1" value="b"> Design</label>
+          <label class="option"><input type="radio" name="q1" value="c"> Maintenance</label>
+        </div>
+
+        <p><b>Q2.</b> An algorithm must be:</p>
+        <div data-correct="c">
+          <label class="option"><input type="radio" name="q2" value="a"> Fast</label>
+          <label class="option"><input type="radio" name="q2" value="b"> Written in Java</label>
+          <label class="option"><input type="radio" name="q2" value="c"> Definite, finite, and effective</label>
+        </div>
+
+        <p><b>Q3.</b> The first step in developing an algorithm is:</p>
+        <div data-correct="a">
+          <label class="option"><input type="radio" name="q3" value="a"> Understand the problem</label>
+          <label class="option"><input type="radio" name="q3" value="b"> Optimize for speed</label>
+          <label class="option"><input type="radio" name="q3" value="c"> Write Java code</label>
+        </div>
+
+        <p><b>Q4.</b> Pseudocode is useful because:</p>
+        <div data-correct="b">
+          <label class="option"><input type="radio" name="q4" value="a"> It's the fastest way to ship</label>
+          <label class="option"><input type="radio" name="q4" value="b"> It lets you focus on logic without language syntax</label>
+          <label class="option"><input type="radio" name="q4" value="c"> It runs in the browser</label>
+        </div>
+
+        <div class="row" style="margin-top: 14px;">
+          <button class="btn" id="checkQuiz">Submit</button>
+          <button class="btn ghost" id="resetQuiz">Reset</button>
+          <span id="quizScore" class="muted" style="font-weight: 700;"></span>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <p>Module 1 · Introduction to Problem Solving · Built as a single self-contained page for the Java Programming course.</p>
+    </footer>
+
+  </main>
+</div>
+
+<script>
+  /* ===== Tabs ===== */
+  document.querySelectorAll('.tabs').forEach(group => {
+    const buttons = group.querySelectorAll('button');
+    buttons.forEach(btn => btn.addEventListener('click', () => {
+      buttons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const id = 'tab-' + btn.dataset.tab;
+      group.parentElement.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      const target = document.getElementById(id);
+      if (target) target.classList.add('active');
+    }));
+  });
+
+  /* ===== Sidebar scroll-spy ===== */
+  const links = document.querySelectorAll('aside nav a');
+  links.forEach(a => a.addEventListener('click', () => {
+    links.forEach(l => l.classList.remove('active'));
+    a.classList.add('active');
+  }));
+  const sections = [...document.querySelectorAll('section, header.hero')];
+  window.addEventListener('scroll', () => {
+    const y = window.scrollY + 120;
+    let active = sections[0];
+    sections.forEach(s => { if (s.offsetTop <= y) active = s; });
+    links.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + active.id));
+  });
+
+  /* ===== Copy code ===== */
+  function copyCode(btn) {
+    const code = btn.parentElement.querySelector('pre').innerText;
+    navigator.clipboard.writeText(code).then(() => {
+      btn.textContent = '✓ Copied';
+      setTimeout(() => btn.textContent = 'Copy', 1400);
+    });
+  }
+  window.copyCode = copyCode;
+
+  /* ===== Visualizer ===== */
+  const barsEl = document.getElementById('bars');
+  const sizeInput = document.getElementById('sizeInput');
+  const speedSel  = document.getElementById('speedSelect');
+  let arr = [];
+  let running = false;
+  let stopFlag = false;
+
+  function render(highlight = {}) {
+    barsEl.innerHTML = '';
+    arr.forEach((v, i) => {
+      const d = document.createElement('div');
+      d.className = 'bar';
+      if (highlight.sorted?.includes(i)) d.classList.add('sorted');
+      if (highlight.compare?.includes(i)) d.classList.add('compare');
+      if (highlight.swap?.includes(i)) d.classList.add('swap');
+      d.style.height = (v * 2) + 'px';
+      const n = document.createElement('span'); n.className='num'; n.textContent = v;
+      d.appendChild(n);
+      barsEl.appendChild(d);
+    });
+  }
+  function generate() {
+    const n = Math.max(5, Math.min(60, +sizeInput.value || 20));
+    arr = Array.from({length: n}, () => 5 + Math.floor(Math.random() * 90));
+    render();
+  }
+  function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+  async function bubbleSort() {
+    const sorted = [];
+    const n = arr.length;
+    for (let i = 0; i < n - 1; i++) {
+      let swapped = false;
+      for (let j = 0; j < n - 1 - i; j++) {
+        if (stopFlag) return;
+        render({ compare: [j, j+1], sorted });
+        await sleep(+speedSel.value);
+        if (arr[j] > arr[j+1]) {
+          [arr[j], arr[j+1]] = [arr[j+1], arr[j]];
+          swapped = true;
+          render({ swap: [j, j+1], sorted });
+          await sleep(+speedSel.value);
+        }
+      }
+      sorted.unshift(n - 1 - i);
+      if (!swapped) { for (let k = 0; k < n - 1 - i; k++) sorted.push(k); break; }
+    }
+    render({ sorted: arr.map((_, i) => i) });
+  }
+
+  document.getElementById('genBtn').addEventListener('click', generate);
+  document.getElementById('startBtn').addEventListener('click', async () => {
+    if (running) return;
+    running = true; stopFlag = false;
+    document.getElementById('startBtn').disabled = true;
+    await bubbleSort();
+    running = false;
+    document.getElementById('startBtn').disabled = false;
+  });
+  document.getElementById('stopBtn').addEventListener('click', () => { stopFlag = true; });
+  generate();
+
+  /* ===== Quiz ===== */
+  document.getElementById('checkQuiz').addEventListener('click', () => {
+    let score = 0, total = 0;
+    document.querySelectorAll('#quiz > div[data-correct]').forEach(div => {
+      total++;
+      const correct = div.dataset.correct;
+      div.querySelectorAll('.option').forEach(opt => {
+        opt.classList.remove('correct','wrong');
+        const input = opt.querySelector('input');
+        if (input.value === correct) opt.classList.add('correct');
+        if (input.checked && input.value !== correct) opt.classList.add('wrong');
+      });
+      const picked = div.querySelector('input:checked');
+      if (picked && picked.value === correct) score++;
+    });
+    document.getElementById('quizScore').textContent = `Score: ${score} / ${total}`;
+  });
+  document.getElementById('resetQuiz').addEventListener('click', () => {
+    document.querySelectorAll('#quiz input').forEach(i => i.checked = false);
+    document.querySelectorAll('#quiz .option').forEach(o => o.classList.remove('correct','wrong'));
+    document.getElementById('quizScore').textContent = '';
+  });
+</script>
+
 </body>
 </html>
